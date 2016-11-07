@@ -50,12 +50,12 @@ uses System.Math;
 
 constructor TSingleGridMap2T.Create;
 begin
-     Create( 1, 1 );
+     Create( 2, 2 );
 end;
 
 constructor TSingleGridMap2T.Create( const BricX_,BricY_:Integer );
 begin
-     Create( BricX_, BricY_, 1, 1 );
+     Create( BricX_, BricY_, 2, 2 );
 end;
 
 destructor TSingleGridMap2T.Destroy;
@@ -76,14 +76,15 @@ begin
      X2 := Floor( X_ );  X1 := X2 - 1;  X3 := X2 + 1;  X4 := X3 + 1;
      Y2 := Floor( Y_ );  Y1 := Y2 - 1;  Y3 := Y2 + 1;  Y4 := Y3 + 1;
 
-     T.o := TSingle2D.Create( X_ - X2, Y_ - Y2 );
+     T.o := TSingle2D.Create( X_ - X2,
+                              Y_ - Y2 );
 
      with M do
      begin
-          _11 := Grid[ X1, Y1 ];  _11 := Grid[ X2, Y1 ];  _13 := Grid[ X3, Y1 ];  _14 := Grid[ X4, Y1 ];
-          _21 := Grid[ X1, Y2 ];  _21 := Grid[ X2, Y2 ];  _23 := Grid[ X3, Y2 ];  _24 := Grid[ X4, Y2 ];
-          _31 := Grid[ X1, Y3 ];  _31 := Grid[ X2, Y3 ];  _33 := Grid[ X3, Y3 ];  _34 := Grid[ X4, Y3 ];
-          _41 := Grid[ X1, Y4 ];  _41 := Grid[ X2, Y4 ];  _43 := Grid[ X3, Y4 ];  _44 := Grid[ X4, Y4 ];
+          _11 := Grid[ X1, Y1 ];  _12 := Grid[ X2, Y1 ];  _13 := Grid[ X3, Y1 ];  _14 := Grid[ X4, Y1 ];
+          _21 := Grid[ X1, Y2 ];  _22 := Grid[ X2, Y2 ];  _23 := Grid[ X3, Y2 ];  _24 := Grid[ X4, Y2 ];
+          _31 := Grid[ X1, Y3 ];  _32 := Grid[ X2, Y3 ];  _33 := Grid[ X3, Y3 ];  _34 := Grid[ X4, Y3 ];
+          _41 := Grid[ X1, Y4 ];  _42 := Grid[ X2, Y4 ];  _43 := Grid[ X3, Y4 ];  _44 := Grid[ X4, Y4 ];
      end;
 
      T.d := TSingle2D.Create( 1, 0 );
