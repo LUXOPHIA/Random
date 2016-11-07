@@ -1,4 +1,4 @@
-﻿unit LUX.Map.D3;
+﻿unit LUX.Lattice.T3;
 
 interface //#################################################################### ■
 
@@ -34,6 +34,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetMarginY( const MarginY_:Integer );
        procedure SetMarginZ( const MarginZ_:Integer );
        function GetItem( const X_,Y_,Z_:Integer ) :T_Item;
+
        procedure SetItem( const X_,Y_,Z_:Integer; const Item_:T_Item );
      public
        constructor Create; overload;
@@ -54,9 +55,32 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class procedure Swap( var Array0_,Array1_:TArray3D<T_Item> ); static;
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGridMap3D<T_Item>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBricArray3D<T_Item>
 
-     TGridMap3D<T_Item> = class( TArray3D<T_Item> )
+     TBricArray3D<T_Item> = class( TArray3D<T_Item> )
+     private
+     protected
+       ///// アクセス
+       function GetGridX :Integer;
+       procedure SetGridX( const GridX_:Integer );
+       function GetGridY :Integer;
+       procedure SetGridY( const GridY_:Integer );
+       function GetGridZ :Integer;
+       procedure SetGridZ( const GridZ_:Integer );
+     public
+       ///// プロパティ
+       property Bric[ const X_,Y_,Z_:Integer ] :T_Item  read GetItem   write SetItem  ; default;
+       property BricX                          :Integer read   _CountX write SetCountX;
+       property BricY                          :Integer read   _CountY write SetCountY;
+       property BricZ                          :Integer read   _CountZ write SetCountZ;
+       property GridX                          :Integer read GetGridX  write SetGridX ;
+       property GridY                          :Integer read GetGridY  write SetGridY ;
+       property GridZ                          :Integer read GetGridZ  write SetGridZ ;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGridArray3D<T_Item>
+
+     TGridArray3D<T_Item> = class( TArray3D<T_Item> )
      private
      protected
        ///// アクセス
@@ -203,7 +227,7 @@ begin
      A := Array0_;  Array0_ := Array1_;  Array1_ := A;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGridMap3D<T_Item>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBricArray3D<T_Item>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -211,54 +235,94 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TGridMap3D<T_Item>.GetDivX :Integer;
+function TBricArray3D<T_Item>.GetGridX :Integer;
+begin
+     Result := BricX + 1;
+end;
+
+procedure TBricArray3D<T_Item>.SetGridX( const GridX_:Integer );
+begin
+     BricX := GridX_ - 1;
+end;
+
+function TBricArray3D<T_Item>.GetGridY :Integer;
+begin
+     Result := BricY + 1;
+end;
+
+procedure TBricArray3D<T_Item>.SetGridY( const GridY_:Integer );
+begin
+     BricY := GridY_ - 1;
+end;
+
+function TBricArray3D<T_Item>.GetGridZ :Integer;
+begin
+     Result := BricZ + 1;
+end;
+
+procedure TBricArray3D<T_Item>.SetGridZ( const GridZ_:Integer );
+begin
+     BricY := GridZ_ - 1;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGridArray3D<T_Item>
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+/////////////////////////////////////////////////////////////////////// アクセス
+
+function TGridArray3D<T_Item>.GetDivX :Integer;
 begin
      Result := _CountX - 1;
 end;
 
-procedure TGridMap3D<T_Item>.SetDivX( const DivX_:Integer );
+procedure TGridArray3D<T_Item>.SetDivX( const DivX_:Integer );
 begin
      _CountX  := DivX_ + 1;  MakeArray;
 end;
 
-function TGridMap3D<T_Item>.GetDivY :Integer;
+function TGridArray3D<T_Item>.GetDivY :Integer;
 begin
      Result := _CountY - 1;
 end;
 
-procedure TGridMap3D<T_Item>.SetDivY( const DivY_:Integer );
+procedure TGridArray3D<T_Item>.SetDivY( const DivY_:Integer );
 begin
      _CountY  := DivY_ + 1;  MakeArray;
 end;
 
-function TGridMap3D<T_Item>.GetDivZ :Integer;
+function TGridArray3D<T_Item>.GetDivZ :Integer;
 begin
      Result := _CountZ - 1;
 end;
 
-procedure TGridMap3D<T_Item>.SetDivZ( const DivZ_:Integer );
+procedure TGridArray3D<T_Item>.SetDivZ( const DivZ_:Integer );
 begin
      _CountZ  := DivZ_ + 1;  MakeArray;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TGridMap3D<T_Item>.Create;
+constructor TGridArray3D<T_Item>.Create;
 begin
      Create( 0, 0, 0 );
 end;
 
-constructor TGridMap3D<T_Item>.Create( const DivX_,DivY_,DivZ_:Integer );
+constructor TGridArray3D<T_Item>.Create( const DivX_,DivY_,DivZ_:Integer );
 begin
      Create( DivX_, DivY_, DivZ_, 0 );
 end;
 
-constructor TGridMap3D<T_Item>.Create( const DivX_,DivY_,DivZ_,Margin_:Integer );
+constructor TGridArray3D<T_Item>.Create( const DivX_,DivY_,DivZ_,Margin_:Integer );
 begin
      Create( DivX_, DivY_, DivZ_, Margin_, Margin_, Margin_ );
 end;
 
-constructor TGridMap3D<T_Item>.Create( const DivX_,DivY_,DivZ_,MarginX_,MarginY_,MarginZ_:Integer );
+constructor TGridArray3D<T_Item>.Create( const DivX_,DivY_,DivZ_,MarginX_,MarginY_,MarginZ_:Integer );
 begin
      inherited;
 
@@ -267,7 +331,7 @@ begin
      _CountZ  := DivZ_ + 1;
 end;
 
-destructor TGridMap3D<T_Item>.Destroy;
+destructor TGridArray3D<T_Item>.Destroy;
 begin
 
      inherited;
