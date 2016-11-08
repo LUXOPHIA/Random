@@ -3,7 +3,7 @@
 interface //#################################################################### ■
 
 uses LUX, LUX.D1, LUX.D2,
-     LUX.Matrix.L4,
+     LUX.M4,
      LUX.Lattice.T2,
      LUX.Curve.T2.D1;
 
@@ -23,7 +23,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create( const BricX_,BricY_:Integer ); overload;
        destructor Destroy; override;
        ///// メソッド
-       function Nabla( const X_,Y_:Single ) :TSingle2D;
+       procedure Patch( const T_:TSingle2D; out M_:TSingleM4 ); overload;
+       procedure Patch( const T_:TSingle2D; out M_:TdSingleM4 ); overload;
+       function Interp( const T_:TSingle2D ) :Single; overload;
+       function Interp( const T_:TdSingle2D ) :TdSingle; overload;
+       function Nabla( const T_:TSingle2D ) :TSingle2D;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -66,26 +70,75 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TSingleGridMap2T.Nabla( const X_,Y_:Single ) :TSingle2D;
+procedure TSingleGridMap2T.Patch( const T_:TSingle2D; out M_:TSingleM4 );
 var
-   X, X1, X2, X3, X4,
-   Y, Y1, Y2, Y3, Y4 :Integer;
-   T :TdSingle2D;
-   M :TdSingleM4;
+   X1, X2, X3, X4,
+   Y1, Y2, Y3, Y4 :Integer;
 begin
-     X2 := Floor( X_ );  X1 := X2 - 1;  X3 := X2 + 1;  X4 := X3 + 1;
-     Y2 := Floor( Y_ );  Y1 := Y2 - 1;  Y3 := Y2 + 1;  Y4 := Y3 + 1;
+     X2 := Floor( T_.X );  X1 := X2 - 1;  X3 := X2 + 1;  X4 := X3 + 1;
+     Y2 := Floor( T_.Y );  Y1 := Y2 - 1;  Y3 := Y2 + 1;  Y4 := Y3 + 1;
 
-     T.o := TSingle2D.Create( X_ - X2,
-                              Y_ - Y2 );
-
-     with M do
+     with M_ do
      begin
           _11 := Grid[ X1, Y1 ];  _12 := Grid[ X2, Y1 ];  _13 := Grid[ X3, Y1 ];  _14 := Grid[ X4, Y1 ];
           _21 := Grid[ X1, Y2 ];  _22 := Grid[ X2, Y2 ];  _23 := Grid[ X3, Y2 ];  _24 := Grid[ X4, Y2 ];
           _31 := Grid[ X1, Y3 ];  _32 := Grid[ X2, Y3 ];  _33 := Grid[ X3, Y3 ];  _34 := Grid[ X4, Y3 ];
           _41 := Grid[ X1, Y4 ];  _42 := Grid[ X2, Y4 ];  _43 := Grid[ X3, Y4 ];  _44 := Grid[ X4, Y4 ];
      end;
+end;
+
+procedure TSingleGridMap2T.Patch( const T_:TSingle2D; out M_:TdSingleM4 );
+var
+   X1, X2, X3, X4,
+   Y1, Y2, Y3, Y4 :Integer;
+begin
+     X2 := Floor( T_.X );  X1 := X2 - 1;  X3 := X2 + 1;  X4 := X3 + 1;
+     Y2 := Floor( T_.Y );  Y1 := Y2 - 1;  Y3 := Y2 + 1;  Y4 := Y3 + 1;
+
+     with M_ do
+     begin
+          _11 := Grid[ X1, Y1 ];  _12 := Grid[ X2, Y1 ];  _13 := Grid[ X3, Y1 ];  _14 := Grid[ X4, Y1 ];
+          _21 := Grid[ X1, Y2 ];  _22 := Grid[ X2, Y2 ];  _23 := Grid[ X3, Y2 ];  _24 := Grid[ X4, Y2 ];
+          _31 := Grid[ X1, Y3 ];  _32 := Grid[ X2, Y3 ];  _33 := Grid[ X3, Y3 ];  _34 := Grid[ X4, Y3 ];
+          _41 := Grid[ X1, Y4 ];  _42 := Grid[ X2, Y4 ];  _43 := Grid[ X3, Y4 ];  _44 := Grid[ X4, Y4 ];
+     end;
+end;
+
+function TSingleGridMap2T.Interp( const T_:TSingle2D ) :Single;
+var
+   M :TSingleM4;
+   T :TSingle2D;
+begin
+     Patch( T_, M );
+
+     T.X := Frac( T_.X );
+     T.Y := Frac( T_.Y );
+
+     Result := BSplin4( M, T );
+end;
+
+function TSingleGridMap2T.Interp( const T_:TdSingle2D ) :TdSingle;
+var
+   M :TdSingleM4;
+   T :TdSingle2D;
+begin
+     Patch( T_.o, M );
+
+     T.X.o := Frac( T_.X.o );  T.X.d := T_.X.d;
+     T.Y.o := Frac( T_.Y.o );  T.Y.d := T_.Y.d;
+
+     Result := BSplin4( M, T );
+end;
+
+function TSingleGridMap2T.Nabla( const T_:TSingle2D ) :TSingle2D;
+var
+   M :TdSingleM4;
+   T :TdSingle2D;
+begin
+     Patch( T_, M );
+
+     T.X.o := Frac( T_.X );
+     T.Y.o := Frac( T_.Y );
 
      T.d := TSingle2D.Create( 1, 0 );
 
