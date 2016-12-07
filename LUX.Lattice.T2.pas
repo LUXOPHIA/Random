@@ -8,9 +8,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TArray2D<T_Item>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TArray2D<_TItem_>
 
-     TArray2D<T_Item> = class
+     TArray2D<_TItem_> = class
      private
        _AllX :Integer;
        _AllY :Integer;
@@ -22,14 +22,14 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _CountY  :Integer;
        _MarginX :Integer;
        _MarginY :Integer;
-       _Item    :array of T_Item;
+       _Item    :array of _TItem_;
        ///// アクセス
        procedure SetCountX( const CountX_:Integer );
        procedure SetCountY( const CountY_:Integer );
        procedure SetMarginX( const MarginX_:Integer );
        procedure SetMarginY( const MarginY_:Integer );
-       function GetItem( const X_,Y_:Integer ) :T_Item;
-       procedure SetItem( const X_,Y_:Integer; const Item_:T_Item );
+       function GetItem( const X_,Y_:Integer ) :_TItem_;
+       procedure SetItem( const X_,Y_:Integer; const Item_:_TItem_ );
      public
        constructor Create; overload;
        constructor Create( const CountX_,CountY_:Integer ); overload;
@@ -42,15 +42,15 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property CountY                      :Integer read   _CountY  write SetCountY ;
        property MarginX                     :Integer read   _MarginX write SetMarginX;
        property MarginY                     :Integer read   _MarginY write SetMarginY;
-       property Item[ const X_,Y_:Integer ] :T_Item  read GetItem    write SetItem   ; default;
+       property Item[ const X_,Y_:Integer ] :_TItem_ read GetItem    write SetItem   ; default;
        ///// メソッド
-       class procedure Swap( var Array0_,Array1_:TArray2D<T_Item> ); static;
+       class procedure Swap( var Array0_,Array1_:TArray2D<_TItem_> ); static;
        procedure MakeEdgeLoop;
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBricArray2D<T_Item>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBricArray2D<_TItem_>
 
-     TBricArray2D<T_Item> = class( TArray2D<T_Item> )
+     TBricArray2D<_TItem_> = class( TArray2D<_TItem_> )
      private
      protected
        ///// アクセス
@@ -60,16 +60,16 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetGridY( const GridY_:Integer );
      public
        ///// プロパティ
-       property Bric[ const X_,Y_:Integer ] :T_Item  read GetItem   write SetItem  ; default;
+       property Bric[ const X_,Y_:Integer ] :_TItem_ read GetItem   write SetItem  ; default;
        property BricX                       :Integer read   _CountX write SetCountX;
        property BricY                       :Integer read   _CountY write SetCountY;
        property GridX                       :Integer read GetGridX  write SetGridX ;
        property GridY                       :Integer read GetGridY  write SetGridY ;
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGridArray2D<T_Item>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGridArray2D<_TItem_>
 
-     TGridArray2D<T_Item> = class( TArray2D<T_Item> )
+     TGridArray2D<_TItem_> = class( TArray2D<_TItem_> )
      private
      protected
        ///// アクセス
@@ -83,7 +83,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create( const BricX_,BricY_,MarginX_,MarginY_:Integer ); overload;
        destructor Destroy; override;
        ///// プロパティ
-       property Grid[ const X_,Y_:Integer ] :T_Item  read GetItem   write SetItem  ; default;
+       property Grid[ const X_,Y_:Integer ] :_TItem_ read GetItem   write SetItem  ; default;
        property GridX                       :Integer read   _CountX write SetCountX;
        property GridY                       :Integer read   _CountY write SetCountY;
        property BricX                       :Integer read GetBricX  write SetBricX ;
@@ -102,13 +102,13 @@ implementation //###############################################################
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TArray2D<T_Item>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TArray2D<_TItem_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TArray2D<T_Item>.MakeArray;
+procedure TArray2D<_TItem_>.MakeArray;
 begin
      _AllX := _MarginX + _CountX + _MarginX;
      _AllY := _MarginY + _CountY + _MarginY;
@@ -116,7 +116,7 @@ begin
      SetLength( _Item, _AllX * _AllY );
 end;
 
-function TArray2D<T_Item>.XYtoI( const X_,Y_:Integer ) :Integer;
+function TArray2D<_TItem_>.XYtoI( const X_,Y_:Integer ) :Integer;
 begin
      Result := ( _MarginX + X_ ) + _AllX * ( _MarginY + Y_ );
 end;
@@ -125,54 +125,54 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-procedure TArray2D<T_Item>.SetCountX( const CountX_:Integer );
+procedure TArray2D<_TItem_>.SetCountX( const CountX_:Integer );
 begin
      _CountX := CountX_;  MakeArray;
 end;
 
-procedure TArray2D<T_Item>.SetCountY( const CountY_:Integer );
+procedure TArray2D<_TItem_>.SetCountY( const CountY_:Integer );
 begin
      _CountY := CountY_;  MakeArray;
 end;
 
-procedure TArray2D<T_Item>.SetMarginX( const MarginX_:Integer );
+procedure TArray2D<_TItem_>.SetMarginX( const MarginX_:Integer );
 begin
      _MarginX := MarginX_;  MakeArray;
 end;
 
-procedure TArray2D<T_Item>.SetMarginY( const MarginY_:Integer );
+procedure TArray2D<_TItem_>.SetMarginY( const MarginY_:Integer );
 begin
      _MarginY := MarginY_;  MakeArray;
 end;
 
-function TArray2D<T_Item>.GetItem( const X_,Y_:Integer ) :T_Item;
+function TArray2D<_TItem_>.GetItem( const X_,Y_:Integer ) :_TItem_;
 begin
      Result := _Item[ XYtoI( X_, Y_ ) ];
 end;
 
-procedure TArray2D<T_Item>.SetItem( const X_,Y_:Integer; const Item_:T_Item );
+procedure TArray2D<_TItem_>.SetItem( const X_,Y_:Integer; const Item_:_TItem_ );
 begin
      _Item[ XYtoI( X_, Y_ ) ] := Item_;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TArray2D<T_Item>.Create;
+constructor TArray2D<_TItem_>.Create;
 begin
      Create( 0, 0 );
 end;
 
-constructor TArray2D<T_Item>.Create( const CountX_,CountY_:Integer );
+constructor TArray2D<_TItem_>.Create( const CountX_,CountY_:Integer );
 begin
      Create( CountX_, CountY_, 0 );
 end;
 
-constructor TArray2D<T_Item>.Create( const CountX_,CountY_,Margin_:Integer );
+constructor TArray2D<_TItem_>.Create( const CountX_,CountY_,Margin_:Integer );
 begin
      Create( CountX_, CountY_, Margin_, Margin_ );
 end;
 
-constructor TArray2D<T_Item>.Create( const CountX_,CountY_,MarginX_,MarginY_:Integer );
+constructor TArray2D<_TItem_>.Create( const CountX_,CountY_,MarginX_,MarginY_:Integer );
 begin
      inherited Create;
 
@@ -182,12 +182,12 @@ begin
      _MarginY := MarginY_;
 end;
 
-procedure TArray2D<T_Item>.AfterConstruction;
+procedure TArray2D<_TItem_>.AfterConstruction;
 begin
      MakeArray;
 end;
 
-destructor TArray2D<T_Item>.Destroy;
+destructor TArray2D<_TItem_>.Destroy;
 begin
 
      inherited;
@@ -195,14 +195,14 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-class procedure TArray2D<T_Item>.Swap( var Array0_,Array1_:TArray2D<T_Item> );
+class procedure TArray2D<_TItem_>.Swap( var Array0_,Array1_:TArray2D<_TItem_> );
 var
-   A :TArray2D<T_Item>;
+   A :TArray2D<_TItem_>;
 begin
      A := Array0_;  Array0_ := Array1_;  Array1_ := A;
 end;
 
-procedure TArray2D<T_Item>.MakeEdgeLoop;
+procedure TArray2D<_TItem_>.MakeEdgeLoop;
 var
    EX, EY, MX, MY :Integer;
 begin
@@ -232,7 +232,7 @@ begin
      end;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBricArray2D<T_Item>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBricArray2D<_TItem_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -240,29 +240,29 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TBricArray2D<T_Item>.GetGridX :Integer;
+function TBricArray2D<_TItem_>.GetGridX :Integer;
 begin
      Result := BricX + 1;
 end;
 
-procedure TBricArray2D<T_Item>.SetGridX( const GridX_:Integer );
+procedure TBricArray2D<_TItem_>.SetGridX( const GridX_:Integer );
 begin
      BricX := GridX_ - 1;
 end;
 
-function TBricArray2D<T_Item>.GetGridY :Integer;
+function TBricArray2D<_TItem_>.GetGridY :Integer;
 begin
      Result := BricY + 1;
 end;
 
-procedure TBricArray2D<T_Item>.SetGridY( const GridY_:Integer );
+procedure TBricArray2D<_TItem_>.SetGridY( const GridY_:Integer );
 begin
      BricY := GridY_ - 1;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGridArray2D<T_Item>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGridArray2D<_TItem_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -270,39 +270,39 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TGridArray2D<T_Item>.GetBricX :Integer;
+function TGridArray2D<_TItem_>.GetBricX :Integer;
 begin
      Result := _CountX - 1;
 end;
 
-procedure TGridArray2D<T_Item>.SetBricX( const BricX_:Integer );
+procedure TGridArray2D<_TItem_>.SetBricX( const BricX_:Integer );
 begin
      _CountX  := BricX_ + 1;  MakeArray;
 end;
 
-function TGridArray2D<T_Item>.GetBricY :Integer;
+function TGridArray2D<_TItem_>.GetBricY :Integer;
 begin
      Result := _CountY - 1;
 end;
 
-procedure TGridArray2D<T_Item>.SetBricY( const BricY_:Integer );
+procedure TGridArray2D<_TItem_>.SetBricY( const BricY_:Integer );
 begin
      _CountY  := BricY_ + 1;  MakeArray;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TGridArray2D<T_Item>.Create;
+constructor TGridArray2D<_TItem_>.Create;
 begin
      Create( 0, 0 );
 end;
 
-constructor TGridArray2D<T_Item>.Create( const BricX_,BricY_:Integer );
+constructor TGridArray2D<_TItem_>.Create( const BricX_,BricY_:Integer );
 begin
      Create( BricX_, BricY_, 0, 0 );
 end;
 
-constructor TGridArray2D<T_Item>.Create( const BricX_,BricY_,MarginX_,MarginY_:Integer );
+constructor TGridArray2D<_TItem_>.Create( const BricX_,BricY_,MarginX_,MarginY_:Integer );
 begin
      inherited;
 
@@ -310,7 +310,7 @@ begin
      _CountY  := BricY_ + 1;
 end;
 
-destructor TGridArray2D<T_Item>.Destroy;
+destructor TGridArray2D<_TItem_>.Destroy;
 begin
 
      inherited;
