@@ -9,6 +9,96 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TByte3D
+
+     TByte3D = record
+     private
+     public
+     case Byte of
+      0:( _ :array [ 1..3 ] of Byte; );
+      1:(  X :Byte;
+           Y :Byte;
+           Z :Byte;                  );
+      2:( _1 :Byte;
+          _2 :Byte;
+          _3 :Byte;                  );
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TShortint3D
+
+     TShortint3D = record
+     private
+     public
+     case Byte of
+      0:( _ :array [ 1..3 ] of Shortint; );
+      1:(  X :Shortint;
+           Y :Shortint;
+           Z :Shortint;                  );
+      2:( _1 :Shortint;
+          _2 :Shortint;
+          _3 :Shortint;                  );
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TWord3D
+
+     TWord3D = record
+     private
+     public
+     case Byte of
+      0:( _ :array [ 1..3 ] of Word; );
+      1:(  X :Word;
+           Y :Word;
+           Z :Word;                  );
+      2:( _1 :Word;
+          _2 :Word;
+          _3 :Word;                  );
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSmallint3D
+
+     TSmallint3D = record
+     private
+     public
+     case Byte of
+      0:( _ :array [ 1..3 ] of Smallint; );
+      1:(  X :Smallint;
+           Y :Smallint;
+           Z :Smallint;                  );
+      2:( _1 :Smallint;
+          _2 :Smallint;
+          _3 :Smallint;                  );
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCardinal3D
+
+     TCardinal3D = record
+     private
+     public
+     case Byte of
+      0:( _ :array [ 1..3 ] of Cardinal; );
+      1:(  X :Cardinal;
+           Y :Cardinal;
+           Z :Cardinal;                  );
+      2:( _1 :Cardinal;
+          _2 :Cardinal;
+          _3 :Cardinal;                  );
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TInteger3D
+
+     TInteger3D = record
+     private
+     public
+     case Byte of
+      0:( _ :array [ 1..3 ] of Integer; );
+      1:(  X :Integer;
+           Y :Integer;
+           Z :Integer;                  );
+      2:( _1 :Integer;
+          _2 :Integer;
+          _3 :Integer;                  );
+     end;
+
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingle3D
 
      TSingle3D = record
@@ -426,11 +516,50 @@ function Ave( const P1_,P2_,P3_,P4_:TdDouble3D ) :TdDouble3D; inline; overload;
 function Nabla( const Func_:TSingleImplicit3D; const P_:TSingle3D ) :TSingle3D; inline; overload;
 function Nabla( const Func_:TDoubleImplicit3D; const P_:TDouble3D ) :TDouble3D; inline; overload;
 
+function PolySolveReal( const Ks_:TSingle3D; out Xs_:TSingle2D ) :Byte; overload;
+function PolySolveReal( const Ks_:TDouble3D; out Xs_:TDouble2D ) :Byte; overload;
+
 implementation //############################################################### ■
 
 uses System.SysUtils, System.Math;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TByte3D
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TShortint3D
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TWord3D
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSmallint3D
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCardinal3D
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TInteger3D
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingle3D
 
@@ -2060,6 +2189,68 @@ begin
      P.d := TDouble3D.Create( 0, 0, 1 );
 
      Result.Z := Func_( P ).d;
+end;
+
+//------------------------------------------------------------------------------
+
+function PolySolveReal( const Ks_:TSingle3D; out Xs_:TSingle2D ) :Byte;
+var
+   X1, D, A2, D2 :Single;
+begin
+     if Ks_[ 3 ] = 0 then
+     begin
+          Result := PolySolveReal( TSingle2D( Ks_ ), X1 );
+
+          Xs_[ 1 ] := X1;
+     end
+     else
+     begin
+          D := Pow2( Ks_[ 2 ] ) - 4 * Ks_[ 3 ] * Ks_[ 1 ];
+
+          Result := 1 + Sign( D );
+
+          A2 := 2 * Ks_[ 3 ];
+
+          case Result of
+            1: Xs_[ 1 ] := -Ks_[ 2 ] / A2;
+            2: begin
+                    D2 := Roo2( D );
+
+                    Xs_[ 1 ] := ( -Ks_[ 2 ] - D2 ) / A2;
+                    Xs_[ 2 ] := ( -Ks_[ 2 ] + D2 ) / A2;
+               end;
+          end;
+     end;
+end;
+
+function PolySolveReal( const Ks_:TDouble3D; out Xs_:TDouble2D ) :Byte;
+var
+   X1, D, A2, D2 :Double;
+begin
+     if Ks_[ 3 ] = 0 then
+     begin
+          Result := PolySolveReal( TDouble2D( Ks_ ), X1 );
+
+          Xs_[ 1 ] := X1;
+     end
+     else
+     begin
+          D := Pow2( Ks_[ 2 ] ) - 4 * Ks_[ 3 ] * Ks_[ 1 ];
+
+          Result := 1 + Sign( D );
+
+          A2 := 2 * Ks_[ 3 ];
+
+          case Result of
+            1: Xs_[ 1 ] := -Ks_[ 2 ] / A2;
+            2: begin
+                    D2 := Roo2( D );
+
+                    Xs_[ 1 ] := ( -Ks_[ 2 ] - D2 ) / A2;
+                    Xs_[ 2 ] := ( -Ks_[ 2 ] + D2 ) / A2;
+               end;
+          end;
+     end;
 end;
 
 //############################################################################## □
