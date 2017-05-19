@@ -1,8 +1,8 @@
-﻿unit LUX.GPU.OpenGL.FMX;
+﻿unit LUX.GPU.OpenGL.VCL;
 
 interface //#################################################################### ■
 
-uses FMX.Forms,
+uses Vcl.Forms,
      LUX, LUX.GPU.OpenGL;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
@@ -17,8 +17,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      TOepnGL = class( LUX.GPU.OpenGL.TOepnGL )
      private
-       _Form :TCommonCustomForm;
+       _Form :TCustomForm;
      protected
+       ///// メソッド
        procedure CreateWindow; override;
        procedure DestroyWindow; override;
      public
@@ -32,8 +33,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 implementation //############################################################### ■
 
-uses FMX.Platform.Win,
-     Winapi.OpenGLext;
+uses Winapi.OpenGLext;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
@@ -49,14 +49,14 @@ uses FMX.Platform.Win,
 
 procedure TOepnGL.CreateWindow;
 begin
-     _Form := TCommonCustomForm.Create( nil );
+     _Form := TCustomForm.CreateNew( nil );
 
-     _WND := WindowHandleToPlatform( _Form.Handle ).Wnd;
+     _WND := _Form.Handle;
 end;
 
 procedure TOepnGL.DestroyWindow;
 begin
-     _Form.DisposeOf;
+     _Form.Free;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
