@@ -9,6 +9,86 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TByte2D
+
+     TByte2D = record
+     private
+       ///// アクセス
+       function GetV( const I_:Integer ) :Byte; inline;
+       procedure SetV( const I_:Integer; const V_:Byte ); inline;
+     public
+       constructor Create( const V_:Byte ); overload;
+       constructor Create( const X_,Y_:Byte ); overload;
+       ///// プロパティ
+       property _s[ const I_:Integer ] :Byte read GetV write SetV; default;
+     case Byte of
+      0:( _ :array [ 1..2 ] of Byte; );
+      1:(  X :Byte;
+           Y :Byte;                  );
+      2:( _1 :Byte;
+          _2 :Byte;                  );
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TShortint2D
+
+     TShortint2D = record
+     private
+     public
+       constructor Create( const V_:Shortint ); overload;
+       constructor Create( const X_,Y_:Shortint ); overload;
+     case Byte of
+      0:( _ :array [ 1..2 ] of Shortint; );
+      1:(  X :Shortint;
+           Y :Shortint;                  );
+      2:( _1 :Shortint;
+          _2 :Shortint;                  );
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TWord2D
+
+     TWord2D = record
+     private
+     public
+       constructor Create( const V_:Word ); overload;
+       constructor Create( const X_,Y_:Word ); overload;
+     case Byte of
+      0:( _ :array [ 1..2 ] of Word; );
+      1:(  X :Word;
+           Y :Word;                  );
+      2:( _1 :Word;
+          _2 :Word;                  );
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSmallint2D
+
+     TSmallint2D = record
+     private
+     public
+       constructor Create( const V_:Smallint ); overload;
+       constructor Create( const X_,Y_:Smallint ); overload;
+     case Byte of
+      0:( _ :array [ 1..2 ] of Smallint; );
+      1:(  X :Smallint;
+           Y :Smallint;                  );
+      2:( _1 :Smallint;
+          _2 :Smallint;                  );
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCardinal2D
+
+     TCardinal2D = record
+     private
+     public
+       constructor Create( const V_:Cardinal ); overload;
+       constructor Create( const X_,Y_:Cardinal ); overload;
+     case Byte of
+      0:( _ :array [ 1..2 ] of Cardinal; );
+      1:(  X :Cardinal;
+           Y :Cardinal;                  );
+      2:( _1 :Cardinal;
+          _2 :Cardinal;                  );
+     end;
+
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TInteger2D
 
      TInteger2D = record
@@ -18,13 +98,15 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetV( const I_:Integer; const V_:Integer ); inline;
      public
        ///// プロパティ
-       property V[ const I_:Integer ] :Integer read GetV write SetV; default;
-     case Integer of
-      0:( _ :array [ 1..2 ] of Integer; );
+       property _s[ const I_:Integer ] :Integer read GetV write SetV; default;
+     case Byte of
+      0:( _  :array [ 1..2 ] of Integer; );
       1:(  X :Integer;
-           Y :Integer;                  );
+           Y :Integer;                   );
       2:( _1 :Integer;
-          _2 :Integer;                  );
+          _2 :Integer;                   );
+      3:(  U :Integer;
+           V :Integer;                   );
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingle2D
@@ -43,10 +125,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
        constructor Create( const X_,Y_:Single );
        ///// プロパティ
-       property V[ const I_:Integer ] :Single    read GetV      write SetV     ; default;
-       property Siz2                  :Single    read GetSiz2   write SetSiz2  ;
-       property Size                  :Single    read GetSize   write SetSize  ;
-       property Unitor                :TSingle2D read GetUnitor write SetUnitor;
+       property _s[ const I_:Integer ] :Single    read GetV      write SetV     ; default;
+       property Siz2                   :Single    read GetSiz2   write SetSiz2  ;
+       property Size                   :Single    read GetSize   write SetSize  ;
+       property Unitor                 :TSingle2D read GetUnitor write SetUnitor;
        ///// 演算子
        class operator Negative( const V_:TSingle2D ) :TSingle2D; inline;
        class operator Positive( const V_:TSingle2D ) :TSingle2D; inline;
@@ -72,12 +154,14 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class function RandBS1 :TSingle2D; static;
        class function RandBS2 :TSingle2D; static;
        class function RandBS4 :TSingle2D; static;
-     case Integer of
-      0:( _ :array [ 1..2 ] of Single; );
+     case Byte of
+      0:( _  :array [ 1..2 ] of Single; );
       1:(  X :Single;
-           Y :Single;                  );
+           Y :Single;                   );
       2:( _1 :Single;
-          _2 :Single;                  );
+          _2 :Single;                   );
+      3:(  U :Single;
+           V :Single;                   );
      end;
 
      TSinglePos2D = TSingle2D;
@@ -99,10 +183,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
        constructor Create( const X_,Y_:Double );
        ///// プロパティ
-       property V[ const I_:Integer ] :Double    read GetV      write SetV     ; default;
-       property Siz2                  :Double    read GetSiz2   write SetSiz2  ;
-       property Size                  :Double    read GetSize   write SetSize  ;
-       property Unitor                :TDouble2D read GetUnitor write SetUnitor;
+       property _s[ const I_:Integer ] :Double    read GetV      write SetV     ; default;
+       property Siz2                   :Double    read GetSiz2   write SetSiz2  ;
+       property Size                   :Double    read GetSize   write SetSize  ;
+       property Unitor                 :TDouble2D read GetUnitor write SetUnitor;
        ///// 演算子
        class operator Negative( const V_:TDouble2D ) :TDouble2D; inline;
        class operator Positive( const V_:TDouble2D ) :TDouble2D; inline;
@@ -128,12 +212,14 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class function RandBS1 :TDouble2D; static;
        class function RandBS2 :TDouble2D; static;
        class function RandBS4 :TDouble2D; static;
-     case Integer of
-      0:( _ :array [ 1..2 ] of Double; );
+     case Byte of
+      0:( _  :array [ 1..2 ] of Double; );
       1:(  X :Double;
-           Y :Double;                  );
+           Y :Double;                   );
       2:( _1 :Double;
-          _2 :Double;                  );
+          _2 :Double;                   );
+      3:(  U :Double;
+           V :Double;                   );
      end;
 
      TDoublePos2D = TDouble2D;
@@ -159,12 +245,12 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
        constructor Create( const X_,Y_:TdSingle );
        ///// プロパティ
-       property V[ const I_:Integer ] :TdSingle   read GetV      write SetV     ; default;
-       property o                     :TSingle2D  read Geto      write Seto     ;
-       property d                     :TSingle2D  read Getd      write Setd     ;
-       property Siz2                  :TdSingle   read GetSiz2   write SetSiz2  ;
-       property Size                  :TdSingle   read GetSize   write SetSize  ;
-       property Unitor                :TdSingle2D read GetUnitor write SetUnitor;
+       property _s[ const I_:Integer ] :TdSingle   read GetV      write SetV     ; default;
+       property o                      :TSingle2D  read Geto      write Seto     ;
+       property d                      :TSingle2D  read Getd      write Setd     ;
+       property Siz2                   :TdSingle   read GetSiz2   write SetSiz2  ;
+       property Size                   :TdSingle   read GetSize   write SetSize  ;
+       property Unitor                 :TdSingle2D read GetUnitor write SetUnitor;
        ///// 演算子
        class operator Negative( const V_:TdSingle2D ) :TdSingle2D; inline;
        class operator Positive( const V_:TdSingle2D ) :TdSingle2D; inline;
@@ -178,12 +264,14 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class operator Explicit( const P_:TdSingle2D ) :TPointF; inline;
        class operator Implicit( const P_:TSingle2D ) :TdSingle2D; inline;
        class operator Explicit( const P_:TdSingle2D ) :TSingle2D; inline;
-     case Integer of
-      0:( _ :array [ 1..2 ] of TdSingle; );
+     case Byte of
+      0:( _  :array [ 1..2 ] of TdSingle; );
       1:(  X :TdSingle;
-           Y :TdSingle;                  );
+           Y :TdSingle;                   );
       2:( _1 :TdSingle;
-          _2 :TdSingle;                  );
+          _2 :TdSingle;                   );
+      3:(  U :TdSingle;
+           V :TdSingle;                   );
      end;
 
      TdSinglePos2D = TdSingle2D;
@@ -209,12 +297,12 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
        constructor Create( const X_,Y_:TdDouble );
        ///// プロパティ
-       property V[ const I_:Integer ] :TdDouble   read GetV      write SetV     ; default;
-       property o                     :TDouble2D  read Geto      write Seto     ;
-       property d                     :TDouble2D  read Getd      write Setd     ;
-       property Siz2                  :TdDouble   read GetSiz2   write SetSiz2  ;
-       property Size                  :TdDouble   read GetSize   write SetSize  ;
-       property Unitor                :TdDouble2D read GetUnitor write SetUnitor;
+       property _s[ const I_:Integer ] :TdDouble   read GetV      write SetV     ; default;
+       property o                      :TDouble2D  read Geto      write Seto     ;
+       property d                      :TDouble2D  read Getd      write Setd     ;
+       property Siz2                   :TdDouble   read GetSiz2   write SetSiz2  ;
+       property Size                   :TdDouble   read GetSize   write SetSize  ;
+       property Unitor                 :TdDouble2D read GetUnitor write SetUnitor;
        ///// 演算子
        class operator Negative( const V_:TdDouble2D ) :TdDouble2D; inline;
        class operator Positive( const V_:TdDouble2D ) :TdDouble2D; inline;
@@ -228,12 +316,14 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class operator Explicit( const P_:TdDouble2D ) :TPointF; inline;
        class operator Implicit( const P_:TDouble2D ) :TdDouble2D; inline;
        class operator Explicit( const P_:TdDouble2D ) :TDouble2D; inline;
-     case Integer of
-      0:( _ :array [ 1..2 ] of TdDouble; );
+     case Byte of
+      0:( _  :array [ 1..2 ] of TdDouble; );
       1:(  X :TdDouble;
-           Y :TdDouble;                  );
+           Y :TdDouble;                   );
       2:( _1 :TdDouble;
-          _2 :TdDouble;                  );
+          _2 :TdDouble;                   );
+      3:(  U :TdDouble;
+           V :TdDouble;                   );
      end;
 
      TdDoublePos2D = TdDouble2D;
@@ -569,6 +659,108 @@ implementation //###############################################################
 uses System.SysUtils, System.Math;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TByte2D
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+/////////////////////////////////////////////////////////////////////// アクセス
+
+function TByte2D.GetV( const I_:Integer ) :Byte;
+begin
+     Result := _[ I_ ];
+end;
+
+procedure TByte2D.SetV( const I_:Integer; const V_:Byte );
+begin
+     _[ I_ ] := V_;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TByte2D.Create( const V_:Byte );
+begin
+     X := V_;
+     Y := V_;
+end;
+
+constructor TByte2D.Create( const X_,Y_:Byte );
+begin
+     X := X_;
+     Y := Y_;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TShortint2D
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TShortint2D.Create( const V_:Shortint );
+begin
+     X := V_;
+     Y := V_;
+end;
+
+constructor TShortint2D.Create( const X_,Y_:Shortint );
+begin
+     X := X_;
+     Y := Y_;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TWord2D
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TWord2D.Create( const V_:Word );
+begin
+     X := V_;
+     Y := V_;
+end;
+
+constructor TWord2D.Create( const X_,Y_:Word );
+begin
+     X := X_;
+     Y := Y_;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSmallint2D
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TSmallint2D.Create( const V_:Smallint );
+begin
+     X := V_;
+     Y := V_;
+end;
+
+constructor TSmallint2D.Create( const X_,Y_:Smallint );
+begin
+     X := X_;
+     Y := Y_;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCardinal2D
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TCardinal2D.Create( const V_:Cardinal );
+begin
+     X := V_;
+     Y := V_;
+end;
+
+constructor TCardinal2D.Create( const X_,Y_:Cardinal );
+begin
+     X := X_;
+     Y := Y_;
+end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TInteger2D
 
