@@ -45,7 +45,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure MakeArray;
        function XtoI( const X_:Integer ) :Integer; inline;
      protected
-       _Items  :array of _TItem_;
+       _Elems  :TArray<_TItem_>;
        _ItemsX :Integer;
        _MargsX :Integer;
        ///// アクセス
@@ -211,7 +211,7 @@ procedure TArray1D<_TItem_>.MakeArray;
 begin
      _TotalX := _MargsX + _ItemsX + _MargsX;
 
-     SetLength( _Items, _TotalX );
+     SetLength( _Elems, _TotalX );
 
      _OnChange;
 end;
@@ -227,17 +227,17 @@ end;
 
 function TArray1D<_TItem_>.GetItems( const X_:Integer ) :_TItem_;
 begin
-     Result := _Items[ XtoI( X_ ) ];
+     Result := _Elems[ XtoI( X_ ) ];
 end;
 
 procedure TArray1D<_TItem_>.SetItems( const X_:Integer; const Item_:_TItem_ );
 begin
-     _Items[ XtoI( X_ ) ] := Item_;
+     _Elems[ XtoI( X_ ) ] := Item_;
 end;
 
 function TArray1D<_TItem_>.GetItemP( const X_:Integer ) :_PItem_;
 begin
-     Result := @_Items[ XtoI( X_ ) ];
+     Result := @_Elems[ XtoI( X_ ) ];
 end;
 
 //------------------------------------------------------------------------------

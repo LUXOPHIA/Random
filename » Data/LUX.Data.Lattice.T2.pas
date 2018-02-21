@@ -40,7 +40,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure MakeArray;
        function XYtoI( const X_,Y_:Integer ) :Integer; inline;
      protected
-       _Items  :array of _TItem_;
+       _Elems  :TArray<_TItem_>;
        _ItemsX :Integer;
        _ItemsY :Integer;
        _MargsX :Integer;
@@ -167,7 +167,7 @@ begin
      _TotalX := _MargsX + _ItemsX + _MargsX;
      _TotalY := _MargsY + _ItemsY + _MargsY;
 
-     SetLength( _Items, _TotalX * _TotalY );
+     SetLength( _Elems, _TotalX * _TotalY );
 end;
 
 function TArray2D<_TItem_>.XYtoI( const X_,Y_:Integer ) :Integer;
@@ -181,17 +181,17 @@ end;
 
 function TArray2D<_TItem_>.GetItems( const X_,Y_:Integer ) :_TItem_;
 begin
-     Result := _Items[ XYtoI( X_, Y_ ) ];
+     Result := _Elems[ XYtoI( X_, Y_ ) ];
 end;
 
 procedure TArray2D<_TItem_>.SetItems( const X_,Y_:Integer; const Item_:_TItem_ );
 begin
-     _Items[ XYtoI( X_, Y_ ) ] := Item_;
+     _Elems[ XYtoI( X_, Y_ ) ] := Item_;
 end;
 
 function TArray2D<_TItem_>.GetItemP( const X_,Y_:Integer ) :_PItem_;
 begin
-     Result := @_Items[ XYtoI( X_, Y_ ) ];
+     Result := @_Elems[ XYtoI( X_, Y_ ) ];
 end;
 
 //------------------------------------------------------------------------------

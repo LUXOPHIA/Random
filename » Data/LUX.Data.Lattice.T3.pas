@@ -75,7 +75,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure MakeArray; virtual;
        function XYZtoI( const X_,Y_,Z_:Integer ) :Integer; inline;
      protected
-       _Items  :TArray<_TItem_>;
+       _Elems  :TArray<_TItem_>;
        _ElemsX :Integer;
        _ElemsY :Integer;
        _ElemsZ :Integer;
@@ -364,7 +364,7 @@ begin
      _ElemsY := _MargsY + _ItemsY + _MargsY;
      _ElemsZ := _MargsZ + _ItemsZ + _MargsZ;
 
-     SetLength( _Items, GetElemsN );
+     SetLength( _Elems, GetElemsN );
 end;
 
 function TArray3D<_TItem_>.XYZtoI( const X_,Y_,Z_:Integer ) :Integer;
@@ -378,19 +378,19 @@ end;
 
 function TArray3D<_TItem_>.GetItems( const X_,Y_,Z_:Integer ) :_TItem_;
 begin
-     Result := _Items[ XYZtoI( X_, Y_, Z_ ) ];
+     Result := _Elems[ XYZtoI( X_, Y_, Z_ ) ];
 end;
 
 procedure TArray3D<_TItem_>.SetItems( const X_,Y_,Z_:Integer; const Item_:_TItem_ );
 begin
-     _Items[ XYZtoI( X_, Y_, Z_ ) ] := Item_;
+     _Elems[ XYZtoI( X_, Y_, Z_ ) ] := Item_;
 end;
 
 //------------------------------------------------------------------------------
 
 function TArray3D<_TItem_>.GetItemP( const X_,Y_,Z_:Integer ) :_PItem_;
 begin
-     Result := @_Items[ XYZtoI( X_, Y_, Z_ ) ];
+     Result := @_Elems[ XYZtoI( X_, Y_, Z_ ) ];
 end;
 
 //------------------------------------------------------------------------------
@@ -529,7 +529,7 @@ end;
 
 function TArray3D<_TItem_>.GetLines( const Y_,Z_:Integer ) :PByteArray;
 begin
-     Result := @_Items[ XYZtoI( 0, Y_, Z_ ) ];
+     Result := @_Elems[ XYZtoI( 0, Y_, Z_ ) ];
 end;
 
 function TArray3D<_TItem_>.GetLineSize :Integer;
@@ -590,12 +590,12 @@ end;
 
 procedure TArray3D<_TItem_>.Read( const Stream_:TStream );
 begin
-     Stream_.Read( _Items[ 0 ], GetElemsByte );
+     Stream_.Read( _Elems[ 0 ], GetElemsByte );
 end;
 
 procedure TArray3D<_TItem_>.Write( const Stream_:TStream );
 begin
-     Stream_.Write( _Items[ 0 ], GetElemsByte );
+     Stream_.Write( _Elems[ 0 ], GetElemsByte );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBricArray3D<_TItem_>
