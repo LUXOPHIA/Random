@@ -30,17 +30,19 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property MargsY :Integer read GetMargsY write SetMargsY;
      end;
 
+     //-------------------------------------------------------------------------
+
      TArray2D<_TItem_> = class( TInterfacedBase, IArray2D )
      public type
        _PItem_ = ^_TItem_;
      private
-       _ElemsX :Integer;
-       _ElemsY :Integer;
        ///// メソッド
        procedure MakeArray;
        function XYtoI( const X_,Y_:Integer ) :Integer; inline;
      protected
        _Elems  :TArray<_TItem_>;
+       _ElemsX :Integer;
+       _ElemsY :Integer;
        _ItemsX :Integer;
        _ItemsY :Integer;
        _MargsX :Integer;
@@ -92,6 +94,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property GridsY :Integer read GetGridsY write SetGridsY;
      end;
 
+     //-------------------------------------------------------------------------
+
      TBricArray2D<_TItem_> = class( TArray2D<_TItem_>, IBricArray2D )
      private
      protected
@@ -124,6 +128,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property BricsX :Integer read GetBricsX write SetBricsX;
        property BricsY :Integer read GetBricsY write SetBricsY;
      end;
+
+     //-------------------------------------------------------------------------
 
      TGridArray2D<_TItem_> = class( TArray2D<_TItem_>, IGridArray2D )
      private
