@@ -125,9 +125,12 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure AfterConstruction; override;
        destructor Destroy; override;
        ///// プロパティ
+       property ItemByte                        :Integer    read GetItemByte                ;
        property ElemsX                          :Integer    read GetElemsX                  ;
        property ElemsY                          :Integer    read GetElemsY                  ;
        property ElemsZ                          :Integer    read GetElemsZ                  ;
+       property ElemsN                          :Integer    read GetElemsN                  ;
+       property ElemsByte                       :Integer    read GetElemsByte               ;
        property Items[ const X_,Y_,Z_:Integer ] :_TItem_    read GetItems    write SetItems ; default;
        property ItemP[ const X_,Y_,Z_:Integer ] :_PItem_    read GetItemP                   ;
        property ItemsX                          :Integer    read GetItemsX   write SetItemsX;
@@ -136,9 +139,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property MargsX                          :Integer    read GetMargsX   write SetMargsX;
        property MargsY                          :Integer    read GetMargsY   write SetMargsY;
        property MargsZ                          :Integer    read GetMargsZ   write SetMargsZ;
-       property ItemByte                        :Integer    read GetItemByte                ;
-       property ElemsN                          :Integer    read GetElemsN                  ;
-       property ElemsByte                       :Integer    read GetElemsByte               ;
        property CounStepX                       :Integer    read GetCounStepX               ;
        property CounStepY                       :Integer    read GetCounStepY               ;
        property CounStepZ                       :Integer    read GetCounStepZ               ;
@@ -364,7 +364,7 @@ begin
      _ElemsY := _MargsY + _ItemsY + _MargsY;
      _ElemsZ := _MargsZ + _ItemsZ + _MargsZ;
 
-     SetLength( _Elems, GetElemsN );
+     SetLength( _Elems, ElemsN );
 end;
 
 function TArray3D<_TItem_>.XYZtoI( const X_,Y_,Z_:Integer ) :Integer;
