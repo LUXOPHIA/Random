@@ -34,8 +34,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public type
        _PItem_ = ^_TItem_;
      private
-       _TotalX :Integer;
-       _TotalY :Integer;
+       _ElemsX :Integer;
+       _ElemsY :Integer;
        ///// メソッド
        procedure MakeArray;
        function XYtoI( const X_,Y_:Integer ) :Integer; inline;
@@ -164,15 +164,15 @@ implementation //###############################################################
 
 procedure TArray2D<_TItem_>.MakeArray;
 begin
-     _TotalX := _MargsX + _ItemsX + _MargsX;
-     _TotalY := _MargsY + _ItemsY + _MargsY;
+     _ElemsX := _MargsX + _ItemsX + _MargsX;
+     _ElemsY := _MargsY + _ItemsY + _MargsY;
 
-     SetLength( _Elems, _TotalX * _TotalY );
+     SetLength( _Elems, _ElemsX * _ElemsY );
 end;
 
 function TArray2D<_TItem_>.XYtoI( const X_,Y_:Integer ) :Integer;
 begin
-     Result := _TotalX * ( _MargsY + Y_ ) + ( _MargsX + X_ );
+     Result := _ElemsX * ( _MargsY + Y_ ) + ( _MargsX + X_ );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected

@@ -40,7 +40,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public type
        _PItem_ = ^_TItem_;
      private
-       _TotalX :Integer;
+       _ElemsX :Integer;
        ///// メソッド
        procedure MakeArray;
        function XtoI( const X_:Integer ) :Integer; inline;
@@ -209,9 +209,9 @@ end;
 
 procedure TArray1D<_TItem_>.MakeArray;
 begin
-     _TotalX := _MargsX + _ItemsX + _MargsX;
+     _ElemsX := _MargsX + _ItemsX + _MargsX;
 
-     SetLength( _Elems, _TotalX );
+     SetLength( _Elems, _ElemsX );
 
      _OnChange;
 end;
