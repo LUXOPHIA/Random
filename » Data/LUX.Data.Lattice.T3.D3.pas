@@ -59,6 +59,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
        ///// メソッド
        function InterpFrac( const Xd_,Yd_,Zd_:Single ) :Single; override;
+       function Grad( const X_,Y_,Z_:Single ) :TSingle3D;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -113,6 +114,18 @@ begin
      for Z := 0 to 1 do Zs[ Z ] := ( Ys[ Z, 1 ] - Ys[ Z, 0 ] ) * Yd_ + Ys[ Z, 0 ];
 
      Result := ( Zs[ 1 ] - Zs[ 0 ] ) * Zd_ + Zs[ 0 ];
+end;
+
+//------------------------------------------------------------------------------
+
+function TSingleBricIterGridArray3D.Grad( const X_,Y_,Z_:Single ) :TSingle3D;
+begin
+     with Result do
+     begin
+          X := Interp( X_+1, Y_  , Z_   ) - Interp( X_-1, Y_  , Z_   );
+          Y := Interp( X_  , Y_+1, Z_   ) - Interp( X_  , Y_-1, Z_   );
+          Z := Interp( X_  , Y_  , Z_+1 ) - Interp( X_  , Y_  , Z_-1 );
+     end;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
