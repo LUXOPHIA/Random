@@ -67,7 +67,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
      public
        ///// メソッド
-       function InterpFrac( const Xd_,Yd_,Zd_:Single ) :Single; override;
+       function FracInterp( const Xd_,Yd_,Zd_:Single ) :Single; override;
        function Grad( const X_,Y_,Z_:Single ) :TSingle3D;
      end;
 
@@ -145,7 +145,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TSingleBricIterGridArray3D.InterpFrac( const Xd_,Yd_,Zd_:Single ) :Single;
+function TSingleBricIterGridArray3D.FracInterp( const Xd_,Yd_,Zd_:Single ) :Single;
 var
    Z, Y :Integer;
    Ys :array [ -1..+2, -1..+2 ] of Single;
