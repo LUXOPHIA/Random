@@ -7,9 +7,10 @@ uses System.SysUtils, System.Classes,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
-     TArray3D<_TItem_>     = class;
-     TBricArray3D<_TItem_> = class;
-     TGridArray3D<_TItem_> = class;
+     TArray3D<_TItem_>             = class;
+     TBricArray3D<_TItem_>         = class;
+     TGridArray3D<_TItem_>         = class;
+     TBricIterGridArray3D<_TItem_> = class;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
@@ -336,6 +337,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure GoNextZ( const N_:Integer ); overload;
        function InterpFrac( const Xd_,Yd_,Zd_:Single ) :_TItem_; virtual; abstract;
        function Interp( const X_,Y_,Z_:Single ) :_TItem_; virtual;
+       procedure ForBrics( const Proc_:TProc );
+       procedure ForEdgesX( const Proc_:TProc );
+       procedure ForEdgesY( const Proc_:TProc );
+       procedure ForEdgesZ( const Proc_:TProc );
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -1040,6 +1045,100 @@ begin
      PosX := Floor( X_ );  Xd := X_ - PosX;
 
      Result := InterpFrac( Xd, Yd, Zd );
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TBricIterGridArray3D<_TItem_>.ForBrics( const Proc_:TProc );
+var
+   X, Y, Z :Integer;
+begin
+     PosZ := 0;
+     for Z := 1 to _Array.BricsZ do
+     begin
+          PosY := 0;
+          for Y := 1 to _Array.BricsY do
+          begin
+               PosX := 0;
+               for X := 1 to _Array.BricsX do
+               begin
+                    Proc_;
+
+                    GoNextX;
+               end;
+               GoNextY;
+          end;
+          GoNextZ;
+     end;
+end;
+
+procedure TBricIterGridArray3D<_TItem_>.ForEdgesX( const Proc_:TProc );
+var
+   X, Y, Z :Integer;
+begin
+     PosZ := 0;
+     for Z := 0 to _Array.BricsZ do
+     begin
+          PosY := 0;
+          for Y := 0 to _Array.BricsY do
+          begin
+               PosX := 0;
+               for X := 1 to _Array.BricsX do
+               begin
+                    Proc_;
+
+                    GoNextX;
+               end;
+               GoNextY;
+          end;
+          GoNextZ;
+     end;
+end;
+
+procedure TBricIterGridArray3D<_TItem_>.ForEdgesY( const Proc_:TProc );
+var
+   X, Y, Z :Integer;
+begin
+     PosZ := 0;
+     for Z := 0 to _Array.BricsZ do
+     begin
+          PosY := 0;
+          for Y := 1 to _Array.BricsY do
+          begin
+               PosX := 0;
+               for X := 0 to _Array.BricsX do
+               begin
+                    Proc_;
+
+                    GoNextX;
+               end;
+               GoNextY;
+          end;
+          GoNextZ;
+     end;
+end;
+
+procedure TBricIterGridArray3D<_TItem_>.ForEdgesZ( const Proc_:TProc );
+var
+   X, Y, Z :Integer;
+begin
+     PosZ := 0;
+     for Z := 1 to _Array.BricsZ do
+     begin
+          PosY := 0;
+          for Y := 0 to _Array.BricsY do
+          begin
+               PosX := 0;
+               for X := 0 to _Array.BricsX do
+               begin
+                    Proc_;
+
+                    GoNextX;
+               end;
+               GoNextY;
+          end;
+          GoNextZ;
+     end;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
