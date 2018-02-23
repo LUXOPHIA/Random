@@ -7,6 +7,10 @@ uses System.SysUtils, System.Classes,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
+     TSingleBricArray3D         = class;
+     TSingleGridArray3D         = class;
+     TSingleBricIterGridArray3D = class;
+
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
@@ -41,6 +45,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
      public
+       ///// メソッド
+       procedure ForBrics( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
+       procedure ForEdgesX( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
+       procedure ForEdgesY( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
+       procedure ForEdgesZ( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleBricIterGridArray3D
@@ -89,6 +98,42 @@ uses System.Math;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+/////////////////////////////////////////////////////////////////////// メソッド
+
+procedure TSingleGridArray3D.ForBrics( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
+begin
+     inherited ForBrics( procedure( const B_:TBricIterGridArray3D<Single> )
+     begin
+          Proc_( B_ as TSingleBricIterGridArray3D );
+     end );
+end;
+
+procedure TSingleGridArray3D.ForEdgesX( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
+begin
+     inherited ForEdgesX( procedure( const E_:TBricIterGridArray3D<Single> )
+     begin
+          Proc_( E_ as TSingleBricIterGridArray3D );
+     end );
+end;
+
+procedure TSingleGridArray3D.ForEdgesY( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
+begin
+     inherited ForEdgesY( procedure( const E_:TBricIterGridArray3D<Single> )
+     begin
+          Proc_( E_ as TSingleBricIterGridArray3D );
+     end );
+end;
+
+procedure TSingleGridArray3D.ForEdgesZ( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
+begin
+     inherited ForEdgesZ( procedure( const E_:TBricIterGridArray3D<Single> )
+     begin
+          Proc_( E_ as TSingleBricIterGridArray3D );
+     end );
+end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleBricIterGridArray3D
 
