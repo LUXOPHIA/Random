@@ -231,6 +231,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetBricsY( const BricsY_:Integer );
        function GetBricsZ :Integer;
        procedure SetBricsZ( const BricsZ_:Integer );
+       function NewBricIter :TBricIterGridArray3D<_TItem_>; virtual;
      public
        constructor Create( const BricsX_,BricsY_,BricsZ_,MargsX_,MargsY_,MargsZ_:Integer ); override;
        destructor Destroy; override;
@@ -245,6 +246,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        ///// メソッド
        procedure Read( const Stream_:TStream ); override;
        procedure Write( const Stream_:TStream ); override;
+       procedure ForBrics( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
+       procedure ForEdgesX( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
+       procedure ForEdgesY( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
+       procedure ForEdgesZ( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBricIterGridArray3D<_TItem_>
@@ -681,6 +686,13 @@ begin
      _ItemsZ  := BricsZ_ + 1;  MakeArray;
 end;
 
+//------------------------------------------------------------------------------
+
+function TGridArray3D<_TItem_>.NewBricIter :TBricIterGridArray3D<_TItem_>;
+begin
+     Result := TBricIterGridArray3D<_TItem_>.Create( Self );
+end;
+
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 constructor TGridArray3D<_TItem_>.Create( const BricsX_,BricsY_,BricsZ_,MargsX_,MargsY_,MargsZ_:Integer );
@@ -744,6 +756,52 @@ begin
      end;
 
      inherited;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TGridArray3D<_TItem_>.ForBrics( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
+var
+   B :TBricIterGridArray3D<_TItem_>;
+begin
+     B := NewBricIter;
+
+     B.ForBrics( procedure begin Proc_( B ); end );
+
+     B.DisposeOf;
+end;
+
+procedure TGridArray3D<_TItem_>.ForEdgesX( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
+var
+   E :TBricIterGridArray3D<_TItem_>;
+begin
+     E := NewBricIter;
+
+     E.ForEdgesX( procedure begin Proc_( E ); end );
+
+     E.DisposeOf;
+end;
+
+procedure TGridArray3D<_TItem_>.ForEdgesY( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
+var
+   E :TBricIterGridArray3D<_TItem_>;
+begin
+     E := NewBricIter;
+
+     E.ForEdgesY( procedure begin Proc_( E ); end );
+
+     E.DisposeOf;
+end;
+
+procedure TGridArray3D<_TItem_>.ForEdgesZ( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
+var
+   E :TBricIterGridArray3D<_TItem_>;
+begin
+     E := NewBricIter;
+
+     E.ForEdgesZ( procedure begin Proc_( E ); end );
+
+     E.DisposeOf;
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBricIterGridArray3D<_TItem_>
