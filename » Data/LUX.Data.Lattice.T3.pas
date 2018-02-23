@@ -289,7 +289,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected type
        _PItem_ = ^_TItem_;
      protected
-       _Array :TGridArray3D<_TItem_>;
+       _Paren :TGridArray3D<_TItem_>;
        _HeadZ :array [ -1..+2 ] of _PItem_;
        _HeadY :array [ -1..+2, -1..+2 ] of _PItem_;
        _Grids :array [ -1..+2, -1..+2, -1..+2 ] of _PItem_;
@@ -773,7 +773,7 @@ begin
                begin
                     _Grids[ Z, Y, X ] := _HeadY[ Z, Y ];
 
-                    Inc( _Grids[ Z, Y, X ], _GX[ X ] * _Array.CounStepX );
+                    Inc( _Grids[ Z, Y, X ], _GX[ X ] * _Paren.CounStepX );
                end;
           end;
      end;
@@ -796,7 +796,7 @@ begin
           begin
                _HeadY[ Z, Y ] := _HeadZ[ Z ];
 
-               Inc( _HeadY[ Z, Y ], _GY[ Y ] * _Array.CounStepY );
+               Inc( _HeadY[ Z, Y ], _GY[ Y ] * _Paren.CounStepY );
           end;
      end;
 end;
@@ -814,9 +814,9 @@ begin
      begin
           _GZ[ Z ] := PosZ_ + Z;
 
-          _HeadZ[ Z ] := _Array.ItemP[ 0, 0, 0 ];
+          _HeadZ[ Z ] := _Paren.ItemP[ 0, 0, 0 ];
 
-          Inc( _HeadZ[ Z ], _GZ[ Z ] * _Array.CounStepZ );
+          Inc( _HeadZ[ Z ], _GZ[ Z ] * _Paren.CounStepZ );
      end;
 end;
 
@@ -872,7 +872,7 @@ constructor TBricIterGridArray3D<_TItem_>.Create( const Array_:TGridArray3D<_TIt
 begin
      inherited Create;
 
-     _Array := Array_;
+     _Paren := Array_;
 
      Pos := TInteger3D.Create( 0, 0, 0 );
 end;
@@ -897,7 +897,7 @@ begin
           begin
                Move( _Grids[ Z, Y, -1 ], _Grids[ Z, Y, 0 ], 3 * SizeOf( _PItem_ ) );
 
-               Dec( _Grids[ Z, Y, -1 ], _Array.CounStepX );
+               Dec( _Grids[ Z, Y, -1 ], _Paren.CounStepX );
           end;
      end;
 end;
@@ -914,7 +914,7 @@ begin
           begin
                Move( _Grids[ Z, Y, 0 ], _Grids[ Z, Y, -1 ], 3 * SizeOf( _PItem_ ) );
 
-               Inc( _Grids[ Z, Y, +2 ], _Array.CounStepX );
+               Inc( _Grids[ Z, Y, +2 ], _Paren.CounStepX );
           end;
      end;
 end;
@@ -929,11 +929,11 @@ begin
 
      for Z := -1 to +2 do
      begin
-          Move( _HeadY[ Z, -1 ], _HeadY[ Z, 0 ],  3 * SizeOf( _PItem_ ) );  Dec( _HeadY[ Z, -1 ], _Array.CounStepY );
+          Move( _HeadY[ Z, -1 ], _HeadY[ Z, 0 ],  3 * SizeOf( _PItem_ ) );  Dec( _HeadY[ Z, -1 ], _Paren.CounStepY );
 
           Move( _Grids[ Z, -1 ], _Grids[ Z, 0 ], 12 * SizeOf( _PItem_ ) );
 
-          for X := -1 to +2 do Dec( _Grids[ Z, -1, X ], _Array.CounStepY );
+          for X := -1 to +2 do Dec( _Grids[ Z, -1, X ], _Paren.CounStepY );
      end;
 end;
 
@@ -945,11 +945,11 @@ begin
 
      for Z := -1 to +2 do
      begin
-          Move( _HeadY[ Z, 0 ], _HeadY[ Z, -1 ],  3 * SizeOf( _PItem_ ) );  Inc( _HeadY[ Z, +2 ], _Array.CounStepY );
+          Move( _HeadY[ Z, 0 ], _HeadY[ Z, -1 ],  3 * SizeOf( _PItem_ ) );  Inc( _HeadY[ Z, +2 ], _Paren.CounStepY );
 
           Move( _Grids[ Z, 0 ], _Grids[ Z, -1 ], 12 * SizeOf( _PItem_ ) );
 
-          for X := -1 to +2 do Inc( _Grids[ Z, +2, X ], _Array.CounStepY );
+          for X := -1 to +2 do Inc( _Grids[ Z, +2, X ], _Paren.CounStepY );
      end;
 end;
 
@@ -961,13 +961,13 @@ var
 begin
      Move( _GZ[ -1 ], _GZ[ 0 ], 3 * SizeOf( Integer ) );  Dec( _GZ[ -1 ] );
 
-     Move( _HeadZ[ -1 ], _HeadZ[ 0 ], 3 * SizeOf( _PItem_ ) );  Dec( _HeadZ[ -1 ], _Array.CounStepZ );
+     Move( _HeadZ[ -1 ], _HeadZ[ 0 ], 3 * SizeOf( _PItem_ ) );  Dec( _HeadZ[ -1 ], _Paren.CounStepZ );
 
      Move( _Grids[ -1 ], _Grids[ 0 ], 48 * SizeOf( _PItem_ ) );
 
      for Y := -1 to +2 do
      begin
-          for X := -1 to +2 do Dec( _Grids[ -1, Y, X ], _Array.CounStepZ );
+          for X := -1 to +2 do Dec( _Grids[ -1, Y, X ], _Paren.CounStepZ );
      end;
 end;
 
@@ -977,7 +977,7 @@ var
 begin
      Move( _GZ[ 0 ], _GZ[ -1 ], 3 * SizeOf( Integer ) );  Inc( _GZ[ +2 ] );
 
-     Move( _HeadZ[ 0 ], _HeadZ[ -1 ], 3 * SizeOf( _PItem_ ) );  Inc( _HeadZ[ +2 ], _Array.CounStepZ );
+     Move( _HeadZ[ 0 ], _HeadZ[ -1 ], 3 * SizeOf( _PItem_ ) );  Inc( _HeadZ[ +2 ], _Paren.CounStepZ );
 
      Move( _Grids[ 0 ], _Grids[ -1 ], 48 * SizeOf( _PItem_ ) );
 
@@ -985,7 +985,7 @@ begin
      begin
           for X := -1 to +2 do
           begin
-               Inc( _Grids[ +2, Y, X ], _Array.CounStepZ );
+               Inc( _Grids[ +2, Y, X ], _Paren.CounStepZ );
           end;
      end;
 end;
@@ -1054,13 +1054,13 @@ var
    X, Y, Z :Integer;
 begin
      PosZ := 0;
-     for Z := 1 to _Array.BricsZ do
+     for Z := 1 to _Paren.BricsZ do
      begin
           PosY := 0;
-          for Y := 1 to _Array.BricsY do
+          for Y := 1 to _Paren.BricsY do
           begin
                PosX := 0;
-               for X := 1 to _Array.BricsX do
+               for X := 1 to _Paren.BricsX do
                begin
                     Proc_;
 
@@ -1077,13 +1077,13 @@ var
    X, Y, Z :Integer;
 begin
      PosZ := 0;
-     for Z := 0 to _Array.BricsZ do
+     for Z := 0 to _Paren.BricsZ do
      begin
           PosY := 0;
-          for Y := 0 to _Array.BricsY do
+          for Y := 0 to _Paren.BricsY do
           begin
                PosX := 0;
-               for X := 1 to _Array.BricsX do
+               for X := 1 to _Paren.BricsX do
                begin
                     Proc_;
 
@@ -1100,13 +1100,13 @@ var
    X, Y, Z :Integer;
 begin
      PosZ := 0;
-     for Z := 0 to _Array.BricsZ do
+     for Z := 0 to _Paren.BricsZ do
      begin
           PosY := 0;
-          for Y := 1 to _Array.BricsY do
+          for Y := 1 to _Paren.BricsY do
           begin
                PosX := 0;
-               for X := 0 to _Array.BricsX do
+               for X := 0 to _Paren.BricsX do
                begin
                     Proc_;
 
@@ -1123,13 +1123,13 @@ var
    X, Y, Z :Integer;
 begin
      PosZ := 0;
-     for Z := 1 to _Array.BricsZ do
+     for Z := 1 to _Paren.BricsZ do
      begin
           PosY := 0;
-          for Y := 0 to _Array.BricsY do
+          for Y := 0 to _Paren.BricsY do
           begin
                PosX := 0;
-               for X := 0 to _Array.BricsX do
+               for X := 0 to _Paren.BricsX do
                begin
                     Proc_;
 
