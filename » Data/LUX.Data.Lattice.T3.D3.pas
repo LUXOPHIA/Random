@@ -167,9 +167,9 @@ function TSingleBricIterGridArray3D.Grad( const X_,Y_,Z_:Single ) :TSingle3D;
 begin
      with Result do
      begin
-          X := Interp( X_+1, Y_  , Z_   ) - Interp( X_-1, Y_  , Z_   );
-          Y := Interp( X_  , Y_+1, Z_   ) - Interp( X_  , Y_-1, Z_   );
-          Z := Interp( X_  , Y_  , Z_+1 ) - Interp( X_  , Y_  , Z_-1 );
+          X := ( Interp( X_+1, Y_  , Z_   ) - Interp( X_-1, Y_  , Z_   ) ) / 2;
+          Y := ( Interp( X_  , Y_+1, Z_   ) - Interp( X_  , Y_-1, Z_   ) ) / 2;
+          Z := ( Interp( X_  , Y_  , Z_+1 ) - Interp( X_  , Y_  , Z_-1 ) ) / 2;
      end;
 end;
 
