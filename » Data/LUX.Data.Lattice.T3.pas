@@ -74,6 +74,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
        ///// メソッド
        procedure MakeArray; virtual;
+       function ElemXYZtoI( const X_,Y_,Z_:Integer ) :Integer;
        function XYZtoI( const X_,Y_,Z_:Integer ) :Integer; inline;
      protected
        _Elems  :TArray<_TItem_>;
@@ -90,6 +91,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _OnChange :TNotifyEvent;
        ///// アクセス
        function GetItemByte :Integer;
+       function GetElems( const X_,Y_,Z_:Integer ) :_TItem_;
+       procedure SetElems( const X_,Y_,Z_:Integer; const Elem_:_TItem_ );
+       function GetElemP( const X_,Y_,Z_:Integer ) :_PItem_;
        function GetElemsX :Integer;
        function GetElemsY :Integer;
        function GetElemsZ :Integer;
@@ -127,6 +131,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        destructor Destroy; override;
        ///// プロパティ
        property ItemByte                        :Integer    read GetItemByte                ;
+       property Elems[ const X_,Y_,Z_:Integer ] :_TItem_    read GetElems    write SetElems ;
+       property ElemP[ const X_,Y_,Z_:Integer ] :_PItem_    read GetElemP                   ;
        property ElemsX                          :Integer    read GetElemsX                  ;
        property ElemsY                          :Integer    read GetElemsY                  ;
        property ElemsZ                          :Integer    read GetElemsZ                  ;
@@ -379,6 +385,11 @@ begin
      SetLength( _Elems, ElemsN );
 end;
 
+function TArray3D<_TItem_>.ElemXYZtoI( const X_,Y_,Z_:Integer ) :Integer;
+begin
+     Result := ( Z_ * _ElemsY + Y_ ) * _ElemsX + X_;
+end;
+
 function TArray3D<_TItem_>.XYZtoI( const X_,Y_,Z_:Integer ) :Integer;
 begin
      Result := ( ( _MargsZ + Z_ ) * _ElemsY + ( _MargsY + Y_ ) ) * _ElemsX + ( _MargsX + X_ );
@@ -391,6 +402,23 @@ end;
 function TArray3D<_TItem_>.GetItemByte :Integer;
 begin
      Result := SizeOf( _TItem_ );
+end;
+
+//------------------------------------------------------------------------------
+
+function TArray3D<_TItem_>.GetElems( const X_,Y_,Z_:Integer ) :_TItem_;
+begin
+     Result := _Elems[ ElemXYZtoI( X_, Y_, Z_ ) ];
+end;
+
+procedure TArray3D<_TItem_>.SetElems( const X_,Y_,Z_:Integer; const Elem_:_TItem_ );
+begin
+     _Elems[ ElemXYZtoI( X_, Y_, Z_ ) ] := Elem_;
+end;
+
+function TArray3D<_TItem_>.GetElemP( const X_,Y_,Z_:Integer ) :_PItem_;
+begin
+     Result := @_Elems[ ElemXYZtoI( X_, Y_, Z_ ) ];
 end;
 
 //------------------------------------------------------------------------------
