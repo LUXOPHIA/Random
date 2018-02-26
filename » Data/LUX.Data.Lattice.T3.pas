@@ -289,8 +289,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure GoNextY( const N_:Integer ); overload;
        procedure GoPrevZ( const N_:Integer ); overload;
        procedure GoNextZ( const N_:Integer ); overload;
-       function FracInterp( const Xd_,Yd_,Zd_:Single ) :_TItem_;
-       function Interp( const X_,Y_,Z_:Single ) :_TItem_;
+       function Interp( const Xd_,Yd_,Zd_:Single ) :_TItem_;
+       function AbsoInterp( const X_,Y_,Z_:Single ) :_TItem_;
      end;
 
      //-------------------------------------------------------------------------
@@ -348,8 +348,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure GoNextY( const N_:Integer ); overload;
        procedure GoPrevZ( const N_:Integer ); overload;
        procedure GoNextZ( const N_:Integer ); overload;
-       function FracInterp( const Xd_,Yd_,Zd_:Single ) :_TItem_; virtual;
-       function Interp( const X_,Y_,Z_:Single ) :_TItem_; virtual;
+       function Interp( const Xd_,Yd_,Zd_:Single ) :_TItem_; virtual;
+       function AbsoInterp( const X_,Y_,Z_:Single ) :_TItem_; virtual;
        procedure ForBrics( const Proc_:TProc );
        procedure ForEdgesX( const Proc_:TProc );
        procedure ForEdgesY( const Proc_:TProc );
@@ -1134,12 +1134,12 @@ end;
 
 //------------------------------------------------------------------------------
 
-function TBricIterGridArray3D<_TItem_>.FracInterp( const Xd_,Yd_,Zd_:Single ) :_TItem_;
+function TBricIterGridArray3D<_TItem_>.Interp( const Xd_,Yd_,Zd_:Single ) :_TItem_;
 begin
      Result := Grids[ Round( Xd_ ), Round( Yd_ ), Round( Zd_ ) ];
 end;
 
-function TBricIterGridArray3D<_TItem_>.Interp( const X_,Y_,Z_:Single ) :_TItem_;
+function TBricIterGridArray3D<_TItem_>.AbsoInterp( const X_,Y_,Z_:Single ) :_TItem_;
 var
    Xd, Yd, Zd :Single;
 begin
@@ -1147,7 +1147,7 @@ begin
      PosY := Floor( Y_ );  Yd := Y_ - PosY;
      PosX := Floor( X_ );  Xd := X_ - PosX;
 
-     Result := FracInterp( Xd, Yd, Zd );
+     Result := Interp( Xd, Yd, Zd );
 end;
 
 //------------------------------------------------------------------------------
