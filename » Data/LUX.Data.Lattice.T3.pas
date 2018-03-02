@@ -22,6 +22,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      ['{2ED01C38-BB77-4958-83DE-E4F723A74774}']
        ///// アクセス
        function GetItemByte :Integer;
+       function GetElemsP0 :Pointer;
        function GetElemsX :Integer;
        function GetElemsY :Integer;
        function GetElemsZ :Integer;
@@ -47,6 +48,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function GetByteStepZ :Integer;
        ///// プロパティ
        property ItemByte  :Integer read GetItemByte                 ;
+       property ElemsP0   :Pointer read GetElemsP0                  ;
        property ElemsX    :Integer read GetElemsX                   ;
        property ElemsY    :Integer read GetElemsY                   ;
        property ElemsZ    :Integer read GetElemsZ                   ;
@@ -91,6 +93,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _OnChange :TNotifyEvent;
        ///// アクセス
        function GetItemByte :Integer;
+       function GetElemsP0 :Pointer;
        function GetElems( const X_,Y_,Z_:Integer ) :_TItem_;
        procedure SetElems( const X_,Y_,Z_:Integer; const Elem_:_TItem_ );
        function GetElemP( const X_,Y_,Z_:Integer ) :_PItem_;
@@ -131,6 +134,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        destructor Destroy; override;
        ///// プロパティ
        property ItemByte                        :Integer    read GetItemByte                ;
+       property ElemsP0                         :Pointer    read GetElemsP0                 ;
        property Elems[ const X_,Y_,Z_:Integer ] :_TItem_    read GetElems    write SetElems ;
        property ElemP[ const X_,Y_,Z_:Integer ] :_PItem_    read GetElemP                   ;
        property ElemsX                          :Integer    read GetElemsX                  ;
@@ -402,6 +406,13 @@ end;
 function TArray3D<_TItem_>.GetItemByte :Integer;
 begin
      Result := SizeOf( _TItem_ );
+end;
+
+//------------------------------------------------------------------------------
+
+function TArray3D<_TItem_>.GetElemsP0 :Pointer;
+begin
+     Result := @_Elems[ 0 ];
 end;
 
 //------------------------------------------------------------------------------
