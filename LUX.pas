@@ -6,7 +6,8 @@ uses System.Types, System.SysUtils, System.Classes, System.Math.Vectors, System.
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
-     PPByte = ^PByte;
+     PPByte    = ^PByte;
+     PPLongint = ^PLongint;
 
      //-------------------------------------------------------------------------
 
@@ -310,6 +311,14 @@ function Clamp( const X_,Min_,Max_:Integer ) :Integer; inline; overload;
 function Clamp( const X_,Min_,Max_:Single ) :Single; inline; overload;
 function Clamp( const X_,Min_,Max_:Double ) :Double; inline; overload;
 
+function ClampMin( const X_,Min_:Integer ) :Integer; inline; overload;
+function ClampMin( const X_,Min_:Single ) :Single; inline; overload;
+function ClampMin( const X_,Min_:Double ) :Double; inline; overload;
+
+function ClampMax( const X_,Max_:Integer ) :Integer; inline; overload;
+function ClampMax( const X_,Max_:Single ) :Single; inline; overload;
+function ClampMax( const X_,Max_:Double ) :Double; inline; overload;
+
 function Min( const A_,B_,C_:Integer ) :Integer; overload;
 function Min( const A_,B_,C_:Single ) :Single; overload;
 function Min( const A_,B_,C_:Double ) :Double; overload;
@@ -366,10 +375,29 @@ function FileToBytes( const FileName_:string ) :TBytes;
 
 function Comb( N_,K_:Cardinal ) :UInt64;
 
-function BinPowN( const N_:Integer ) :Integer; overload;
-function BinPowN( const N_:Cardinal ) :Cardinal; overload;
-function BinPowN( const N_:Int64 ) :Int64; overload;
-function BinPowN( const N_:UInt64 ) :UInt64; overload;
+function BinPow( const N_:Integer ) :Integer; overload;
+function BinPow( const N_:Cardinal ) :Cardinal; overload;
+function BinPow( const N_:Int64 ) :Int64; overload;
+function BinPow( const N_:UInt64 ) :UInt64; overload;
+
+function IntToStr( const Value_:Integer; const N_:Integer; const C_:Char = '0' ) :String; overload;
+function IntToStr( const Value_:Int64; const N_:Integer; const C_:Char = '0' ) :String; overload;
+function IntToStrP( const Value_:Integer; const N_:Integer; const C_:Char = '0' ) :String; overload;
+function IntToStrP( const Value_:Int64; const N_:Integer; const C_:Char = '0' ) :String; overload;
+
+function FloatToStr( const Value_:Single; const N_:Integer; out Man_,Exp_:String ) :Boolean; overload;
+function FloatToStr( const Value_:Double; const N_:Integer; out Man_,Exp_:String ) :Boolean; overload;
+
+function _TestFloatToStr_Single( const Value_:String; const N_:Integer ) :String;
+function _TestFloatToStr_Double( const Value_:String; const N_:Integer ) :String;
+
+function FloatToStr( const Value_:Single; const N_:Integer; out Man_,Exp_:String; out DecN_:Integer ) :Boolean; overload;
+function FloatToStr( const Value_:Double; const N_:Integer; out Man_,Exp_:String; out DecN_:Integer ) :Boolean; overload;
+
+function FloatToStr( const Value_:Single; const N_:Integer ) :String; overload;
+function FloatToStr( const Value_:Double; const N_:Integer ) :String; overload;
+function FloatToStrP( const Value_:Single; const N_:Integer ) :String; overload;
+function FloatToStrP( const Value_:Double; const N_:Integer ) :String; overload;
 
 implementation //############################################################### ■
 
@@ -1222,7 +1250,7 @@ function Clamp( const X_,Min_,Max_:Integer ) :Integer;
 begin
      if X_ < Min_ then Result := Min_
                   else
-     if X_ > Max_ then Result := Max_
+     if Max_ < X_ then Result := Max_
                   else Result := X_;
 end;
 
@@ -1230,7 +1258,7 @@ function Clamp( const X_,Min_,Max_:Single ) :Single;
 begin
      if X_ < Min_ then Result := Min_
                   else
-     if X_ > Max_ then Result := Max_
+     if Max_ < X_ then Result := Max_
                   else Result := X_;
 end;
 
@@ -1238,7 +1266,47 @@ function Clamp( const X_,Min_,Max_:Double ) :Double;
 begin
      if X_ < Min_ then Result := Min_
                   else
-     if X_ > Max_ then Result := Max_
+     if Max_ < X_ then Result := Max_
+                  else Result := X_;
+end;
+
+//------------------------------------------------------------------------------
+
+function ClampMin( const X_,Min_:Integer ) :Integer;
+begin
+     if X_ < Min_ then Result := Min_
+                  else Result := X_;
+end;
+
+function ClampMin( const X_,Min_:Single ) :Single;
+begin
+     if X_ < Min_ then Result := Min_
+                  else Result := X_;
+end;
+
+function ClampMin( const X_,Min_:Double ) :Double;
+begin
+     if X_ < Min_ then Result := Min_
+                  else Result := X_;
+end;
+
+//------------------------------------------------------------------------------
+
+function ClampMax( const X_,Max_:Integer ) :Integer;
+begin
+     if Max_ < X_ then Result := Max_
+                  else Result := X_;
+end;
+
+function ClampMax( const X_,Max_:Single ) :Single;
+begin
+     if Max_ < X_ then Result := Max_
+                  else Result := X_;
+end;
+
+function ClampMax( const X_,Max_:Double ) :Double;
+begin
+     if Max_ < X_ then Result := Max_
                   else Result := X_;
 end;
 
@@ -1731,24 +1799,208 @@ end;
 
 //------------------------------------------------------------------------------
 
-function BinPowN( const N_:Integer ) :Integer;
+function BinPow( const N_:Integer ) :Integer;
 begin
      Result := 1 shl N_;
 end;
 
-function BinPowN( const N_:Cardinal ) :Cardinal;
+function BinPow( const N_:Cardinal ) :Cardinal;
 begin
      Result := 1 shl N_;
 end;
 
-function BinPowN( const N_:Int64 ) :Int64;
+function BinPow( const N_:Int64 ) :Int64;
 begin
      Result := 1 shl N_;
 end;
 
-function BinPowN( const N_:UInt64 ) :UInt64;
+function BinPow( const N_:UInt64 ) :UInt64;
 begin
      Result := 1 shl N_;
+end;
+
+//------------------------------------------------------------------------------
+
+function IntToStr( const Value_:Integer; const N_:Integer; const C_:Char = '0' ) :String;
+var
+   I :Integer;
+begin
+     Result := IntToStr( Value_ );
+
+     if Value_ < 0 then I := 1
+                   else I := 0;
+
+     Result := Result.Insert( I, StringOfChar( C_, N_ + I - Length( Result ) ) );
+end;
+
+function IntToStr( const Value_:Int64; const N_:Integer; const C_:Char = '0' ) :String;
+var
+   I :Integer;
+begin
+     Result := IntToStr( Value_ );
+
+     if Value_ < 0 then I := 1
+                   else I := 0;
+
+     Result := Result.Insert( I, StringOfChar( C_, N_ + I - Length( Result ) ) );
+end;
+
+function IntToStrP( const Value_:Integer; const N_:Integer; const C_:Char = '0' ) :String;
+begin
+     Result := IntToStr( Value_, N_, C_ );
+
+     if Value_ > 0 then Result := '+' + Result;
+end;
+
+function IntToStrP( const Value_:Int64; const N_:Integer; const C_:Char = '0' ) :String;
+begin
+     Result := IntToStr( Value_, N_, C_ );
+
+     if Value_ > 0 then Result := '+' + Result;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure _SplitME( const Value_:String; out Man_,Exp_:String );
+var
+   I :Integer;
+begin
+     I := Value_.IndexOf( 'E' );
+
+     Man_ := Value_.Substring( 0, I ).TrimRight( [ '0' ] );
+     Exp_ := Value_.Substring( I+1 );
+end;
+
+function FloatToStr( const Value_:Single; const N_:Integer; out Man_,Exp_:String ) :Boolean;
+begin
+     Result := not ( Value_.IsNan or Value_.IsInfinity );
+
+     if Result then _SplitME( FloatToStrF( Value_, TFloatFormat.ffExponent, N_, 0 ), Man_,Exp_ );
+end;
+
+function FloatToStr( const Value_:Double; const N_:Integer; out Man_,Exp_:String ) :Boolean;
+begin
+     Result := not ( Value_.IsNan or Value_.IsInfinity );
+
+     if Result then _SplitME( FloatToStrF( Value_, TFloatFormat.ffExponent, N_, 0 ), Man_,Exp_ );
+end;
+
+//------------------------------------------------------------------------------
+
+function _DecN( const Man_,Exp_:String ) :Integer;
+var
+   M, E :Integer;
+begin
+     if Man_.Chars[ 0 ] = '-' then M := Man_.Length - 3
+                              else M := Man_.Length - 2;
+
+     E := Exp_.ToInteger;
+
+     Result := M - E;
+
+     if Result <= 0 then Result := -E-1;
+end;
+
+function FloatToStr( const Value_:Single; const N_:Integer; out Man_,Exp_:String; out DecN_:Integer ) :Boolean;
+begin
+     Result := FloatToStr( Value_, N_, Man_, Exp_ );
+
+     if Result then DecN_ := _DecN( Man_, Exp_ );
+end;
+
+function FloatToStr( const Value_:Double; const N_:Integer; out Man_,Exp_:String; out DecN_:Integer ) :Boolean;
+begin
+     Result := FloatToStr( Value_, N_, Man_, Exp_ );
+
+     if Result then DecN_ := _DecN( Man_, Exp_ );
+end;
+
+//------------------------------------------------------------------------------
+
+function _TestFloatToStr_Single( const Value_:String; const N_:Integer ) :String;
+var
+   Zs, S0, S :String;
+   I :Integer;
+begin
+     Zs := StringOfChar( '0', N_+1 );
+
+     S0 := Zs + Value_ + Zs;
+
+     for I := 1 to Length( S0 )-1 do
+     begin
+          S := S0;  S.Insert( I, '.' );
+
+          Result := Result + S + '	' + FloatToStr( S.ToSingle, N_ ) + CRLF;
+     end;
+end;
+
+function _TestFloatToStr_Double( const Value_:String; const N_:Integer ) :String;
+var
+   Zs, S0, S :String;
+   I :Integer;
+begin
+     Zs := StringOfChar( '0', N_+1 );
+
+     S0 := Zs + Value_ + Zs;
+
+     for I := 1 to Length( S0 )-1 do
+     begin
+          S := S0;  S.Insert( I, '.' );
+
+          Result := Result + S + '	' + FloatToStr( S.ToDouble, N_ ) + CRLF;
+     end;
+end;
+
+//------------------------------------------------------------------------------
+
+function FloatToStr( const Value_:Single; const N_:Integer ) :String;
+var
+   M, E :String;
+   D :Integer;
+begin
+     if FloatToStr( Value_, N_, M, E, D ) then
+     begin
+          if Abs( D ) <= N_ then Result := FloatToStrF( Value_, TFloatFormat.ffFixed, N_, ClampMin( D, 0 ) )
+                            else Result := M + 'e' + E;
+     end
+     else
+     if Value_.IsNan              then Result :=  'NAN'
+                                  else
+     if Value_.IsNegativeInfinity then Result := '-INF'
+                                  else
+     if Value_.IsPositiveInfinity then Result := '+INF';
+end;
+
+function FloatToStr( const Value_:Double; const N_:Integer ) :String;
+var
+   M, E :String;
+   D :Integer;
+begin
+     if FloatToStr( Value_, N_, M, E, D ) then
+     begin
+          if Abs( D ) <= N_ then Result := FloatToStrF( Value_, TFloatFormat.ffFixed, N_, ClampMin( D, 0 ) )
+                            else Result := M + 'e' + E;
+     end
+     else
+     if Value_.IsNan              then Result :=  'NAN'
+                                  else
+     if Value_.IsNegativeInfinity then Result := '-INF'
+                                  else
+     if Value_.IsPositiveInfinity then Result := '+INF';
+end;
+
+function FloatToStrP( const Value_:Single; const N_:Integer ) :String;
+begin
+     Result := FloatToStr( Value_, N_ );
+
+     if Value_ > 0 then Result := '+' + Result;
+end;
+
+function FloatToStrP( const Value_:Double; const N_:Integer ) :String;
+begin
+     Result := FloatToStr( Value_, N_ );
+
+     if Value_ > 0 then Result := '+' + Result;
 end;
 
 //############################################################################## □

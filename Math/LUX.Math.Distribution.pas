@@ -20,18 +20,21 @@ uses LUX, LUX.D1;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
 
-function DistT( const X_:Single; const N_:Cardinal ) :Single; overload;
-function DistT( const X_:Double; const N_:Cardinal ) :Double; overload;
-function DistT( const X_:TdSingle; const N_:Cardinal ) :TdSingle; overload;
-function DistT( const X_:TdDouble; const N_:Cardinal ) :TdDouble; overload;
+function DistT( const X_,V_:Single ) :Single; overload;
+function DistT( const X_,V_:Double ) :Double; overload;
+function DistT( const X_,V_:TdSingle ) :TdSingle; overload;
+function DistT( const X_,V_:TdDouble ) :TdDouble; overload;
 
-function CumDistT( const X_:Single; const N_:Cardinal ) :Single; overload;
-function CumDistT( const X_:Double; const N_:Cardinal ) :Double; overload;
-function CumDistT( const X_:TdSingle; const N_:Cardinal ) :TdSingle; overload;
-function CumDistT( const X_:TdDouble; const N_:Cardinal ) :TdDouble; overload;
+function Cum2DistT( const X_,V_:Single ) :Single; overload;
+function Cum2DistT( const X_,V_:Double ) :Double; overload;
 
-function InvCumDistT( const P_:Single; const N_:Cardinal ) :Single; overload;
-function InvCumDistT( const P_:Double; const N_:Cardinal ) :Double; overload;
+function CumDistT( const X_,V_:Single ) :Single; overload;
+function CumDistT( const X_,V_:Double ) :Double; overload;
+function CumDistT( const X_:TdSingle; const V_:Single ) :TdSingle; overload;
+function CumDistT( const X_:TdDouble; const V_:Double ) :TdDouble; overload;
+
+function InvCumDistT( const P_,V_:Single ) :Single; overload;
+function InvCumDistT( const P_,V_:Double ) :Double; overload;
 
 implementation //############################################################### ■
 
@@ -58,77 +61,100 @@ uses System.Math,
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
 
-function DistT( const X_:Single; const N_:Cardinal ) :Single;
+function DistT( const X_,V_:Single ) :Single;
 begin
-     Result := Power( 1 + Pow2( X_ ) / N_, -( N_ + 1 ) / 2 )
-             / ( Roo2( N_ ) * Beta( N_ / 2, 0.5 ) );
+     Result := Power( 1 + Pow2( X_ ) / V_, -( V_ + 1 ) / 2 )
+             / ( Roo2( V_ ) * Beta( V_ / 2, 0.5 ) );
 end;
 
-function DistT( const X_:Double; const N_:Cardinal ) :Double;
+function DistT( const X_,V_:Double ) :Double;
 begin
-     Result := Power( 1 + Pow2( X_ ) / N_, -( N_ + 1 ) / 2 )
-             / ( Roo2( N_ ) * Beta( N_ / 2, 0.5 ) );
+     Result := Power( 1 + Pow2( X_ ) / V_, -( V_ + 1 ) / 2 )
+             / ( Roo2( V_ ) * Beta( V_ / 2, 0.5 ) );
 end;
 
-function DistT( const X_:TdSingle; const N_:Cardinal ) :TdSingle;
+function DistT( const X_,V_:TdSingle ) :TdSingle;
 begin
-     Result := Power( 1 + Pow2( X_ ) / N_, -( N_ + 1 ) / 2 )
-             / ( Roo2( N_ ) * Beta( N_ / 2, 0.5 ) );
+     Result := Power( 1 + Pow2( X_ ) / V_, -( V_ + 1 ) / 2 )
+             / ( Roo2( V_ ) * Beta( V_ / 2, 0.5 ) );
 end;
 
-function DistT( const X_:TdDouble; const N_:Cardinal ) :TdDouble;
+function DistT( const X_,V_:TdDouble ) :TdDouble;
 begin
-     Result := Power( 1 + Pow2( X_ ) / N_, -( N_ + 1 ) / 2 )
-             / ( Roo2( N_ ) * Beta( N_ / 2, 0.5 ) );
+     Result := Power( 1 + Pow2( X_ ) / V_, -( V_ + 1 ) / 2 )
+             / ( Roo2( V_ ) * Beta( V_ / 2, 0.5 ) );
 end;
 
 //------------------------------------------------------------------------------
 
-function CumDistT( const X_:Single; const N_:Cardinal ) :Single;
-var
-   X2 :Single;
-begin
-     X2 := Pow2( X_ );
+//   RegIncBeta( x a, b ) = 1 - RegIncBeta( 1 - x b, a )
 
-     if N_ < 2 * Pow2( X_ ) then Result :=       RegIncBeta( N_ / ( X2 + N_ ), N_ / 2, 1  / 2 )   / 2
-                            else Result := ( 1 - RegIncBeta( X2 / ( N_ + X2 ), 1  / 2, N_ / 2 ) ) / 2;
-
-     if X_ > 0 then Result := 1 - Result;
-end;
-
-function CumDistT( const X_:Double; const N_:Cardinal ) :Double;
+function Cum2DistT( const X_,V_:Single ) :Single;
 var
    X2 :Double;
 begin
      X2 := Pow2( X_ );
 
-     if N_ < 2 * Pow2( X_ ) then Result :=       RegIncBeta( N_ / ( X2 + N_ ), N_ / 2, 1  / 2 )   / 2
-                            else Result := ( 1 - RegIncBeta( X2 / ( N_ + X2 ), 1  / 2, N_ / 2 ) ) / 2;
-
-     if X_ > 0 then Result := 1 - Result;
+     if 100 * X2 < V_ then Result := 1 - RegIncBeta( X2 / ( X2 + V_ ), 1  / 2, V_ / 2 )
+                      else Result :=     RegIncBeta( V_ / ( X2 + V_ ), V_ / 2, 1  / 2 );
 end;
 
-function CumDistT( const X_:TdSingle; const N_:Cardinal ) :TdSingle;
+function Cum2DistT( const X_,V_:Double ) :Double;
+var
+   X2 :Double;
+begin
+     X2 := Pow2( X_ );
+
+     if 100 * X2 < V_ then Result := 1 - RegIncBeta( X2 / ( X2 + V_ ), 1  / 2, V_ / 2 )
+                      else Result :=     RegIncBeta( V_ / ( X2 + V_ ), V_ / 2, 1  / 2 );
+end;
+
+//------------------------------------------------------------------------------
+
+//   Result := RegIncBeta( ( X_ + Roo2( X2 + V_ ) )
+//                       / ( 2  * Roo2( X2 + V_ ) ), V_ / 2, V_ / 2 );
+
+function CumDistT( const X_,V_:Single ) :Single;
+var
+   C :Double;
+begin
+     C := Cum2DistT( X_, V_ );
+
+     if X_ < 0 then Result :=     C / 2
+               else Result := 1 - C / 2;
+end;
+
+function CumDistT( const X_,V_:Double ) :Double;
+var
+   C :Double;
+begin
+     C := Cum2DistT( X_, V_ );
+
+     if X_ < 0 then Result :=     C / 2
+               else Result := 1 - C / 2;
+end;
+
+function CumDistT( const X_:TdSingle; const V_:Single ) :TdSingle;
 begin
      with X_ do
      begin
-          Result.o := CumDistT( o, N_ )    ;
-          Result.d :=    DistT( o, N_ ) * d;
+          Result.o := CumDistT( o, V_ )    ;
+          Result.d :=    DistT( o, V_ ) * d;
      end;
 end;
 
-function CumDistT( const X_:TdDouble; const N_:Cardinal ) :TdDouble;
+function CumDistT( const X_:TdDouble; const V_:Double ) :TdDouble;
 begin
      with X_ do
      begin
-          Result.o := CumDistT( o, N_ )    ;
-          Result.d :=    DistT( o, N_ ) * d;
+          Result.o := CumDistT( o, V_ )    ;
+          Result.d :=    DistT( o, V_ ) * d;
      end;
 end;
 
 //------------------------------------------------------------------------------
 
-function InvCumDistT( const P_:Single; const N_:Cardinal ) :Single;
+function InvCumDistT( const P_,V_:Single ) :Single;
 var
    X, P :TdSingle;
    Pd :Single;
@@ -136,7 +162,7 @@ begin
      X := TdSingle.Create( 0, 1 );
 
      repeat
-           P := CumDistT( X, N_ );
+           P := CumDistT( X, V_ );
 
            Pd := P.o - P_;
 
@@ -147,7 +173,7 @@ begin
      Result := X.o;
 end;
 
-function InvCumDistT( const P_:Double; const N_:Cardinal ) :Double;
+function InvCumDistT( const P_,V_:Double ) :Double;
 var
    X, P :TdDouble;
    Pd :Double;
@@ -155,7 +181,7 @@ begin
      X := TdDouble.Create( 0, 1 );
 
      repeat
-           P := CumDistT( X, N_ );
+           P := CumDistT( X, V_ );
 
            Pd := P.o - P_;
 
