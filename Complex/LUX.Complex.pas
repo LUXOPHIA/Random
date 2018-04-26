@@ -100,12 +100,46 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleAreaC
 
+     TSingleAreaC = record
+     private
+       ///// アクセサ
+       function GetCenter :TSingleC;
+       procedure SetCenter( const Center_:TSingleC );
+       function GetCenterR :Single;
+       procedure SetCenterR( const CenterR_:Single );
+       function GetCenterI :Single;
+       procedure SetCenterI( const CenterI_:Single );
+       function GetSizeR :Single;
+       procedure SetSizeR( const SizeR_:Single );
+       function GetSizeI :Single;
+       procedure SetSizeI( const SizeI_:Single );
+     public
+       Min :TSingleC;
+       Max :TSingleC;
+       /////
+       constructor Create( const Min_,Max_:TSingleC ); overload;
+       constructor Create( const MinR_,MinI_,MaxR_,MaxI_:Single ); overload;
+       ///// プロパティ
+       property Center  :TSingleC read GetCenter  write SetCenter ;
+       property CenterR :Single   read GetCenterR write SetCenterR;
+       property CenterI :Single   read GetCenterI write SetCenterI;
+       property SizeR   :Single   read GetSizeR   write SetSizeR  ;
+       property SizeI   :Single   read GetSizeI   write SetSizeI  ;
+       ///// 演算子
+       class operator Negative( const V_:TSingleAreaC ) :TSingleAreaC;
+       class operator Positive( const V_:TSingleAreaC ) :TSingleAreaC;
+       class operator Add( const A_,B_:TSingleAreaC ) :TSingleAreaC;
+       class operator Subtract( const A_,B_:TSingleAreaC ) :TSingleAreaC;
+       class operator Multiply( const A_:TSingleAreaC; const B_:Single ) :TSingleAreaC;
+       class operator Multiply( const A_:Single; const B_:TSingleAreaC ) :TSingleAreaC;
+       class operator Divide( const A_:TSingleAreaC; const B_:Single ) :TSingleAreaC;
+       ///// 型変換
+     end;
+
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleAreaC
 
      TDoubleAreaC = record
      private
-       _Min :TDoubleC;
-       _Max :TDoubleC;
        ///// アクセサ
        function GetCenter :TDoubleC;
        procedure SetCenter( const Center_:TDoubleC );
@@ -118,12 +152,12 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function GetSizeI :Double;
        procedure SetSizeI( const SizeI_:Double );
      public
+       Min :TDoubleC;
+       Max :TDoubleC;
        /////
        constructor Create( const Min_,Max_:TDoubleC ); overload;
        constructor Create( const MinR_,MinI_,MaxR_,MaxI_:Double ); overload;
        ///// プロパティ
-       property Min     :TDoubleC read   _Min     write   _Min    ;
-       property Max     :TDoubleC read   _Max     write   _Max    ;
        property Center  :TDoubleC read GetCenter  write SetCenter ;
        property CenterR :Double   read GetCenterR write SetCenterR;
        property CenterI :Double   read GetCenterI write SetCenterI;
@@ -235,7 +269,7 @@ begin
      I := I_;
 end;
 
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 演算子
+///////////////////////////////////////////////////////////////////////// 演算子
 
 class operator TSingleC.Negative( const V_:TSingleC ) :TSingleC;
 begin
@@ -322,7 +356,7 @@ begin
      end
 end;
 
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 型変換
+///////////////////////////////////////////////////////////////////////// 型変換
 
 class operator TSingleC.Implicit( const V_:Single ) :TSingleC;
 begin
@@ -436,7 +470,7 @@ begin
      I := I_;
 end;
 
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 演算子
+///////////////////////////////////////////////////////////////////////// 演算子
 
 class operator TDoubleC.Negative( const V_:TDoubleC ) :TDoubleC;
 begin
@@ -523,7 +557,7 @@ begin
      end
 end;
 
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 型変換
+///////////////////////////////////////////////////////////////////////// 型変換
 
 class operator TDoubleC.Implicit( const V_:Double ) :TDoubleC;
 begin
@@ -601,13 +635,180 @@ begin
      end;
 end;
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleAreaC
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+function TSingleAreaC.GetCenter :TSingleC;
+begin
+     Result := ( Max + Min ) / 2
+end;
+
+procedure TSingleAreaC.SetCenter( const Center_:TSingleC );
+begin
+     with Center_ do
+     begin
+          CenterR := R;
+          CenterI := I;
+     end
+end;
+
+function TSingleAreaC.GetCenterR :Single;
+begin
+     Result := ( Max.R + Min.R ) / 2
+end;
+
+procedure TSingleAreaC.SetCenterR( const CenterR_:Single );
+var
+   S :Single;
+begin
+     S := SizeR / 2;
+
+     Min.R := CenterR_ - S;
+     Max.R := CenterR_ + S;
+end;
+
+function TSingleAreaC.GetCenterI :Single;
+begin
+     Result := ( Max.I + Min.I ) / 2
+end;
+
+procedure TSingleAreaC.SetCenterI( const CenterI_:Single );
+var
+   S :Single;
+begin
+     S := SizeI / 2;
+
+     Min.I := CenterI_ - S;
+     Max.I := CenterI_ + S;
+end;
+
+function TSingleAreaC.GetSizeR :Single;
+begin
+     Result := Max.R - Min.R
+end;
+
+procedure TSingleAreaC.SetSizeR( const SizeR_:Single );
+var
+   C, S :Single;
+begin
+     C := CenterR;
+     S := SizeR_ / 2;
+
+     Min.R := C - S;
+     Max.R := C + S;
+end;
+
+function TSingleAreaC.GetSizeI :Single;
+begin
+     Result := Max.I - Min.I
+end;
+
+procedure TSingleAreaC.SetSizeI( const SizeI_:Single );
+var
+   C, S :Single;
+begin
+     C := CenterI;
+     S := SizeI_ / 2;
+
+     Min.I := C - S;
+     Max.I := C + S;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TSingleAreaC.Create( const Min_,Max_:TSingleC );
+begin
+     Min := Min_;
+     Max := Max_;
+end;
+
+constructor TSingleAreaC.Create( const MinR_,MinI_,MaxR_,MaxI_:Single );
+begin
+     with Min do
+     begin
+          R := MinR_;
+          I := MinI_;
+     end;
+     with Max do
+     begin
+          R := MaxR_;
+          I := MaxI_;
+     end;
+end;
+
+///////////////////////////////////////////////////////////////////////// 演算子
+
+class operator TSingleAreaC.Negative( const V_:TSingleAreaC ) :TSingleAreaC;
+begin
+     with Result do
+     begin
+          Min := -V_.Min;
+          Max := -V_.Max;
+     end
+end;
+
+class operator TSingleAreaC.Positive( const V_:TSingleAreaC ) :TSingleAreaC;
+begin
+     with Result do
+     begin
+          Min := +V_.Min;
+          Max := +V_.Max;
+     end
+end;
+
+class operator TSingleAreaC.Add( const A_,B_:TSingleAreaC ) :TSingleAreaC;
+begin
+     with Result do
+     begin
+          Min := A_.Min + B_.Min;
+          Max := A_.Max + B_.Max;
+     end
+end;
+
+class operator TSingleAreaC.Subtract( const A_,B_:TSingleAreaC ) :TSingleAreaC;
+begin
+     with Result do
+     begin
+          Min := A_.Min - B_.Min;
+          Max := A_.Max - B_.Max;
+     end
+end;
+
+class operator TSingleAreaC.Multiply( const A_:TSingleAreaC; const B_:Single ) :TSingleAreaC;
+begin
+     with Result do
+     begin
+          Min := A_.Min * B_;
+          Max := A_.Max * B_;
+     end
+end;
+
+class operator TSingleAreaC.Multiply( const A_:Single; const B_:TSingleAreaC ) :TSingleAreaC;
+begin
+     with Result do
+     begin
+          Min := A_ * B_.Min;
+          Max := A_ * B_.Max;
+     end
+end;
+
+class operator TSingleAreaC.Divide( const A_:TSingleAreaC; const B_:Single ) :TSingleAreaC;
+begin
+     with Result do
+     begin
+          Min := A_.Min / B_;
+          Max := A_.Max / B_;
+     end
+end;
+
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleAreaC
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 function TDoubleAreaC.GetCenter :TDoubleC;
 begin
-     Result := ( _Max + _Min ) / 2
+     Result := ( Max + Min ) / 2
 end;
 
 procedure TDoubleAreaC.SetCenter( const Center_:TDoubleC );
@@ -621,7 +822,7 @@ end;
 
 function TDoubleAreaC.GetCenterR :Double;
 begin
-     Result := ( _Max.R + _Min.R ) / 2
+     Result := ( Max.R + Min.R ) / 2
 end;
 
 procedure TDoubleAreaC.SetCenterR( const CenterR_:Double );
@@ -630,13 +831,13 @@ var
 begin
      S := SizeR / 2;
 
-     _Min.R := CenterR_ - S;
-     _Max.R := CenterR_ + S;
+     Min.R := CenterR_ - S;
+     Max.R := CenterR_ + S;
 end;
 
 function TDoubleAreaC.GetCenterI :Double;
 begin
-     Result := ( _Max.I + _Min.I ) / 2
+     Result := ( Max.I + Min.I ) / 2
 end;
 
 procedure TDoubleAreaC.SetCenterI( const CenterI_:Double );
@@ -645,13 +846,13 @@ var
 begin
      S := SizeI / 2;
 
-     _Min.I := CenterI_ - S;
-     _Max.I := CenterI_ + S;
+     Min.I := CenterI_ - S;
+     Max.I := CenterI_ + S;
 end;
 
 function TDoubleAreaC.GetSizeR :Double;
 begin
-     Result := _Max.R - _Min.R
+     Result := Max.R - Min.R
 end;
 
 procedure TDoubleAreaC.SetSizeR( const SizeR_:Double );
@@ -661,13 +862,13 @@ begin
      C := CenterR;
      S := SizeR_ / 2;
 
-     _Min.R := C - S;
-     _Max.R := C + S;
+     Min.R := C - S;
+     Max.R := C + S;
 end;
 
 function TDoubleAreaC.GetSizeI :Double;
 begin
-     Result := _Max.I - _Min.I
+     Result := Max.I - Min.I
 end;
 
 procedure TDoubleAreaC.SetSizeI( const SizeI_:Double );
@@ -677,40 +878,40 @@ begin
      C := CenterI;
      S := SizeI_ / 2;
 
-     _Min.I := C - S;
-     _Max.I := C + S;
+     Min.I := C - S;
+     Max.I := C + S;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 constructor TDoubleAreaC.Create( const Min_,Max_:TDoubleC );
 begin
-     _Min := Min_;
-     _Max := Max_;
+     Min := Min_;
+     Max := Max_;
 end;
 
 constructor TDoubleAreaC.Create( const MinR_,MinI_,MaxR_,MaxI_:Double );
 begin
-     with _Min do
+     with Min do
      begin
           R := MinR_;
           I := MinI_;
      end;
-     with _Max do
+     with Max do
      begin
           R := MaxR_;
           I := MaxI_;
      end;
 end;
 
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 演算子
+///////////////////////////////////////////////////////////////////////// 演算子
 
 class operator TDoubleAreaC.Negative( const V_:TDoubleAreaC ) :TDoubleAreaC;
 begin
      with Result do
      begin
-          _Min := -V_._Min;
-          _Max := -V_._Max;
+          Min := -V_.Min;
+          Max := -V_.Max;
      end
 end;
 
@@ -718,8 +919,8 @@ class operator TDoubleAreaC.Positive( const V_:TDoubleAreaC ) :TDoubleAreaC;
 begin
      with Result do
      begin
-          _Min := +V_._Min;
-          _Max := +V_._Max;
+          Min := +V_.Min;
+          Max := +V_.Max;
      end
 end;
 
@@ -727,8 +928,8 @@ class operator TDoubleAreaC.Add( const A_,B_:TDoubleAreaC ) :TDoubleAreaC;
 begin
      with Result do
      begin
-          _Min := A_._Min + B_._Min;
-          _Max := A_._Max + B_._Max;
+          Min := A_.Min + B_.Min;
+          Max := A_.Max + B_.Max;
      end
 end;
 
@@ -736,8 +937,8 @@ class operator TDoubleAreaC.Subtract( const A_,B_:TDoubleAreaC ) :TDoubleAreaC;
 begin
      with Result do
      begin
-          _Min := A_._Min - B_._Min;
-          _Max := A_._Max - B_._Max;
+          Min := A_.Min - B_.Min;
+          Max := A_.Max - B_.Max;
      end
 end;
 
@@ -745,8 +946,8 @@ class operator TDoubleAreaC.Multiply( const A_:TDoubleAreaC; const B_:Double ) :
 begin
      with Result do
      begin
-          _Min := A_._Min * B_;
-          _Max := A_._Max * B_;
+          Min := A_.Min * B_;
+          Max := A_.Max * B_;
      end
 end;
 
@@ -754,8 +955,8 @@ class operator TDoubleAreaC.Multiply( const A_:Double; const B_:TDoubleAreaC ) :
 begin
      with Result do
      begin
-          _Min := A_ * B_._Min;
-          _Max := A_ * B_._Max;
+          Min := A_ * B_.Min;
+          Max := A_ * B_.Max;
      end
 end;
 
@@ -763,13 +964,10 @@ class operator TDoubleAreaC.Divide( const A_:TDoubleAreaC; const B_:Double ) :TD
 begin
      with Result do
      begin
-          _Min := A_._Min / B_;
-          _Max := A_._Max / B_;
+          Min := A_.Min / B_;
+          Max := A_.Max / B_;
      end
 end;
-
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 型変換
-
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
