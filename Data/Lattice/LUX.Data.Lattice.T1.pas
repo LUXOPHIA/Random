@@ -57,6 +57,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _ItemsX :Integer;
        _MargsX :Integer;
        ///// アクセス
+       function GetElemsN :Integer; override;
        function GetElemsX :Integer;
        function GetElems( const X_:Integer ) :_TItem_;
        procedure SetElems( const X_:Integer; const Elem_:_TItem_ );
@@ -65,8 +66,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetItemsX( const ItemsX_:Integer );
        function GetMargsX :Integer;
        procedure SetMargsX( const MargsX_:Integer );
-       function GetItems( const X_:Integer ) :_TItem_; virtual;
-       procedure SetItems( const X_:Integer; const Item_:_TItem_ ); virtual;
+       function GetItems( const X_:Integer ) :_TItem_;
+       procedure SetItems( const X_:Integer; const Item_:_TItem_ );
        function GetItemsP( const X_:Integer ) :_PItem_;
        function GetItem0P :Pointer;
        ///// メソッド
@@ -238,6 +239,13 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
+function TArray1D<_TItem_>.GetElemsN :Integer;
+begin
+     Result := _ElemsX;
+end;
+
+//------------------------------------------------------------------------------
+
 function TArray1D<_TItem_>.GetElemsX :Integer;
 begin
      Result := _ElemsX;
@@ -309,8 +317,6 @@ end;
 procedure TArray1D<_TItem_>.MakeArray;
 begin
      _ElemsX := _MargsX + _ItemsX + _MargsX;
-
-     _ElemsN := _ElemsX;
 
      inherited;
 end;
