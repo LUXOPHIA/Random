@@ -3,7 +3,7 @@
 interface //#################################################################### ■
 
 uses System.SysUtils, System.Classes,
-     LUX, LUX.D3;
+     LUX, LUX.D3, LUX.Data.Lattice, LUX.Data.Lattice.T2;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
@@ -18,28 +18,16 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TArray3D<_TItem_>
 
-     IArray3D = interface
+     IArray3D = interface( IArray2D )
      ['{2ED01C38-BB77-4958-83DE-E4F723A74774}']
+     {protected}
        ///// アクセス
-       function GetItemByte :Integer;
-       function GetElemsP0 :Pointer;
-       function GetElemsX :Integer;
-       function GetElemsY :Integer;
        function GetElemsZ :Integer;
-       function GetElemsN :Integer;
-       function GetElemsByte :Integer;
-       function GetItemsX :Integer;
-       procedure SetItemsX( const ItemsX_:Integer );
-       function GetItemsY :Integer;
-       procedure SetItemsY( const ItemsY_:Integer );
        function GetItemsZ :Integer;
        procedure SetItemsZ( const ItemsZ_:Integer );
-       function GetMargsX :Integer;
-       procedure SetMargsX( const MargsX_:Integer );
-       function GetMargsY :Integer;
-       procedure SetMargsY( const MargsY_:Integer );
        function GetMargsZ :Integer;
        procedure SetMargsZ( const MargsZ_:Integer );
+       //---
        function GetCounStepX :Integer;
        function GetCounStepY :Integer;
        function GetCounStepZ :Integer;
@@ -48,42 +36,32 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function GetByteStepZ :Integer;
        function GetLines( const Y_,Z_:Integer ) :PByteArray;
        function GetLineSize :Integer;
+     {public}
        ///// プロパティ
-       property ItemByte                     :Integer    read GetItemByte                 ;
-       property ElemsP0                      :Pointer    read GetElemsP0                  ;
-       property ElemsX                       :Integer    read GetElemsX                   ;
-       property ElemsY                       :Integer    read GetElemsY                   ;
-       property ElemsZ                       :Integer    read GetElemsZ                   ;
-       property ElemsN                       :Integer    read GetElemsN                   ;
-       property ElemsByte                    :Integer    read GetElemsByte                ;
-       property ItemsX                       :Integer    read GetItemsX    write SetItemsX;
-       property ItemsY                       :Integer    read GetItemsY    write SetItemsY;
-       property ItemsZ                       :Integer    read GetItemsZ    write SetItemsZ;
-       property MargsX                       :Integer    read GetMargsX    write SetMargsX;
-       property MargsY                       :Integer    read GetMargsY    write SetMargsY;
-       property MargsZ                       :Integer    read GetMargsZ    write SetMargsZ;
-       property CounStepX                    :Integer    read GetCounStepX                ;
-       property CounStepY                    :Integer    read GetCounStepY                ;
-       property CounStepZ                    :Integer    read GetCounStepZ                ;
-       property ByteStepX                    :Integer    read GetByteStepX                ;
-       property ByteStepY                    :Integer    read GetByteStepY                ;
-       property ByteStepZ                    :Integer    read GetByteStepZ                ;
-       property Lines[ const Y_,Z_:Integer ] :PByteArray read GetLines                    ;
-       property LineSize                     :Integer    read GetLineSize                 ;
+       property ElemsZ :Integer read GetElemsZ                ;
+       property ItemsZ :Integer read GetItemsZ write SetItemsZ;
+       property MargsZ :Integer read GetMargsZ write SetMargsZ;
+       //---
+       property CounStepX                    :Integer    read GetCounStepX;
+       property CounStepY                    :Integer    read GetCounStepY;
+       property CounStepZ                    :Integer    read GetCounStepZ;
+       property ByteStepX                    :Integer    read GetByteStepX;
+       property ByteStepY                    :Integer    read GetByteStepY;
+       property ByteStepZ                    :Integer    read GetByteStepZ;
+       property Lines[ const Y_,Z_:Integer ] :PByteArray read GetLines    ;
+       property LineSize                     :Integer    read GetLineSize ;
      end;
 
      //-------------------------------------------------------------------------
 
-     TArray3D<_TItem_> = class( TInterfacedBase, IArray3D )
+     TArray3D<_TItem_> = class( TCoreArray<_TItem_>, IArray3D )
      public type
-       _PItem_ = ^_TItem_;
+       _PItem_ = TCoreArray<_TItem_>._PElem_;
      private
        ///// メソッド
-       procedure MakeArray; virtual;
-       function ElemXYZtoI( const X_,Y_,Z_:Integer ) :Integer;
-       function XYZtoI( const X_,Y_,Z_:Integer ) :Integer; inline;
+       function ElemsI( const X_,Y_,Z_:Integer ) :Integer; inline;
+       function ItemsI( const X_,Y_,Z_:Integer ) :Integer; inline;
      protected
-       _Elems  :TArray<_TItem_>;
        _ElemsX :Integer;
        _ElemsY :Integer;
        _ElemsZ :Integer;
@@ -93,22 +71,13 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _MargsX :Integer;
        _MargsY :Integer;
        _MargsZ :Integer;
-       ///// イベント
-       _OnChange :TNotifyEvent;
        ///// アクセス
-       function GetItemByte :Integer;
-       function GetElemsP0 :Pointer;
-       function GetElems( const X_,Y_,Z_:Integer ) :_TItem_;
-       procedure SetElems( const X_,Y_,Z_:Integer; const Elem_:_TItem_ );
-       function GetElemP( const X_,Y_,Z_:Integer ) :_PItem_;
        function GetElemsX :Integer;
        function GetElemsY :Integer;
        function GetElemsZ :Integer;
-       function GetElemsN :Integer;
-       function GetElemsByte :Integer;
-       function GetItems( const X_,Y_,Z_:Integer ) :_TItem_;
-       procedure SetItems( const X_,Y_,Z_:Integer; const Item_:_TItem_ );
-       function GetItemP( const X_,Y_,Z_:Integer ) :_PItem_;
+       function GetElems( const X_,Y_,Z_:Integer ) :_TItem_;
+       procedure SetElems( const X_,Y_,Z_:Integer; const Elem_:_TItem_ );
+       function GetElemsP( const X_,Y_,Z_:Integer ) :_PItem_;
        function GetItemsX :Integer;
        procedure SetItemsX( const ItemsX_:Integer );
        function GetItemsY :Integer;
@@ -121,6 +90,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetMargsY( const MargsY_:Integer );
        function GetMargsZ :Integer;
        procedure SetMargsZ( const MargsZ_:Integer );
+       function GetItems( const X_,Y_,Z_:Integer ) :_TItem_;
+       procedure SetItems( const X_,Y_,Z_:Integer; const Item_:_TItem_ );
+       function GetItemsP( const X_,Y_,Z_:Integer ) :_PItem_;
+       function GetItem0P :Pointer;
+       //---
        function GetCounStepX :Integer;
        function GetCounStepY :Integer;
        function GetCounStepZ :Integer;
@@ -129,43 +103,40 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function GetByteStepZ :Integer;
        function GetLines( const Y_,Z_:Integer ) :PByteArray;
        function GetLineSize :Integer;
+       ///// メソッド
+       procedure MakeArray; override;
      public
        constructor Create; overload;
        constructor Create( const ItemsX_,ItemsY_,ItemsZ_:Integer ); overload;
        constructor Create( const ItemsX_,ItemsY_,ItemsZ_,Margs_:Integer ); overload;
        constructor Create( const ItemsX_,ItemsY_,ItemsZ_,MargsX_,MargsY_,MargsZ_:Integer ); overload; virtual;
-       procedure AfterConstruction; override;
        destructor Destroy; override;
        ///// プロパティ
-       property ItemByte                        :Integer    read GetItemByte                ;
-       property ElemsP0                         :Pointer    read GetElemsP0                 ;
-       property Elems[ const X_,Y_,Z_:Integer ] :_TItem_    read GetElems    write SetElems ;
-       property ElemP[ const X_,Y_,Z_:Integer ] :_PItem_    read GetElemP                   ;
-       property ElemsX                          :Integer    read GetElemsX                  ;
-       property ElemsY                          :Integer    read GetElemsY                  ;
-       property ElemsZ                          :Integer    read GetElemsZ                  ;
-       property ElemsN                          :Integer    read GetElemsN                  ;
-       property ElemsByte                       :Integer    read GetElemsByte               ;
-       property Items[ const X_,Y_,Z_:Integer ] :_TItem_    read GetItems    write SetItems ; default;
-       property ItemP[ const X_,Y_,Z_:Integer ] :_PItem_    read GetItemP                   ;
-       property ItemsX                          :Integer    read GetItemsX   write SetItemsX;
-       property ItemsY                          :Integer    read GetItemsY   write SetItemsY;
-       property ItemsZ                          :Integer    read GetItemsZ   write SetItemsZ;
-       property MargsX                          :Integer    read GetMargsX   write SetMargsX;
-       property MargsY                          :Integer    read GetMargsY   write SetMargsY;
-       property MargsZ                          :Integer    read GetMargsZ   write SetMargsZ;
-       property CounStepX                       :Integer    read GetCounStepX               ;
-       property CounStepY                       :Integer    read GetCounStepY               ;
-       property CounStepZ                       :Integer    read GetCounStepZ               ;
-       property ByteStepX                       :Integer    read GetByteStepX               ;
-       property ByteStepY                       :Integer    read GetByteStepY               ;
-       property ByteStepZ                       :Integer    read GetByteStepZ               ;
-       property Lines[ const Y_,Z_:Integer ]    :PByteArray read GetLines                   ;
-       property LineSize                        :Integer    read GetLineSize                ;
-       ///// イベント
-       property OnChange :TNotifyEvent read _OnChange write _OnChange;
+       property ItemByte                         :Integer    read GetElemByte                 ;
+       property ElemsX                           :Integer    read GetElemsX                   ;
+       property ElemsY                           :Integer    read GetElemsY                   ;
+       property ElemsZ                           :Integer    read GetElemsZ                   ;
+       property Elems[ const X_,Y_,Z_:Integer ]  :_TItem_    read GetElems     write SetElems ;
+       property ElemsP[ const X_,Y_,Z_:Integer ] :_PItem_    read GetElemsP                   ;
+       property ItemsX                           :Integer    read GetItemsX    write SetItemsX;
+       property ItemsY                           :Integer    read GetItemsY    write SetItemsY;
+       property ItemsZ                           :Integer    read GetItemsZ    write SetItemsZ;
+       property MargsX                           :Integer    read GetMargsX    write SetMargsX;
+       property MargsY                           :Integer    read GetMargsY    write SetMargsY;
+       property MargsZ                           :Integer    read GetMargsZ    write SetMargsZ;
+       property Items[ const X_,Y_,Z_:Integer ]  :_TItem_    read GetItems     write SetItems ; default;
+       property ItemsP[ const X_,Y_,Z_:Integer ] :_PItem_    read GetItemsP                   ;
+       property Item0P                           :Pointer    read GetItem0P                   ;
+       //---
+       property CounStepX                        :Integer    read GetCounStepX                ;
+       property CounStepY                        :Integer    read GetCounStepY                ;
+       property CounStepZ                        :Integer    read GetCounStepZ                ;
+       property ByteStepX                        :Integer    read GetByteStepX                ;
+       property ByteStepY                        :Integer    read GetByteStepY                ;
+       property ByteStepZ                        :Integer    read GetByteStepZ                ;
+       property Lines[ const Y_,Z_:Integer ]     :PByteArray read GetLines                    ;
+       property LineSize                         :Integer    read GetLineSize                 ;
        ///// メソッド
-       class procedure Swap( var Array0_,Array1_:TArray3D<_TItem_> ); static;
        procedure Read( const Stream_:TStream ); virtual;
        procedure Write( const Stream_:TStream ); virtual;
      end;
@@ -384,21 +355,12 @@ uses System.Math;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TArray3D<_TItem_>.MakeArray;
-begin
-     _ElemsX := _MargsX + _ItemsX + _MargsX;
-     _ElemsY := _MargsY + _ItemsY + _MargsY;
-     _ElemsZ := _MargsZ + _ItemsZ + _MargsZ;
-
-     SetLength( _Elems, ElemsN );
-end;
-
-function TArray3D<_TItem_>.ElemXYZtoI( const X_,Y_,Z_:Integer ) :Integer;
+function TArray3D<_TItem_>.ElemsI( const X_,Y_,Z_:Integer ) :Integer;
 begin
      Result := ( Z_ * _ElemsY + Y_ ) * _ElemsX + X_;
 end;
 
-function TArray3D<_TItem_>.XYZtoI( const X_,Y_,Z_:Integer ) :Integer;
+function TArray3D<_TItem_>.ItemsI( const X_,Y_,Z_:Integer ) :Integer;
 begin
      Result := ( ( _MargsZ + Z_ ) * _ElemsY + ( _MargsY + Y_ ) ) * _ElemsX + ( _MargsX + X_ );
 end;
@@ -406,37 +368,6 @@ end;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 /////////////////////////////////////////////////////////////////////// アクセス
-
-function TArray3D<_TItem_>.GetItemByte :Integer;
-begin
-     Result := SizeOf( _TItem_ );
-end;
-
-//------------------------------------------------------------------------------
-
-function TArray3D<_TItem_>.GetElemsP0 :Pointer;
-begin
-     Result := @_Elems[ 0 ];
-end;
-
-//------------------------------------------------------------------------------
-
-function TArray3D<_TItem_>.GetElems( const X_,Y_,Z_:Integer ) :_TItem_;
-begin
-     Result := _Elems[ ElemXYZtoI( X_, Y_, Z_ ) ];
-end;
-
-procedure TArray3D<_TItem_>.SetElems( const X_,Y_,Z_:Integer; const Elem_:_TItem_ );
-begin
-     _Elems[ ElemXYZtoI( X_, Y_, Z_ ) ] := Elem_;
-end;
-
-function TArray3D<_TItem_>.GetElemP( const X_,Y_,Z_:Integer ) :_PItem_;
-begin
-     Result := @_Elems[ ElemXYZtoI( X_, Y_, Z_ ) ];
-end;
-
-//------------------------------------------------------------------------------
 
 function TArray3D<_TItem_>.GetElemsX :Integer;
 begin
@@ -453,33 +384,21 @@ begin
      Result := _ElemsZ;
 end;
 
-function TArray3D<_TItem_>.GetElemsN :Integer;
-begin
-     Result := _ElemsZ * _ElemsY * _ElemsX;
-end;
-
-function TArray3D<_TItem_>.GetElemsByte :Integer;
-begin
-     Result := ItemByte * ElemsN;
-end;
-
 //------------------------------------------------------------------------------
 
-function TArray3D<_TItem_>.GetItems( const X_,Y_,Z_:Integer ) :_TItem_;
+function TArray3D<_TItem_>.GetElems( const X_,Y_,Z_:Integer ) :_TItem_;
 begin
-     Result := _Elems[ XYZtoI( X_, Y_, Z_ ) ];
+     Result := _Elems[ ElemsI( X_, Y_, Z_ ) ];
 end;
 
-procedure TArray3D<_TItem_>.SetItems( const X_,Y_,Z_:Integer; const Item_:_TItem_ );
+procedure TArray3D<_TItem_>.SetElems( const X_,Y_,Z_:Integer; const Elem_:_TItem_ );
 begin
-     _Elems[ XYZtoI( X_, Y_, Z_ ) ] := Item_;
+     _Elems[ ElemsI( X_, Y_, Z_ ) ] := Elem_;
 end;
 
-//------------------------------------------------------------------------------
-
-function TArray3D<_TItem_>.GetItemP( const X_,Y_,Z_:Integer ) :_PItem_;
+function TArray3D<_TItem_>.GetElemsP( const X_,Y_,Z_:Integer ) :_PItem_;
 begin
-     Result := @_Elems[ XYZtoI( X_, Y_, Z_ ) ];
+     Result := @_Elems[ ElemsI( X_, Y_, Z_ ) ];
 end;
 
 //------------------------------------------------------------------------------
@@ -548,6 +467,28 @@ end;
 
 //------------------------------------------------------------------------------
 
+function TArray3D<_TItem_>.GetItems( const X_,Y_,Z_:Integer ) :_TItem_;
+begin
+     Result := _Elems[ ItemsI( X_, Y_, Z_ ) ];
+end;
+
+procedure TArray3D<_TItem_>.SetItems( const X_,Y_,Z_:Integer; const Item_:_TItem_ );
+begin
+     _Elems[ ItemsI( X_, Y_, Z_ ) ] := Item_;
+end;
+
+function TArray3D<_TItem_>.GetItemsP( const X_,Y_,Z_:Integer ) :_PItem_;
+begin
+     Result := @_Elems[ ItemsI( X_, Y_, Z_ ) ];
+end;
+
+function TArray3D<_TItem_>.GetItem0P :Pointer;
+begin
+     Result := GetItemsP( 0, 0, 0 );
+end;
+
+//------------------------------------------------------------------------------
+
 function TArray3D<_TItem_>.GetCounStepX :Integer;
 begin
      Result := 1;
@@ -584,12 +525,25 @@ end;
 
 function TArray3D<_TItem_>.GetLines( const Y_,Z_:Integer ) :PByteArray;
 begin
-     Result := @_Elems[ XYZtoI( 0, Y_, Z_ ) ];
+     Result := @_Elems[ ItemsI( 0, Y_, Z_ ) ];
 end;
 
 function TArray3D<_TItem_>.GetLineSize :Integer;
 begin
      Result := ItemByte * _ItemsX;
+end;
+
+/////////////////////////////////////////////////////////////////////// メソッド
+
+procedure TArray3D<_TItem_>.MakeArray;
+begin
+     _ElemsX := _MargsX + _ItemsX + _MargsX;
+     _ElemsY := _MargsY + _ItemsY + _MargsY;
+     _ElemsZ := _MargsZ + _ItemsZ + _MargsZ;
+
+     _ElemsN := _ElemsZ * _ElemsY * _ElemsX;
+
+     inherited;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -613,17 +567,14 @@ constructor TArray3D<_TItem_>.Create( const ItemsX_,ItemsY_,ItemsZ_,MargsX_,Marg
 begin
      inherited Create;
 
+     _OnChange := procedure begin end;
+
      _ItemsX := ItemsX_;
      _ItemsY := ItemsY_;
      _ItemsZ := ItemsZ_;
      _MargsX := MargsX_;
      _MargsY := MargsY_;
      _MargsZ := MargsZ_;
-end;
-
-procedure TArray3D<_TItem_>.AfterConstruction;
-begin
-     MakeArray;
 end;
 
 destructor TArray3D<_TItem_>.Destroy;
@@ -633,15 +584,6 @@ begin
 end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
-
-class procedure TArray3D<_TItem_>.Swap( var Array0_,Array1_:TArray3D<_TItem_> );
-var
-   A :TArray3D<_TItem_>;
-begin
-     A := Array0_;  Array0_ := Array1_;  Array1_ := A;
-end;
-
-//------------------------------------------------------------------------------
 
 procedure TArray3D<_TItem_>.Read( const Stream_:TStream );
 begin
@@ -917,7 +859,7 @@ begin
      begin
           _GZ[ Z ] := PosZ_ + Z;
 
-          _HeadZ[ Z ] := _Paren.ItemP[ 0, 0, 0 ];
+          _HeadZ[ Z ] := _Paren.Item0P;
 
           Inc( _HeadZ[ Z ], _GZ[ Z ] * _Paren.CounStepZ );
      end;
