@@ -30,7 +30,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TArray2D<_TItem_> = class( TCoreArray<_TItem_>, IArray2D )
+     TArray2D<_TItem_> = class( TArray1D<_TItem_>, IArray2D )
      public type
        _PItem_ = TCoreArray<_TItem_>._PElem_;
      private
@@ -38,24 +38,17 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function ElemsI( const X_,Y_:Integer ) :Integer; inline;
        function ItemsI( const X_,Y_:Integer ) :Integer; inline;
      protected
-       _ElemsX :Integer;
        _ElemsY :Integer;
-       _ItemsX :Integer;
        _ItemsY :Integer;
-       _MargsX :Integer;
        _MargsY :Integer;
        ///// アクセス
-       function GetElemsX :Integer;
+       function GetElemsN :Integer; override;
        function GetElemsY :Integer;
        function GetElems( const X_,Y_:Integer ) :_TItem_;
        procedure SetElems( const X_,Y_:Integer; const Elem_:_TItem_ );
        function GetElemsP( const X_,Y_:Integer ) :_PItem_;
-       function GetItemsX :Integer;
-       procedure SetItemsX( const ItemsX_:Integer );
        function GetItemsY :Integer;
        procedure SetItemsY( const ItemsY_:Integer );
-       function GetMargsX :Integer;
-       procedure SetMargsX( const MargsX_:Integer );
        function GetMargsY :Integer;
        procedure SetMargsY( const MargsY_:Integer );
        function GetItems( const X_,Y_:Integer ) :_TItem_;
@@ -66,18 +59,15 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure MakeArray; override;
      public
        constructor Create; overload;
-       constructor Create( const ItemsX_,ItemsY_:Integer ); overload;
+       constructor Create( const ItemsX_,ItemsY_:Integer ); reintroduce; overload;
        constructor Create( const ItemsX_,ItemsY_,Margs_:Integer ); overload;
        constructor Create( const ItemsX_,ItemsY_,MargsX_,MargsY_:Integer ); overload; virtual;
        destructor Destroy; override;
        ///// プロパティ
-       property ElemsX                        :Integer read GetElemsX                ;
        property ElemsY                        :Integer read GetElemsY                ;
        property Elems[ const X_,Y_:Integer ]  :_TItem_ read GetElems  write SetElems ;
        property ElemsP[ const X_,Y_:Integer ] :_PItem_ read GetElemsP                ;
-       property ItemsX                        :Integer read GetItemsX write SetItemsX;
        property ItemsY                        :Integer read GetItemsY write SetItemsY;
-       property MargsX                        :Integer read GetMargsX write SetMargsX;
        property MargsY                        :Integer read GetMargsY write SetMargsY;
        property Items[ const X_,Y_:Integer ]  :_TItem_ read GetItems  write SetItems ; default;
        property ItemsP[ const X_,Y_:Integer ] :_PItem_ read GetItemsP                ;
@@ -190,10 +180,12 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TArray2D<_TItem_>.GetElemsX :Integer;
+function TArray2D<_TItem_>.GetElemsN :Integer;
 begin
-     Result := _ElemsX;
+     Result := _ElemsY * _ElemsX;
 end;
+
+//------------------------------------------------------------------------------
 
 function TArray2D<_TItem_>.GetElemsY :Integer;
 begin
@@ -219,16 +211,6 @@ end;
 
 //------------------------------------------------------------------------------
 
-function TArray2D<_TItem_>.GetItemsX :Integer;
-begin
-     Result := _ItemsX;
-end;
-
-procedure TArray2D<_TItem_>.SetItemsX( const ItemsX_:Integer );
-begin
-     _ItemsX := ItemsX_;  MakeArray;
-end;
-
 function TArray2D<_TItem_>.GetItemsY :Integer;
 begin
      Result := _ItemsY;
@@ -240,16 +222,6 @@ begin
 end;
 
 //------------------------------------------------------------------------------
-
-function TArray2D<_TItem_>.GetMargsX :Integer;
-begin
-     Result := _MargsX;
-end;
-
-procedure TArray2D<_TItem_>.SetMargsX( const MargsX_:Integer );
-begin
-     _MargsX := MargsX_;  MakeArray;
-end;
 
 function TArray2D<_TItem_>.GetMargsY :Integer;
 begin
@@ -287,10 +259,7 @@ end;
 
 procedure TArray2D<_TItem_>.MakeArray;
 begin
-     _ElemsX := _MargsX + _ItemsX + _MargsX;
      _ElemsY := _MargsY + _ItemsY + _MargsY;
-
-     _ElemsN := _ElemsY * _ElemsX;
 
      inherited;
 end;
@@ -314,13 +283,9 @@ end;
 
 constructor TArray2D<_TItem_>.Create( const ItemsX_,ItemsY_,MargsX_,MargsY_:Integer );
 begin
-     inherited Create;
+     inherited Create( ItemsX_, MargsX_ );
 
-     _OnChange := procedure begin end;
-
-     _ItemsX := ItemsX_;
      _ItemsY := ItemsY_;
-     _MargsX := MargsX_;
      _MargsY := MargsY_;
 end;
 
