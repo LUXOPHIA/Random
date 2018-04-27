@@ -54,7 +54,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TArray3D<_TItem_> = class( TCoreArray<_TItem_>, IArray3D )
+     TArray3D<_TItem_> = class( TArray2D<_TItem_>, IArray3D )
      public type
        _PItem_ = TCoreArray<_TItem_>._PElem_;
      private
@@ -62,32 +62,17 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function ElemsI( const X_,Y_,Z_:Integer ) :Integer; inline;
        function ItemsI( const X_,Y_,Z_:Integer ) :Integer; inline;
      protected
-       _ElemsX :Integer;
-       _ElemsY :Integer;
        _ElemsZ :Integer;
-       _ItemsX :Integer;
-       _ItemsY :Integer;
        _ItemsZ :Integer;
-       _MargsX :Integer;
-       _MargsY :Integer;
        _MargsZ :Integer;
        ///// アクセス
-       function GetElemsX :Integer;
-       function GetElemsY :Integer;
+       function GetElemsN :Integer; override;
        function GetElemsZ :Integer;
        function GetElems( const X_,Y_,Z_:Integer ) :_TItem_;
        procedure SetElems( const X_,Y_,Z_:Integer; const Elem_:_TItem_ );
        function GetElemsP( const X_,Y_,Z_:Integer ) :_PItem_;
-       function GetItemsX :Integer;
-       procedure SetItemsX( const ItemsX_:Integer );
-       function GetItemsY :Integer;
-       procedure SetItemsY( const ItemsY_:Integer );
        function GetItemsZ :Integer;
        procedure SetItemsZ( const ItemsZ_:Integer );
-       function GetMargsX :Integer;
-       procedure SetMargsX( const MargsX_:Integer );
-       function GetMargsY :Integer;
-       procedure SetMargsY( const MargsY_:Integer );
        function GetMargsZ :Integer;
        procedure SetMargsZ( const MargsZ_:Integer );
        function GetItems( const X_,Y_,Z_:Integer ) :_TItem_;
@@ -108,21 +93,15 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
        constructor Create; overload;
        constructor Create( const ItemsX_,ItemsY_,ItemsZ_:Integer ); overload;
-       constructor Create( const ItemsX_,ItemsY_,ItemsZ_,Margs_:Integer ); overload;
+       constructor Create( const ItemsX_,ItemsY_,ItemsZ_,Margs_:Integer ); reintroduce; overload;
        constructor Create( const ItemsX_,ItemsY_,ItemsZ_,MargsX_,MargsY_,MargsZ_:Integer ); overload; virtual;
        destructor Destroy; override;
        ///// プロパティ
        property ItemByte                         :Integer    read GetElemByte                 ;
-       property ElemsX                           :Integer    read GetElemsX                   ;
-       property ElemsY                           :Integer    read GetElemsY                   ;
        property ElemsZ                           :Integer    read GetElemsZ                   ;
        property Elems[ const X_,Y_,Z_:Integer ]  :_TItem_    read GetElems     write SetElems ;
        property ElemsP[ const X_,Y_,Z_:Integer ] :_PItem_    read GetElemsP                   ;
-       property ItemsX                           :Integer    read GetItemsX    write SetItemsX;
-       property ItemsY                           :Integer    read GetItemsY    write SetItemsY;
        property ItemsZ                           :Integer    read GetItemsZ    write SetItemsZ;
-       property MargsX                           :Integer    read GetMargsX    write SetMargsX;
-       property MargsY                           :Integer    read GetMargsY    write SetMargsY;
        property MargsZ                           :Integer    read GetMargsZ    write SetMargsZ;
        property Items[ const X_,Y_,Z_:Integer ]  :_TItem_    read GetItems     write SetItems ; default;
        property ItemsP[ const X_,Y_,Z_:Integer ] :_PItem_    read GetItemsP                   ;
@@ -369,15 +348,12 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TArray3D<_TItem_>.GetElemsX :Integer;
+function TArray3D<_TItem_>.GetElemsN :Integer;
 begin
-     Result := _ElemsX;
+     Result := _ElemsZ * _ElemsY * _ElemsX;
 end;
 
-function TArray3D<_TItem_>.GetElemsY :Integer;
-begin
-     Result := _ElemsY;
-end;
+//------------------------------------------------------------------------------
 
 function TArray3D<_TItem_>.GetElemsZ :Integer;
 begin
@@ -403,26 +379,6 @@ end;
 
 //------------------------------------------------------------------------------
 
-function TArray3D<_TItem_>.GetItemsX :Integer;
-begin
-     Result := _ItemsX;
-end;
-
-procedure TArray3D<_TItem_>.SetItemsX( const ItemsX_:Integer );
-begin
-     _ItemsX := ItemsX_;  MakeArray;
-end;
-
-function TArray3D<_TItem_>.GetItemsY :Integer;
-begin
-     Result := _ItemsY;
-end;
-
-procedure TArray3D<_TItem_>.SetItemsY( const ItemsY_:Integer );
-begin
-     _ItemsY := ItemsY_;  MakeArray;
-end;
-
 function TArray3D<_TItem_>.GetItemsZ :Integer;
 begin
      Result := _ItemsZ;
@@ -434,26 +390,6 @@ begin
 end;
 
 //------------------------------------------------------------------------------
-
-function TArray3D<_TItem_>.GetMargsX :Integer;
-begin
-     Result := _MargsX;
-end;
-
-procedure TArray3D<_TItem_>.SetMargsX( const MargsX_:Integer );
-begin
-     _MargsX := MargsX_;  MakeArray;
-end;
-
-function TArray3D<_TItem_>.GetMargsY :Integer;
-begin
-     Result := _MargsY;
-end;
-
-procedure TArray3D<_TItem_>.SetMargsY( const MargsY_:Integer );
-begin
-     _MargsY := MargsY_;  MakeArray;
-end;
 
 function TArray3D<_TItem_>.GetMargsZ :Integer;
 begin
@@ -537,11 +473,7 @@ end;
 
 procedure TArray3D<_TItem_>.MakeArray;
 begin
-     _ElemsX := _MargsX + _ItemsX + _MargsX;
-     _ElemsY := _MargsY + _ItemsY + _MargsY;
      _ElemsZ := _MargsZ + _ItemsZ + _MargsZ;
-
-     _ElemsN := _ElemsZ * _ElemsY * _ElemsX;
 
      inherited;
 end;
@@ -565,15 +497,9 @@ end;
 
 constructor TArray3D<_TItem_>.Create( const ItemsX_,ItemsY_,ItemsZ_,MargsX_,MargsY_,MargsZ_:Integer );
 begin
-     inherited Create;
+     inherited Create( ItemsX_, ItemsY_, MargsX_, MargsY_ );
 
-     _OnChange := procedure begin end;
-
-     _ItemsX := ItemsX_;
-     _ItemsY := ItemsY_;
      _ItemsZ := ItemsZ_;
-     _MargsX := MargsX_;
-     _MargsY := MargsY_;
      _MargsZ := MargsZ_;
 end;
 
