@@ -8,9 +8,9 @@ uses System.SysUtils, System.Classes,
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
      TArray3D<_TItem_>             = class;
-     TBricArray3D<_TItem_>         = class;
+     TCellArray3D<_TItem_>         = class;
      TGridArray3D<_TItem_>         = class;
-     TBricIterGridArray3D<_TItem_> = class;
+     TCellIterGridArray3D<_TItem_> = class;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
@@ -120,9 +120,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure Write( const Stream_:TStream ); virtual;
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBricArray3D<_TItem_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCellArray3D<_TItem_>
 
-     IBricArray3D = interface( IArray3D )
+     ICellArray3D = interface( IArray3D )
      ['{40BD11E7-4BF9-43F3-BE98-846C78B22EFD}']
        ///// アクセス
        function GetGridsX :Integer;
@@ -132,9 +132,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function GetGridsZ :Integer;
        procedure SetGridsZ( const GridZ_:Integer );
        ///// プロパティ
-       property BricsX :Integer read GetItemsX write SetItemsX;
-       property BricsY :Integer read GetItemsY write SetItemsY;
-       property BricsZ :Integer read GetItemsZ write SetItemsZ;
+       property CellsX :Integer read GetItemsX write SetItemsX;
+       property CellsY :Integer read GetItemsY write SetItemsY;
+       property CellsZ :Integer read GetItemsZ write SetItemsZ;
        property GridsX :Integer read GetGridsX write SetGridsX;
        property GridsY :Integer read GetGridsY write SetGridsY;
        property GridsZ :Integer read GetGridsZ write SetGridsZ;
@@ -142,7 +142,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TBricArray3D<_TItem_> = class( TArray3D<_TItem_>, IBricArray3D )
+     TCellArray3D<_TItem_> = class( TArray3D<_TItem_>, ICellArray3D )
      private
      protected
        ///// アクセス
@@ -154,10 +154,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetGridsZ( const GridZ_:Integer );
      public
        ///// プロパティ
-       property Brics[ const X_,Y_,Z_:Integer ] :_TItem_ read GetItems  write SetItems ; default;
-       property BricsX                          :Integer read GetItemsX write SetItemsX;
-       property BricsY                          :Integer read GetItemsY write SetItemsY;
-       property BricsZ                          :Integer read GetItemsZ write SetItemsZ;
+       property Cells[ const X_,Y_,Z_:Integer ] :_TItem_ read GetItems  write SetItems ; default;
+       property CellsX                          :Integer read GetItemsX write SetItemsX;
+       property CellsY                          :Integer read GetItemsY write SetItemsY;
+       property CellsZ                          :Integer read GetItemsZ write SetItemsZ;
        property GridsX                          :Integer read GetGridsX write SetGridsX;
        property GridsY                          :Integer read GetGridsY write SetGridsY;
        property GridsZ                          :Integer read GetGridsZ write SetGridsZ;
@@ -168,19 +168,19 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      IGridArray3D = interface( IArray3D )
      ['{60135172-47A4-4183-8CE9-B590E8F21835}']
        ///// アクセス
-       function GetBricsX :Integer;
-       procedure SetBricsX( const BricsX_:Integer );
-       function GetBricsY :Integer;
-       procedure SetBricsY( const BricsY_:Integer );
-       function GetBricsZ :Integer;
-       procedure SetBricsZ( const BricsZ_:Integer );
+       function GetCellsX :Integer;
+       procedure SetCellsX( const CellsX_:Integer );
+       function GetCellsY :Integer;
+       procedure SetCellsY( const CellsY_:Integer );
+       function GetCellsZ :Integer;
+       procedure SetCellsZ( const CellsZ_:Integer );
        ///// プロパティ
        property GridsX :Integer read GetItemsX write SetItemsX;
        property GridsY :Integer read GetItemsY write SetItemsY;
        property GridsZ :Integer read GetItemsZ write SetItemsZ;
-       property BricsX :Integer read GetBricsX write SetBricsX;
-       property BricsY :Integer read GetBricsY write SetBricsY;
-       property BricsZ :Integer read GetBricsZ write SetBricsZ;
+       property CellsX :Integer read GetCellsX write SetCellsX;
+       property CellsY :Integer read GetCellsY write SetCellsY;
+       property CellsZ :Integer read GetCellsZ write SetCellsZ;
      end;
 
      //-------------------------------------------------------------------------
@@ -189,36 +189,36 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// アクセス
-       function GetBricsX :Integer;
-       procedure SetBricsX( const BricsX_:Integer );
-       function GetBricsY :Integer;
-       procedure SetBricsY( const BricsY_:Integer );
-       function GetBricsZ :Integer;
-       procedure SetBricsZ( const BricsZ_:Integer );
-       function NewBricIter :TBricIterGridArray3D<_TItem_>; virtual;
+       function GetCellsX :Integer;
+       procedure SetCellsX( const CellsX_:Integer );
+       function GetCellsY :Integer;
+       procedure SetCellsY( const CellsY_:Integer );
+       function GetCellsZ :Integer;
+       procedure SetCellsZ( const CellsZ_:Integer );
+       function NewCellIter :TCellIterGridArray3D<_TItem_>; virtual;
      public
-       constructor Create( const BricsX_,BricsY_,BricsZ_,MargsX_,MargsY_,MargsZ_:Integer ); override;
+       constructor Create( const CellsX_,CellsY_,CellsZ_,MargsX_,MargsY_,MargsZ_:Integer ); override;
        destructor Destroy; override;
        ///// プロパティ
        property Grids[ const X_,Y_,Z_:Integer ] :_TItem_ read GetItems  write SetItems ; default;
        property GridsX                          :Integer read GetItemsX write SetItemsX;
        property GridsY                          :Integer read GetItemsY write SetItemsY;
        property GridsZ                          :Integer read GetItemsZ write SetItemsZ;
-       property BricsX                          :Integer read GetBricsX write SetBricsX;
-       property BricsY                          :Integer read GetBricsY write SetBricsY;
-       property BricsZ                          :Integer read GetBricsZ write SetBricsZ;
+       property CellsX                          :Integer read GetCellsX write SetCellsX;
+       property CellsY                          :Integer read GetCellsY write SetCellsY;
+       property CellsZ                          :Integer read GetCellsZ write SetCellsZ;
        ///// メソッド
        procedure Read( const Stream_:TStream ); override;
        procedure Write( const Stream_:TStream ); override;
-       procedure ForBrics( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
-       procedure ForEdgesX( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
-       procedure ForEdgesY( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
-       procedure ForEdgesZ( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
+       procedure ForCells( const Proc_:TConstProc<TCellIterGridArray3D<_TItem_>> );
+       procedure ForEdgesX( const Proc_:TConstProc<TCellIterGridArray3D<_TItem_>> );
+       procedure ForEdgesY( const Proc_:TConstProc<TCellIterGridArray3D<_TItem_>> );
+       procedure ForEdgesZ( const Proc_:TConstProc<TCellIterGridArray3D<_TItem_>> );
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBricIterGridArray3D<_TItem_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCellIterGridArray3D<_TItem_>
 
-     IBricIterGridArray3D<_TItem_> = interface
+     ICellIterGridArray3D<_TItem_> = interface
      ['{F5FE2821-AAE8-4D83-9732-956556A2E7C2}']
      {protected}
        function GetPos :TInteger3D;
@@ -253,7 +253,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TBricIterGridArray3D<_TItem_> = class( TInterfacedObject, IBricIterGridArray3D<_TItem_> )
+     TCellIterGridArray3D<_TItem_> = class( TInterfacedObject, ICellIterGridArray3D<_TItem_> )
      private
      protected type
        _PItem_ = ^_TItem_;
@@ -308,7 +308,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure GoNextZ( const N_:Integer ); overload;
        function Interp( const Xd_,Yd_,Zd_:Single ) :_TItem_; virtual;
        function AbsoInterp( const X_,Y_,Z_:Single ) :_TItem_; virtual;
-       procedure ForBrics( const Proc_:TProc );
+       procedure ForCells( const Proc_:TProc );
        procedure ForEdgesX( const Proc_:TProc );
        procedure ForEdgesY( const Proc_:TProc );
        procedure ForEdgesZ( const Proc_:TProc );
@@ -521,7 +521,7 @@ begin
      Stream_.Write( _Elems[ 0 ], GetElemsByte );
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBricArray3D<_TItem_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCellArray3D<_TItem_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -529,34 +529,34 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TBricArray3D<_TItem_>.GetGridsX :Integer;
+function TCellArray3D<_TItem_>.GetGridsX :Integer;
 begin
-     Result := BricsX + 1;
+     Result := CellsX + 1;
 end;
 
-procedure TBricArray3D<_TItem_>.SetGridsX( const GridX_:Integer );
+procedure TCellArray3D<_TItem_>.SetGridsX( const GridX_:Integer );
 begin
-     BricsX := GridX_ - 1;
+     CellsX := GridX_ - 1;
 end;
 
-function TBricArray3D<_TItem_>.GetGridsY :Integer;
+function TCellArray3D<_TItem_>.GetGridsY :Integer;
 begin
-     Result := BricsY + 1;
+     Result := CellsY + 1;
 end;
 
-procedure TBricArray3D<_TItem_>.SetGridsY( const GridY_:Integer );
+procedure TCellArray3D<_TItem_>.SetGridsY( const GridY_:Integer );
 begin
-     BricsY := GridY_ - 1;
+     CellsY := GridY_ - 1;
 end;
 
-function TBricArray3D<_TItem_>.GetGridsZ :Integer;
+function TCellArray3D<_TItem_>.GetGridsZ :Integer;
 begin
-     Result := BricsZ + 1;
+     Result := CellsZ + 1;
 end;
 
-procedure TBricArray3D<_TItem_>.SetGridsZ( const GridZ_:Integer );
+procedure TCellArray3D<_TItem_>.SetGridsZ( const GridZ_:Integer );
 begin
-     BricsY := GridZ_ - 1;
+     CellsY := GridZ_ - 1;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -569,48 +569,48 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TGridArray3D<_TItem_>.GetBricsX :Integer;
+function TGridArray3D<_TItem_>.GetCellsX :Integer;
 begin
      Result := _ItemsX - 1;
 end;
 
-procedure TGridArray3D<_TItem_>.SetBricsX( const BricsX_:Integer );
+procedure TGridArray3D<_TItem_>.SetCellsX( const CellsX_:Integer );
 begin
-     _ItemsX  := BricsX_ + 1;  MakeArray;
+     _ItemsX  := CellsX_ + 1;  MakeArray;
 end;
 
-function TGridArray3D<_TItem_>.GetBricsY :Integer;
+function TGridArray3D<_TItem_>.GetCellsY :Integer;
 begin
      Result := _ItemsY - 1;
 end;
 
-procedure TGridArray3D<_TItem_>.SetBricsY( const BricsY_:Integer );
+procedure TGridArray3D<_TItem_>.SetCellsY( const CellsY_:Integer );
 begin
-     _ItemsY  := BricsY_ + 1;  MakeArray;
+     _ItemsY  := CellsY_ + 1;  MakeArray;
 end;
 
-function TGridArray3D<_TItem_>.GetBricsZ :Integer;
+function TGridArray3D<_TItem_>.GetCellsZ :Integer;
 begin
      Result := _ItemsZ - 1;
 end;
 
-procedure TGridArray3D<_TItem_>.SetBricsZ( const BricsZ_:Integer );
+procedure TGridArray3D<_TItem_>.SetCellsZ( const CellsZ_:Integer );
 begin
-     _ItemsZ  := BricsZ_ + 1;  MakeArray;
+     _ItemsZ  := CellsZ_ + 1;  MakeArray;
 end;
 
 //------------------------------------------------------------------------------
 
-function TGridArray3D<_TItem_>.NewBricIter :TBricIterGridArray3D<_TItem_>;
+function TGridArray3D<_TItem_>.NewCellIter :TCellIterGridArray3D<_TItem_>;
 begin
-     Result := TBricIterGridArray3D<_TItem_>.Create( Self );
+     Result := TCellIterGridArray3D<_TItem_>.Create( Self );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TGridArray3D<_TItem_>.Create( const BricsX_,BricsY_,BricsZ_,MargsX_,MargsY_,MargsZ_:Integer );
+constructor TGridArray3D<_TItem_>.Create( const CellsX_,CellsY_,CellsZ_,MargsX_,MargsY_,MargsZ_:Integer );
 begin
-     inherited Create( BricsX_+1, BricsY_+1, BricsZ_+1,
+     inherited Create( CellsX_+1, CellsY_+1, CellsZ_+1,
                        MargsX_  , MargsY_  , MargsZ_   );
 
 end;
@@ -633,9 +633,9 @@ begin
           Read( M, SizeOf( TCardinal3D ) );
      end;
 
-     BricsX := S.X;
-     BricsY := S.Y;
-     BricsZ := S.Z;
+     CellsX := S.X;
+     CellsY := S.Y;
+     CellsZ := S.Z;
 
      MargsX := M.X;
      MargsY := M.Y;
@@ -650,9 +650,9 @@ var
 begin
      with S do
      begin
-          X := BricsX;
-          Y := BricsY;
-          Z := BricsZ;
+          X := CellsX;
+          Y := CellsY;
+          Z := CellsZ;
      end;
 
      with M do
@@ -673,51 +673,51 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TGridArray3D<_TItem_>.ForBrics( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
+procedure TGridArray3D<_TItem_>.ForCells( const Proc_:TConstProc<TCellIterGridArray3D<_TItem_>> );
 var
-   B :TBricIterGridArray3D<_TItem_>;
+   B :TCellIterGridArray3D<_TItem_>;
 begin
-     B := NewBricIter;
+     B := NewCellIter;
 
-     B.ForBrics( procedure begin Proc_( B ); end );
+     B.ForCells( procedure begin Proc_( B ); end );
 
      B.DisposeOf;
 end;
 
-procedure TGridArray3D<_TItem_>.ForEdgesX( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
+procedure TGridArray3D<_TItem_>.ForEdgesX( const Proc_:TConstProc<TCellIterGridArray3D<_TItem_>> );
 var
-   E :TBricIterGridArray3D<_TItem_>;
+   E :TCellIterGridArray3D<_TItem_>;
 begin
-     E := NewBricIter;
+     E := NewCellIter;
 
      E.ForEdgesX( procedure begin Proc_( E ); end );
 
      E.DisposeOf;
 end;
 
-procedure TGridArray3D<_TItem_>.ForEdgesY( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
+procedure TGridArray3D<_TItem_>.ForEdgesY( const Proc_:TConstProc<TCellIterGridArray3D<_TItem_>> );
 var
-   E :TBricIterGridArray3D<_TItem_>;
+   E :TCellIterGridArray3D<_TItem_>;
 begin
-     E := NewBricIter;
+     E := NewCellIter;
 
      E.ForEdgesY( procedure begin Proc_( E ); end );
 
      E.DisposeOf;
 end;
 
-procedure TGridArray3D<_TItem_>.ForEdgesZ( const Proc_:TConstProc<TBricIterGridArray3D<_TItem_>> );
+procedure TGridArray3D<_TItem_>.ForEdgesZ( const Proc_:TConstProc<TCellIterGridArray3D<_TItem_>> );
 var
-   E :TBricIterGridArray3D<_TItem_>;
+   E :TCellIterGridArray3D<_TItem_>;
 begin
-     E := NewBricIter;
+     E := NewCellIter;
 
      E.ForEdgesZ( procedure begin Proc_( E ); end );
 
      E.DisposeOf;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBricIterGridArray3D<_TItem_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCellIterGridArray3D<_TItem_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -725,12 +725,12 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TBricIterGridArray3D<_TItem_>.GetPosX :Integer;
+function TCellIterGridArray3D<_TItem_>.GetPosX :Integer;
 begin
      Result := _GX[ 0 ];
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.SetPosX( const PosX_:Integer );
+procedure TCellIterGridArray3D<_TItem_>.SetPosX( const PosX_:Integer );
 var
    X, Y, Z :Integer;
 begin
@@ -750,12 +750,12 @@ begin
      end;
 end;
 
-function TBricIterGridArray3D<_TItem_>.GetPosY :Integer;
+function TCellIterGridArray3D<_TItem_>.GetPosY :Integer;
 begin
      Result := _GY[ 0 ];
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.SetPosY( const PosY_:Integer );
+procedure TCellIterGridArray3D<_TItem_>.SetPosY( const PosY_:Integer );
 var
    Y, Z :Integer;
 begin
@@ -772,12 +772,12 @@ begin
      end;
 end;
 
-function TBricIterGridArray3D<_TItem_>.GetPosZ :Integer;
+function TCellIterGridArray3D<_TItem_>.GetPosZ :Integer;
 begin
      Result := _GZ[ 0 ];
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.SetPosZ( const PosZ_:Integer );
+procedure TCellIterGridArray3D<_TItem_>.SetPosZ( const PosZ_:Integer );
 var
    Z :Integer;
 begin
@@ -793,12 +793,12 @@ end;
 
 //------------------------------------------------------------------------------
 
-function TBricIterGridArray3D<_TItem_>.GetPos :TInteger3D;
+function TCellIterGridArray3D<_TItem_>.GetPos :TInteger3D;
 begin
      Result := TInteger3D.Create( PosX, PosY, PosZ );
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.SetPos( const Pos_:TInteger3D );
+procedure TCellIterGridArray3D<_TItem_>.SetPos( const Pos_:TInteger3D );
 begin
      with Pos_ do
      begin
@@ -810,34 +810,34 @@ end;
 
 //------------------------------------------------------------------------------
 
-function TBricIterGridArray3D<_TItem_>.GetGrids( const X_,Y_,Z_:Shortint ) :_TItem_;
+function TCellIterGridArray3D<_TItem_>.GetGrids( const X_,Y_,Z_:Shortint ) :_TItem_;
 begin
      Result := _Grids[ Z_, Y_, X_ ]^;
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.SetGrids( const X_,Y_,Z_:Shortint; const Item_:_TItem_ );
+procedure TCellIterGridArray3D<_TItem_>.SetGrids( const X_,Y_,Z_:Shortint; const Item_:_TItem_ );
 begin
      _Grids[ Z_, Y_, X_ ]^ := Item_;
 end;
 
 //------------------------------------------------------------------------------
 
-function TBricIterGridArray3D<_TItem_>.GetGiX( const I_:Shortint ) :Integer;
+function TCellIterGridArray3D<_TItem_>.GetGiX( const I_:Shortint ) :Integer;
 begin
      Result := _GX[ I_ ];
 end;
 
-function TBricIterGridArray3D<_TItem_>.GetGiY( const I_:Shortint ) :Integer;
+function TCellIterGridArray3D<_TItem_>.GetGiY( const I_:Shortint ) :Integer;
 begin
      Result := _GY[ I_ ];
 end;
 
-function TBricIterGridArray3D<_TItem_>.GetGiZ( const I_:Shortint ) :Integer;
+function TCellIterGridArray3D<_TItem_>.GetGiZ( const I_:Shortint ) :Integer;
 begin
      Result := _GZ[ I_ ];
 end;
 
-function TBricIterGridArray3D<_TItem_>.GetGi( const X_,Y_,Z_:Shortint ) :TInteger3D;
+function TCellIterGridArray3D<_TItem_>.GetGi( const X_,Y_,Z_:Shortint ) :TInteger3D;
 begin
      with Result do
      begin
@@ -849,7 +849,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TBricIterGridArray3D<_TItem_>.Create( const Array_:TGridArray3D<_TItem_> );
+constructor TCellIterGridArray3D<_TItem_>.Create( const Array_:TGridArray3D<_TItem_> );
 begin
      inherited Create;
 
@@ -858,7 +858,7 @@ begin
      Pos := TInteger3D.Create( 0, 0, 0 );
 end;
 
-destructor TBricIterGridArray3D<_TItem_>.Destroy;
+destructor TCellIterGridArray3D<_TItem_>.Destroy;
 begin
 
      inherited;
@@ -866,7 +866,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TBricIterGridArray3D<_TItem_>.GoPrevX;
+procedure TCellIterGridArray3D<_TItem_>.GoPrevX;
 var
    Y, Z :Integer;
 begin
@@ -883,7 +883,7 @@ begin
      end;
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.GoNextX;
+procedure TCellIterGridArray3D<_TItem_>.GoNextX;
 var
    Y, Z :Integer;
 begin
@@ -902,7 +902,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TBricIterGridArray3D<_TItem_>.GoPrevY;
+procedure TCellIterGridArray3D<_TItem_>.GoPrevY;
 var
    Z, X :Integer;
 begin
@@ -918,7 +918,7 @@ begin
      end;
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.GoNextY;
+procedure TCellIterGridArray3D<_TItem_>.GoNextY;
 var
    Z, X :Integer;
 begin
@@ -936,7 +936,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TBricIterGridArray3D<_TItem_>.GoPrevZ;
+procedure TCellIterGridArray3D<_TItem_>.GoPrevZ;
 var
    X, Y :Integer;
 begin
@@ -952,7 +952,7 @@ begin
      end;
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.GoNextZ;
+procedure TCellIterGridArray3D<_TItem_>.GoNextZ;
 var
    X, Y :Integer;
 begin
@@ -973,42 +973,42 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TBricIterGridArray3D<_TItem_>.GoPrevX( const N_:Integer );
+procedure TCellIterGridArray3D<_TItem_>.GoPrevX( const N_:Integer );
 var
    N :Integer;
 begin
      for N := 1 to N_ do GoPrevX;
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.GoNextX( const N_:Integer );
+procedure TCellIterGridArray3D<_TItem_>.GoNextX( const N_:Integer );
 var
    N :Integer;
 begin
      for N := 1 to N_ do GoNextX;
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.GoPrevY( const N_:Integer );
+procedure TCellIterGridArray3D<_TItem_>.GoPrevY( const N_:Integer );
 var
    N :Integer;
 begin
      for N := 1 to N_ do GoPrevY;
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.GoNextY( const N_:Integer );
+procedure TCellIterGridArray3D<_TItem_>.GoNextY( const N_:Integer );
 var
    N :Integer;
 begin
      for N := 1 to N_ do GoNextY;
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.GoPrevZ( const N_:Integer );
+procedure TCellIterGridArray3D<_TItem_>.GoPrevZ( const N_:Integer );
 var
    N :Integer;
 begin
      for N := 1 to N_ do GoPrevZ;
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.GoNextZ( const N_:Integer );
+procedure TCellIterGridArray3D<_TItem_>.GoNextZ( const N_:Integer );
 var
    N :Integer;
 begin
@@ -1017,12 +1017,12 @@ end;
 
 //------------------------------------------------------------------------------
 
-function TBricIterGridArray3D<_TItem_>.Interp( const Xd_,Yd_,Zd_:Single ) :_TItem_;
+function TCellIterGridArray3D<_TItem_>.Interp( const Xd_,Yd_,Zd_:Single ) :_TItem_;
 begin
      Result := Grids[ Round( Xd_ ), Round( Yd_ ), Round( Zd_ ) ];
 end;
 
-function TBricIterGridArray3D<_TItem_>.AbsoInterp( const X_,Y_,Z_:Single ) :_TItem_;
+function TCellIterGridArray3D<_TItem_>.AbsoInterp( const X_,Y_,Z_:Single ) :_TItem_;
 var
    Xd, Yd, Zd :Single;
 begin
@@ -1035,18 +1035,18 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TBricIterGridArray3D<_TItem_>.ForBrics( const Proc_:TProc );
+procedure TCellIterGridArray3D<_TItem_>.ForCells( const Proc_:TProc );
 var
    X, Y, Z :Integer;
 begin
      PosZ := 0;
-     for Z := 1 to _Paren.BricsZ do
+     for Z := 1 to _Paren.CellsZ do
      begin
           PosY := 0;
-          for Y := 1 to _Paren.BricsY do
+          for Y := 1 to _Paren.CellsY do
           begin
                PosX := 0;
-               for X := 1 to _Paren.BricsX do
+               for X := 1 to _Paren.CellsX do
                begin
                     Proc_;
 
@@ -1058,18 +1058,18 @@ begin
      end;
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.ForEdgesX( const Proc_:TProc );
+procedure TCellIterGridArray3D<_TItem_>.ForEdgesX( const Proc_:TProc );
 var
    X, Y, Z :Integer;
 begin
      PosZ := 0;
-     for Z := 0 to _Paren.BricsZ do
+     for Z := 0 to _Paren.CellsZ do
      begin
           PosY := 0;
-          for Y := 0 to _Paren.BricsY do
+          for Y := 0 to _Paren.CellsY do
           begin
                PosX := 0;
-               for X := 1 to _Paren.BricsX do
+               for X := 1 to _Paren.CellsX do
                begin
                     Proc_;
 
@@ -1081,18 +1081,18 @@ begin
      end;
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.ForEdgesY( const Proc_:TProc );
+procedure TCellIterGridArray3D<_TItem_>.ForEdgesY( const Proc_:TProc );
 var
    X, Y, Z :Integer;
 begin
      PosZ := 0;
-     for Z := 0 to _Paren.BricsZ do
+     for Z := 0 to _Paren.CellsZ do
      begin
           PosY := 0;
-          for Y := 1 to _Paren.BricsY do
+          for Y := 1 to _Paren.CellsY do
           begin
                PosX := 0;
-               for X := 0 to _Paren.BricsX do
+               for X := 0 to _Paren.CellsX do
                begin
                     Proc_;
 
@@ -1104,18 +1104,18 @@ begin
      end;
 end;
 
-procedure TBricIterGridArray3D<_TItem_>.ForEdgesZ( const Proc_:TProc );
+procedure TCellIterGridArray3D<_TItem_>.ForEdgesZ( const Proc_:TProc );
 var
    X, Y, Z :Integer;
 begin
      PosZ := 0;
-     for Z := 1 to _Paren.BricsZ do
+     for Z := 1 to _Paren.CellsZ do
      begin
           PosY := 0;
-          for Y := 0 to _Paren.BricsY do
+          for Y := 0 to _Paren.CellsY do
           begin
                PosX := 0;
-               for X := 0 to _Paren.BricsX do
+               for X := 0 to _Paren.CellsX do
                begin
                     Proc_;
 
