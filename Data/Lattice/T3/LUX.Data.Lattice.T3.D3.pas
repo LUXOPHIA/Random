@@ -7,17 +7,17 @@ uses System.SysUtils, System.Classes,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
-     TSingleBricArray3D         = class;
+     TSingleCellArray3D         = class;
      TSingleGridArray3D         = class;
-     TSingleBricIterGridArray3D = class;
+     TSingleCellIterGridArray3D = class;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleBricArray3D
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleCellArray3D
 
-     ISingleBricArray3D = interface( IBricArray3D )
+     ISingleCellArray3D = interface( ICellArray3D )
      ['{07DD7FC2-8BD0-4D64-86E5-7FFDE4CF7CA3}']
      {protected}
      {public}
@@ -25,7 +25,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TSingleBricArray3D = class( TBricArray3D<Single>, ISingleBricArray3D )
+     TSingleCellArray3D = class( TCellArray3D<Single>, ISingleCellArray3D )
      private
      protected
      public
@@ -46,15 +46,15 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
      public
        ///// メソッド
-       procedure ForBrics( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
-       procedure ForEdgesX( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
-       procedure ForEdgesY( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
-       procedure ForEdgesZ( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
+       procedure ForCells( const Proc_:TConstProc<TSingleCellIterGridArray3D> );
+       procedure ForEdgesX( const Proc_:TConstProc<TSingleCellIterGridArray3D> );
+       procedure ForEdgesY( const Proc_:TConstProc<TSingleCellIterGridArray3D> );
+       procedure ForEdgesZ( const Proc_:TConstProc<TSingleCellIterGridArray3D> );
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleBricIterGridArray3D
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleCellIterGridArray3D
 
-     ISingleBricIterGridArray3D = interface( IBricIterGridArray3D<Single> )
+     ISingleCellIterGridArray3D = interface( ICellIterGridArray3D<Single> )
      ['{1FA11B62-B22A-4966-815F-48EF06FDBF3B}']
      {protected}
      {public}
@@ -62,7 +62,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TSingleBricIterGridArray3D = class( TBricIterGridArray3D<Single>, ISingleBricIterGridArray3D )
+     TSingleCellIterGridArray3D = class( TCellIterGridArray3D<Single>, ISingleCellIterGridArray3D )
      private
      protected
      public
@@ -87,7 +87,7 @@ uses System.Math;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleBricArray3D
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleCellArray3D
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -105,39 +105,39 @@ uses System.Math;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TSingleGridArray3D.ForBrics( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
+procedure TSingleGridArray3D.ForCells( const Proc_:TConstProc<TSingleCellIterGridArray3D> );
 begin
-     inherited ForBrics( procedure( const B_:TBricIterGridArray3D<Single> )
+     inherited ForCells( procedure( const B_:TCellIterGridArray3D<Single> )
      begin
-          Proc_( B_ as TSingleBricIterGridArray3D );
+          Proc_( B_ as TSingleCellIterGridArray3D );
      end );
 end;
 
-procedure TSingleGridArray3D.ForEdgesX( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
+procedure TSingleGridArray3D.ForEdgesX( const Proc_:TConstProc<TSingleCellIterGridArray3D> );
 begin
-     inherited ForEdgesX( procedure( const E_:TBricIterGridArray3D<Single> )
+     inherited ForEdgesX( procedure( const E_:TCellIterGridArray3D<Single> )
      begin
-          Proc_( E_ as TSingleBricIterGridArray3D );
+          Proc_( E_ as TSingleCellIterGridArray3D );
      end );
 end;
 
-procedure TSingleGridArray3D.ForEdgesY( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
+procedure TSingleGridArray3D.ForEdgesY( const Proc_:TConstProc<TSingleCellIterGridArray3D> );
 begin
-     inherited ForEdgesY( procedure( const E_:TBricIterGridArray3D<Single> )
+     inherited ForEdgesY( procedure( const E_:TCellIterGridArray3D<Single> )
      begin
-          Proc_( E_ as TSingleBricIterGridArray3D );
+          Proc_( E_ as TSingleCellIterGridArray3D );
      end );
 end;
 
-procedure TSingleGridArray3D.ForEdgesZ( const Proc_:TConstProc<TSingleBricIterGridArray3D> );
+procedure TSingleGridArray3D.ForEdgesZ( const Proc_:TConstProc<TSingleCellIterGridArray3D> );
 begin
-     inherited ForEdgesZ( procedure( const E_:TBricIterGridArray3D<Single> )
+     inherited ForEdgesZ( procedure( const E_:TCellIterGridArray3D<Single> )
      begin
-          Proc_( E_ as TSingleBricIterGridArray3D );
+          Proc_( E_ as TSingleCellIterGridArray3D );
      end );
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleBricIterGridArray3D
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleCellIterGridArray3D
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -147,7 +147,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TSingleBricIterGridArray3D.Interp( const Xd_,Yd_,Zd_:Single ) :Single;
+function TSingleCellIterGridArray3D.Interp( const Xd_,Yd_,Zd_:Single ) :Single;
 var
    Y00, Y01, Y10, Y11, Z0, Z1 :Single;
 begin
@@ -164,7 +164,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-function TSingleBricIterGridArray3D.FracGrad( const Xd_,Yd_,Zd_:Single ) :TSingle3D;
+function TSingleCellIterGridArray3D.FracGrad( const Xd_,Yd_,Zd_:Single ) :TSingle3D;
 //······································
      function GetInterp( const X,Y,Z:Shortint ) :Single;
      var
@@ -190,12 +190,12 @@ begin
      end;
 end;
 
-function TSingleBricIterGridArray3D.Grad( const d_:TSingle3D ) :TSingle3D;
+function TSingleCellIterGridArray3D.Grad( const d_:TSingle3D ) :TSingle3D;
 begin
      Result := FracGrad( d_.X, d_.Y, d_.Z );
 end;
 
-function TSingleBricIterGridArray3D.AbsoGrad( const X_,Y_,Z_:Single ) :TSingle3D;
+function TSingleCellIterGridArray3D.AbsoGrad( const X_,Y_,Z_:Single ) :TSingle3D;
 var
    Xd, Yd, Zd :Single;
 begin
