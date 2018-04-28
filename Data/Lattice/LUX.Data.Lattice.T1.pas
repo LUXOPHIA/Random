@@ -94,21 +94,21 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function AddTail( const Item_:_TItem_ ) :Integer;
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBricArray1D<_TItem_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCellArray1D<_TItem_>
 
-     IBricArray1D = interface( IArray1D )
+     ICellArray1D = interface( IArray1D )
      ['{970CB18E-E1DC-4393-A124-528256753896}']
        ///// アクセス
        function GetGridsX :Integer;
        procedure SetGridsX( const GridX_:Integer );
        ///// プロパティ
-       property BricsX :Integer read GetItemsX write SetItemsX;
+       property CellsX :Integer read GetItemsX write SetItemsX;
        property GridsX :Integer read GetGridsX write SetGridsX;
      end;
 
      //-------------------------------------------------------------------------
 
-     TBricArray1D<_TItem_> = class( TArray1D<_TItem_>, IBricArray1D )
+     TCellArray1D<_TItem_> = class( TArray1D<_TItem_>, ICellArray1D )
      private
      protected
        ///// アクセス
@@ -116,9 +116,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetGridsX( const GridsX_:Integer );
      public
        ///// プロパティ
-       property Brics[ const X_:Integer ] :_TItem_ read GetItems  write SetItems ; default;
-       property BricsN                    :Integer read GetItemsX write SetItemsX;
-       property BricsX                    :Integer read GetItemsX write SetItemsX;
+       property Cells[ const X_:Integer ] :_TItem_ read GetItems  write SetItems ; default;
+       property CellsN                    :Integer read GetItemsX write SetItemsX;
+       property CellsX                    :Integer read GetItemsX write SetItemsX;
        property GridsN                    :Integer read GetGridsX write SetGridsX;
        property GridsX                    :Integer read GetGridsX write SetGridsX;
        ///// メソッド
@@ -131,11 +131,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      IGridArray1D = interface( IArray1D )
      ['{9FF11CDA-0879-41D1-8025-C4323E1D4389}']
        ///// アクセス
-       function GetBricsX :Integer;
-       procedure SetBricsX( const BricsX_:Integer );
+       function GetCellsX :Integer;
+       procedure SetCellsX( const CellsX_:Integer );
        ///// プロパティ
        property GridsX :Integer read GetItemsX write SetItemsX;
-       property BricsX :Integer read GetBricsX write SetBricsX;
+       property CellsX :Integer read GetCellsX write SetCellsX;
      end;
 
      //-------------------------------------------------------------------------
@@ -144,17 +144,17 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// アクセス
-       function GetBricsX :Integer;
-       procedure SetBricsX( const BricsX_:Integer );
+       function GetCellsX :Integer;
+       procedure SetCellsX( const CellsX_:Integer );
      public
-       constructor Create( const BricsX_,MargsX_:Integer ); override;
+       constructor Create( const CellsX_,MargsX_:Integer ); override;
        destructor Destroy; override;
        ///// プロパティ
        property Grids[ const X_:Integer ] :_TItem_ read GetItems  write SetItems ; default;
        property GridsN                    :Integer read GetItemsX write SetItemsX;
        property GridsX                    :Integer read GetItemsX write SetItemsX;
-       property BricsN                    :Integer read GetBricsX write SetBricsX;
-       property BricsX                    :Integer read GetBricsX write SetBricsX;
+       property CellsN                    :Integer read GetCellsX write SetCellsX;
+       property CellsX                    :Integer read GetCellsX write SetCellsX;
        ///// メソッド
        procedure MakeEdgePerio; override;
        procedure MakeEdgeMirro; override;
@@ -379,7 +379,7 @@ begin
      Items[ Result ] := Item_;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBricArray1D<_TItem_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCellArray1D<_TItem_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -387,21 +387,21 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TBricArray1D<_TItem_>.GetGridsX :Integer;
+function TCellArray1D<_TItem_>.GetGridsX :Integer;
 begin
-     Result := BricsX + 1;
+     Result := CellsX + 1;
 end;
 
-procedure TBricArray1D<_TItem_>.SetGridsX( const GridsX_:Integer );
+procedure TCellArray1D<_TItem_>.SetGridsX( const GridsX_:Integer );
 begin
-     BricsX := GridsX_ - 1;
+     CellsX := GridsX_ - 1;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TBricArray1D<_TItem_>.MakeEdgePerio;
+procedure TCellArray1D<_TItem_>.MakeEdgePerio;
 var
    M, N, H, X :Integer;
 begin
@@ -419,7 +419,7 @@ begin
      for X := H+1 to H+M do Items[ X ] := Items[ X - N ];
 end;
 
-procedure TBricArray1D<_TItem_>.MakeEdgeMirro;
+procedure TCellArray1D<_TItem_>.MakeEdgeMirro;
 var
    M, N, H, X :Integer;
 begin
@@ -445,21 +445,21 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TGridArray1D<_TItem_>.GetBricsX :Integer;
+function TGridArray1D<_TItem_>.GetCellsX :Integer;
 begin
      Result := _ItemsX - 1;
 end;
 
-procedure TGridArray1D<_TItem_>.SetBricsX( const BricsX_:Integer );
+procedure TGridArray1D<_TItem_>.SetCellsX( const CellsX_:Integer );
 begin
-     _ItemsX := BricsX_ + 1;  MakeArray;
+     _ItemsX := CellsX_ + 1;  MakeArray;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TGridArray1D<_TItem_>.Create( const BricsX_,MargsX_:Integer );
+constructor TGridArray1D<_TItem_>.Create( const CellsX_,MargsX_:Integer );
 begin
-     inherited Create( BricsX_+1,
+     inherited Create( CellsX_+1,
                        MargsX_   );
 
 end;
@@ -529,7 +529,7 @@ end;
 
 function TIrreMap1D<_TItem_>.GetMaxPosX :Single;
 begin
-     Result := Grids[ BricsN ].Pos;
+     Result := Grids[ CellsN ].Pos;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -548,9 +548,9 @@ var
    H0, I0, I1 :Integer;
    G0, G1 :TPosval1D<_TItem_>;
 begin
-     H0 := BricsN;  BricsN := BricsN + 1;
+     H0 := CellsN;  CellsN := CellsN + 1;
 
-     I1 := BricsN;
+     I1 := CellsN;
      for I0 := H0 downto 0 do
      begin
           G0 := Grids[ I0 ];
@@ -598,7 +598,7 @@ begin
      G1 := Grids[ -1 ];
      G2 := Grids[  0 ];
      G3 := Grids[ +1 ];
-     for I3 := 2 to BricsN+1 do
+     for I3 := 2 to CellsN+1 do
      begin
           G0 := G1;  G1 := G2;  G2 := G3;  G3 := Grids[ I3 ];
 
