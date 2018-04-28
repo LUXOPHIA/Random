@@ -117,9 +117,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
        ///// プロパティ
        property Cells[ const X_:Integer ] :_TItem_ read GetItems  write SetItems ; default;
-       property CellsN                    :Integer read GetItemsX write SetItemsX;
        property CellsX                    :Integer read GetItemsX write SetItemsX;
-       property GridsN                    :Integer read GetGridsX write SetGridsX;
        property GridsX                    :Integer read GetGridsX write SetGridsX;
        ///// メソッド
        procedure MakeEdgePerio; override;
@@ -151,9 +149,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        destructor Destroy; override;
        ///// プロパティ
        property Grids[ const X_:Integer ] :_TItem_ read GetItems  write SetItems ; default;
-       property GridsN                    :Integer read GetItemsX write SetItemsX;
        property GridsX                    :Integer read GetItemsX write SetItemsX;
-       property CellsN                    :Integer read GetCellsX write SetCellsX;
        property CellsX                    :Integer read GetCellsX write SetCellsX;
        ///// メソッド
        procedure MakeEdgePerio; override;
@@ -529,7 +525,7 @@ end;
 
 function TIrreMap1D<_TItem_>.GetMaxPosX :Single;
 begin
-     Result := Grids[ CellsN ].Pos;
+     Result := Grids[ CellsX ].Pos;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -548,9 +544,9 @@ var
    H0, I0, I1 :Integer;
    G0, G1 :TPosval1D<_TItem_>;
 begin
-     H0 := CellsN;  CellsN := CellsN + 1;
+     H0 := CellsX;  CellsX := CellsX + 1;
 
-     I1 := CellsN;
+     I1 := CellsX;
      for I0 := H0 downto 0 do
      begin
           G0 := Grids[ I0 ];
@@ -598,7 +594,7 @@ begin
      G1 := Grids[ -1 ];
      G2 := Grids[  0 ];
      G3 := Grids[ +1 ];
-     for I3 := 2 to CellsN+1 do
+     for I3 := 2 to CellsX+1 do
      begin
           G0 := G1;  G1 := G2;  G2 := G3;  G3 := Grids[ I3 ];
 
