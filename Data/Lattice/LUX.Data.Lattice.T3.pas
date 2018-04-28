@@ -27,6 +27,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetItemsZ( const ItemsZ_:Integer );
        function GetMargsZ :Integer;
        procedure SetMargsZ( const MargsZ_:Integer );
+       function GetItemsN :Integer;
        //---
        function GetCounStepX :Integer;
        function GetCounStepY :Integer;
@@ -41,6 +42,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property ElemsZ :Integer read GetElemsZ                ;
        property ItemsZ :Integer read GetItemsZ write SetItemsZ;
        property MargsZ :Integer read GetMargsZ write SetMargsZ;
+       property ItemsN :Integer read GetItemsN                ;
        //---
        property CounStepX                    :Integer    read GetCounStepX;
        property CounStepY                    :Integer    read GetCounStepY;
@@ -75,6 +77,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetItemsZ( const ItemsZ_:Integer );
        function GetMargsZ :Integer;
        procedure SetMargsZ( const MargsZ_:Integer );
+       function GetItemsN :Integer; override;
        function GetItems( const X_,Y_,Z_:Integer ) :_TItem_;
        procedure SetItems( const X_,Y_,Z_:Integer; const Item_:_TItem_ );
        function GetItemsP( const X_,Y_,Z_:Integer ) :_PItem_;
@@ -103,6 +106,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property ElemsP[ const X_,Y_,Z_:Integer ] :_PItem_    read GetElemsP                   ;
        property ItemsZ                           :Integer    read GetItemsZ    write SetItemsZ;
        property MargsZ                           :Integer    read GetMargsZ    write SetMargsZ;
+       property ItemsN                           :Integer    read GetItemsN                   ;
        property Items[ const X_,Y_,Z_:Integer ]  :_TItem_    read GetItems     write SetItems ; default;
        property ItemsP[ const X_,Y_,Z_:Integer ] :_PItem_    read GetItemsP                   ;
        property Item0P                           :Pointer    read GetItem0P                   ;
@@ -195,6 +199,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetCellsY( const CellsY_:Integer );
        function GetCellsZ :Integer;
        procedure SetCellsZ( const CellsZ_:Integer );
+       function GetCellsN :Integer;
+       ///// メソッド
        function NewCellIter :TCellIterPoinArray3D<_TItem_>; virtual;
      public
        constructor Create( const CellsX_,CellsY_,CellsZ_,MargsX_,MargsY_,MargsZ_:Integer ); override;
@@ -204,9 +210,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property PoinsX                          :Integer read GetItemsX write SetItemsX;
        property PoinsY                          :Integer read GetItemsY write SetItemsY;
        property PoinsZ                          :Integer read GetItemsZ write SetItemsZ;
+       property PoinsN                          :Integer read GetItemsN                ;
        property CellsX                          :Integer read GetCellsX write SetCellsX;
        property CellsY                          :Integer read GetCellsY write SetCellsY;
        property CellsZ                          :Integer read GetCellsZ write SetCellsZ;
+       property CellsN                          :Integer read GetCellsN                ;
        ///// メソッド
        procedure Read( const Stream_:TStream ); override;
        procedure Write( const Stream_:TStream ); override;
@@ -389,8 +397,6 @@ begin
      _ItemsZ := ItemsZ_;  MakeArray;
 end;
 
-//------------------------------------------------------------------------------
-
 function TArray3D<_TItem_>.GetMargsZ :Integer;
 begin
      Result := _MargsZ;
@@ -399,6 +405,11 @@ end;
 procedure TArray3D<_TItem_>.SetMargsZ( const MargsZ_:Integer );
 begin
      _MargsZ := MargsZ_;  MakeArray;
+end;
+
+function TArray3D<_TItem_>.GetItemsN :Integer;
+begin
+     Result := _ItemsZ * _ItemsY * _ItemsX;
 end;
 
 //------------------------------------------------------------------------------
@@ -599,7 +610,12 @@ begin
      _ItemsZ  := CellsZ_ + 1;  MakeArray;
 end;
 
-//------------------------------------------------------------------------------
+function TPoinArray3D<_TItem_>.GetCellsN :Integer;
+begin
+     Result := CellsZ * CellsY * CellsX;
+end;
+
+/////////////////////////////////////////////////////////////////////// メソッド
 
 function TPoinArray3D<_TItem_>.NewCellIter :TCellIterPoinArray3D<_TItem_>;
 begin

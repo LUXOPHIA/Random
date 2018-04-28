@@ -21,11 +21,13 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetItemsY( const ItemsY_:Integer );
        function GetMargsY :Integer;
        procedure SetMargsY( const MargsY_:Integer );
+       function GetItemsN :Integer;
      {public}
        ///// プロパティ
        property ElemsY :Integer read GetElemsY                ;
        property ItemsY :Integer read GetItemsY write SetItemsY;
        property MargsY :Integer read GetMargsY write SetMargsY;
+       property ItemsN :Integer read GetItemsN                ;
      end;
 
      //-------------------------------------------------------------------------
@@ -51,6 +53,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetItemsY( const ItemsY_:Integer );
        function GetMargsY :Integer;
        procedure SetMargsY( const MargsY_:Integer );
+       function GetItemsN :Integer; override;
        function GetItems( const X_,Y_:Integer ) :_TItem_;
        procedure SetItems( const X_,Y_:Integer; const Item_:_TItem_ );
        function GetItemsP( const X_,Y_:Integer ) :_PItem_;
@@ -69,6 +72,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property ElemsP[ const X_,Y_:Integer ] :_PItem_ read GetElemsP                ;
        property ItemsY                        :Integer read GetItemsY write SetItemsY;
        property MargsY                        :Integer read GetMargsY write SetMargsY;
+       property ItemsN                        :Integer read GetItemsN                ;
        property Items[ const X_,Y_:Integer ]  :_TItem_ read GetItems  write SetItems ; default;
        property ItemsP[ const X_,Y_:Integer ] :_PItem_ read GetItemsP                ;
        property Item0P                        :Pointer read GetItem0P                ;
@@ -221,8 +225,6 @@ begin
      _ItemsY := ItemsY_;  MakeArray;
 end;
 
-//------------------------------------------------------------------------------
-
 function TArray2D<_TItem_>.GetMargsY :Integer;
 begin
      Result := _MargsY;
@@ -231,6 +233,11 @@ end;
 procedure TArray2D<_TItem_>.SetMargsY( const MargsY_:Integer );
 begin
      _MargsY := MargsY_;  MakeArray;
+end;
+
+function TArray2D<_TItem_>.GetItemsN :Integer;
+begin
+     Result := _ItemsY * _ItemsX;
 end;
 
 //------------------------------------------------------------------------------

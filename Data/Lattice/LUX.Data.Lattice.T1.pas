@@ -33,6 +33,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetItemsX( const ItemsX_:Integer );
        function GetMargsX :Integer;
        procedure SetMargsX( const MargsX_:Integer );
+       function GetItemsN :Integer;
        function GetItem0P :Pointer;
      {public}
        ///// プロパティ
@@ -40,6 +41,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property ElemsX   :Integer read GetElemsX                  ;
        property ItemsX   :Integer read GetItemsX   write SetItemsX;
        property MargsX   :Integer read GetMargsX   write SetMargsX;
+       property ItemsN   :Integer read GetItemsN                  ;
        property Item0P   :Pointer read GetItem0P                  ;
      end;
 
@@ -66,6 +68,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetItemsX( const ItemsX_:Integer ); virtual;
        function GetMargsX :Integer;
        procedure SetMargsX( const MargsX_:Integer );
+       function GetItemsN :Integer; virtual;
        function GetItems( const X_:Integer ) :_TItem_;
        procedure SetItems( const X_:Integer; const Item_:_TItem_ );
        function GetItemsP( const X_:Integer ) :_PItem_;
@@ -84,6 +87,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property ElemsP[ const X_:Integer ] :_PItem_ read GetElemsP                  ;
        property ItemsX                     :Integer read GetItemsX   write SetItemsX;
        property MargsX                     :Integer read GetMargsX   write SetMargsX;
+       property ItemsN                     :Integer read GetItemsN                  ;
        property Items[ const X_:Integer ]  :_TItem_ read GetItems    write SetItems ; default;
        property ItemsP[ const X_:Integer ] :_PItem_ read GetItemsP                  ;
        property Item0P                     :Pointer read GetItem0P                  ;
@@ -284,6 +288,11 @@ end;
 procedure TArray1D<_TItem_>.SetMargsX( const MargsX_:Integer );
 begin
      _MargsX := MargsX_;  MakeArray;
+end;
+
+function TArray1D<_TItem_>.GetItemsN :Integer;
+begin
+     Result := _ItemsX;
 end;
 
 //------------------------------------------------------------------------------
