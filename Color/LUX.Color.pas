@@ -139,6 +139,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class operator Explicit( const C_:TSingleRGBA ) :TByteRGBA;
        class operator Implicit( const C_:TSingleRGB ) :TSingleRGBA;
        class operator Explicit( const C_:TSingleRGBA ) :TSingleRGB;
+       class operator Implicit( const C_:TSingleRGBA ) :TAlphaColorF;
+       class operator Implicit( const C_:TAlphaColorF ) :TSingleRGBA;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TByteRGBE
@@ -701,6 +703,30 @@ end;
 class operator TSingleRGBA.Explicit( const C_:TSingleRGBA ) :TSingleRGB;
 begin
      Result := C_.C;
+end;
+
+//------------------------------------------------------------------------------
+
+class operator TSingleRGBA.Implicit( const C_:TSingleRGBA ) :TAlphaColorF;
+begin
+     with Result do
+     begin
+          R := C_.R;
+          G := C_.G;
+          B := C_.B;
+          A := C_.A;
+     end;
+end;
+
+class operator TSingleRGBA.Implicit( const C_:TAlphaColorF ) :TSingleRGBA;
+begin
+     with Result do
+     begin
+          R := C_.R;
+          G := C_.G;
+          B := C_.B;
+          A := C_.A;
+     end;
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TByteRGBE
