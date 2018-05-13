@@ -18,10 +18,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TSingleRGB> ); overload;
+       procedure DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TSingleRGB>; const Gamm_:Single = 1; const Tone_:Single = 1 ); overload;
      public
        ///// メソッド
-       procedure CopyTo( const BMP_:TBitmap );
+       procedure CopyTo( const BMP_:TBitmap; const Gamm_:Single = 1; const Tone_:Single = 1 );
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCellColorGrid2D_TSingleRGB
@@ -30,10 +30,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TSingleRGB> ); overload;
+       procedure DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TSingleRGB>; const Gamm_:Single = 1; const Tone_:Single = 1 ); overload;
      public
        ///// メソッド
-       procedure CopyTo( const BMP_:TBitmap );
+       procedure CopyTo( const BMP_:TBitmap; const Gamm_:Single = 1; const Tone_:Single = 1 );
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPoinColorGrid2D_TByteRGBE
@@ -42,10 +42,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TByteRGBE> ); overload;
+       procedure DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TByteRGBE>; const Gamm_:Single = 1; const Tone_:Single = 1 ); overload;
      public
        ///// メソッド
-       procedure CopyTo( const BMP_:TBitmap );
+       procedure CopyTo( const BMP_:TBitmap; const Gamm_:Single = 1; const Tone_:Single = 1 );
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCellColorGrid2D_TByteRGBE
@@ -54,10 +54,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TByteRGBE> ); overload;
+       procedure DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TByteRGBE>; const Gamm_:Single = 1; const Tone_:Single = 1 ); overload;
      public
        ///// メソッド
-       procedure CopyTo( const BMP_:TBitmap );
+       procedure CopyTo( const BMP_:TBitmap; const Gamm_:Single = 1; const Tone_:Single = 1 );
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -82,11 +82,11 @@ uses System.Threading;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TPoinColorGrid2D_TSingleRGB.DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TSingleRGB> );
+procedure TPoinColorGrid2D_TSingleRGB.DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TSingleRGB>; const Gamm_:Single = 1; const Tone_:Single = 1 );
 begin
      DrawTo( BMP_, function( const X,Y:Integer ) :TAlphaColor
      begin
-          Result := TByteRGBA( TSingleRGBA( Func_( X, Y ) ) );
+          Result := TByteRGBA( TSingleRGBA( TSingleRGB( Func_( X, Y ) ).ToneMap( Tone_ ).Gamma( Gamm_ ) ) );
      end );
 end;
 
@@ -94,12 +94,13 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TPoinColorGrid2D_TSingleRGB.CopyTo( const BMP_:TBitmap );
+procedure TPoinColorGrid2D_TSingleRGB.CopyTo( const BMP_:TBitmap; const Gamm_:Single = 1; const Tone_:Single = 1 );
 begin
      DrawTo( BMP_, function( const X,Y:Integer ) :TSingleRGB
      begin
           Result := Poins[ X, Y ];
-     end );
+
+     end, Gamm_, Tone_ );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCellColorGrid2D_TSingleRGB
@@ -110,11 +111,11 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TCellColorGrid2D_TSingleRGB.DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TSingleRGB> );
+procedure TCellColorGrid2D_TSingleRGB.DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TSingleRGB>; const Gamm_:Single = 1; const Tone_:Single = 1 );
 begin
      DrawTo( BMP_, function( const X,Y:Integer ) :TAlphaColor
      begin
-          Result := TByteRGBA( TSingleRGBA( Func_( X, Y ) ) );
+          Result := TByteRGBA( TSingleRGBA( TSingleRGB( Func_( X, Y ) ).ToneMap( Tone_ ).Gamma( Gamm_ ) ) );
      end );
 end;
 
@@ -122,12 +123,13 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TCellColorGrid2D_TSingleRGB.CopyTo( const BMP_:TBitmap );
+procedure TCellColorGrid2D_TSingleRGB.CopyTo( const BMP_:TBitmap; const Gamm_:Single = 1; const Tone_:Single = 1 );
 begin
      DrawTo( BMP_, function( const X,Y:Integer ) :TSingleRGB
      begin
           Result := Cells[ X, Y ];
-     end );
+
+     end, Gamm_, Tone_ );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPoinColorGrid2D_TByteRGBE
@@ -138,11 +140,11 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TPoinColorGrid2D_TByteRGBE.DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TByteRGBE> );
+procedure TPoinColorGrid2D_TByteRGBE.DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TByteRGBE>; const Gamm_:Single = 1; const Tone_:Single = 1 );
 begin
      DrawTo( BMP_, function( const X,Y:Integer ) :TAlphaColor
      begin
-          Result := TByteRGBA( TSingleRGBA( TSingleRGB( Func_( X, Y ) ).ToneMap( 10 ).Gamma( 2.2 ) ) );
+          Result := TByteRGBA( TSingleRGBA( TSingleRGB( Func_( X, Y ) ).ToneMap( Tone_ ).Gamma( Gamm_ ) ) );
      end );
 end;
 
@@ -150,12 +152,13 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TPoinColorGrid2D_TByteRGBE.CopyTo( const BMP_:TBitmap );
+procedure TPoinColorGrid2D_TByteRGBE.CopyTo( const BMP_:TBitmap; const Gamm_:Single = 1; const Tone_:Single = 1 );
 begin
      DrawTo( BMP_, function( const X,Y:Integer ) :TByteRGBE
      begin
           Result := Poins[ X, Y ];
-     end );
+
+     end, Gamm_, Tone_ );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCellColorGrid2D_TByteRGBE
@@ -166,11 +169,11 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TCellColorGrid2D_TByteRGBE.DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TByteRGBE> );
+procedure TCellColorGrid2D_TByteRGBE.DrawTo( const BMP_:TBitmap; const Func_:TConstFunc<Integer,Integer,TByteRGBE>; const Gamm_:Single = 1; const Tone_:Single = 1 );
 begin
      DrawTo( BMP_, function( const X,Y:Integer ) :TAlphaColor
      begin
-          Result := TByteRGBA( TSingleRGBA( TSingleRGB( Func_( X, Y ) ).ToneMap( 10 ).Gamma( 2.2 ) ) );
+          Result := TByteRGBA( TSingleRGBA( TSingleRGB( Func_( X, Y ) ).ToneMap( Tone_ ).Gamma( Gamm_ ) ) );
      end );
 end;
 
@@ -178,12 +181,13 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TCellColorGrid2D_TByteRGBE.CopyTo( const BMP_:TBitmap );
+procedure TCellColorGrid2D_TByteRGBE.CopyTo( const BMP_:TBitmap; const Gamm_:Single = 1; const Tone_:Single = 1 );
 begin
      DrawTo( BMP_, function( const X,Y:Integer ) :TByteRGBE
      begin
           Result := Cells[ X, Y ];
-     end );
+
+     end, Gamm_, Tone_ );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
