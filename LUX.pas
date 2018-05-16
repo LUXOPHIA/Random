@@ -185,6 +185,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        ///// メソッド
        function EndOfStream :Boolean;
        function ReadLine :String;
+       function Read( var Buffer_; Count_:Longint ) :Longint;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSearchBM<_TYPE_>
@@ -700,6 +701,11 @@ begin
      end;
 
      Result := _Encoding.GetString( Bs );
+end;
+
+function TFileReader.Read( var Buffer_; Count_:Longint ) :Longint;
+begin
+     Result := BaseStream.Read( Buffer_, Count_ );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSearchBM<_TYPE_>
