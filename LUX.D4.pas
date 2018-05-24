@@ -57,6 +57,30 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
           _4 :Integer;                  );
      end;
 
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCardinal4D
+
+     TCardinal4D = record
+     private
+       ///// アクセス
+       function GetV( const I_:Cardinal ) :Cardinal; inline;
+       procedure SetV( const I_:Cardinal; const V_:Cardinal ); inline;
+     public
+       constructor Create( const V_:Cardinal ); overload;
+       constructor Create( const X_,Y_,Z_,W_:Cardinal ); overload;
+       ///// プロパティ
+       property _s[ const I_:Cardinal ] :Cardinal read GetV write SetV; default;
+     case Byte of
+      0:( _ :array [ 1..4 ] of Cardinal; );
+      1:(  X :Cardinal;
+           Y :Cardinal;
+           Z :Cardinal;
+           W :Cardinal;                  );
+      2:( _1 :Cardinal;
+          _2 :Cardinal;
+          _3 :Cardinal;
+          _4 :Cardinal;                  );
+     end;
+
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingle4D
 
      TSingle4D = record
@@ -406,6 +430,40 @@ begin
 end;
 
 constructor TInteger4D.Create( const X_,Y_,Z_,W_:Integer );
+begin
+     X := X_;
+     Y := Y_;
+     Z := Z_;
+     W := W_;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCardinal4D
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+/////////////////////////////////////////////////////////////////////// アクセス
+
+function TCardinal4D.GetV( const I_:Cardinal ) :Cardinal;
+begin
+     Result := _[ I_ ];
+end;
+
+procedure TCardinal4D.SetV( const I_:Cardinal; const V_:Cardinal );
+begin
+     _[ I_ ] := V_;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TCardinal4D.Create( const V_:Cardinal );
+begin
+     X := V_;
+     Y := V_;
+     Z := V_;
+     W := V_;
+end;
+
+constructor TCardinal4D.Create( const X_,Y_,Z_,W_:Cardinal );
 begin
      X := X_;
      Y := Y_;
