@@ -163,7 +163,9 @@ begin
 
      R := TRandomXOR32.Create;
 
-     _Seed := ( R.GetRand shl 32 ) and R.GetRand;
+     _Seed := ( R.GetRand shl 32 ) or R.GetRand;
+
+     GetRand; GetRand; {←EVEN}
 end;
 
 constructor TRandomXOR64.Create( const Seed_:Uint64 );
@@ -181,7 +183,7 @@ begin
      _Seed := _Seed xor ( _Seed shr  7 );
      _Seed := _Seed xor ( _Seed shl 17 );
 
-     Result := _Seed;
+     Result := _Seed and UInt32.MaxValue;
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR96
