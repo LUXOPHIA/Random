@@ -120,8 +120,8 @@ end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
-     _ThreadsN := 128;
-     _SequensN := 128;
+     _ThreadsN := 256;
+     _SequensN := 256;
 
      SetLength( _Randoms, _ThreadsN, _SequensN );
 
