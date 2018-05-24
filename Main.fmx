@@ -2,38 +2,23 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Random'
-  ClientHeight = 480
-  ClientWidth = 640
+  ClientHeight = 552
+  ClientWidth = 672
   Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
   DesignerMasterStyle = 0
-  object Memo1: TMemo
-    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
-    DataDetectorTypes = []
-    Align = Client
-    Margins.Left = 10.000000000000000000
-    Margins.Top = 10.000000000000000000
-    Margins.Right = 10.000000000000000000
-    Margins.Bottom = 10.000000000000000000
-    Size.Width = 500.000000000000000000
-    Size.Height = 460.000000000000000000
-    Size.PlatformDefault = False
-    TabOrder = 0
-    Viewport.Width = 496.000000000000000000
-    Viewport.Height = 456.000000000000000000
-  end
   object Panel1: TPanel
     Align = Right
     Margins.Left = -10.000000000000000000
-    Position.X = 510.000000000000000000
+    Position.X = 542.000000000000000000
     Size.Width = 130.000000000000000000
-    Size.Height = 480.000000000000000000
+    Size.Height = 552.000000000000000000
     Size.PlatformDefault = False
     StyleLookup = 'pushpanel'
-    TabOrder = 1
+    TabOrder = 0
     object GroupBox1: TGroupBox
       Position.X = 10.000000000000000000
       Position.Y = 10.000000000000000000
@@ -84,23 +69,52 @@ object Form1: TForm1
       end
     end
     object Button1: TButton
-      Position.X = 15.000000000000000000
-      Position.Y = 160.000000000000000000
-      Size.Width = 100.000000000000000000
+      Default = True
+      Position.X = 10.000000000000000000
+      Position.Y = 130.000000000000000000
+      Size.Width = 106.000000000000000000
       Size.Height = 50.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
       Text = 'Genarate'
       OnClick = Button1Click
     end
-    object CheckBox1: TCheckBox
-      Position.X = 15.000000000000000000
-      Position.Y = 130.000000000000000000
-      Size.Width = 100.000000000000000000
-      Size.Height = 20.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 3
-      Text = 'Multi Thread'
-    end
+  end
+  object Label2: TLabel
+    Position.X = 5.000000000000000000
+    Position.Y = 85.000000000000000000
+    RotationAngle = -90.000000000000000000
+    RotationCenter.X = 0.000000000000000000
+    RotationCenter.Y = 0.000000000000000000
+    Size.Width = 55.000000000000000000
+    Size.Height = 20.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.HorzAlign = Trailing
+    Text = #8592' Thread'
+    TabOrder = 1
+  end
+  object Label1: TLabel
+    Position.X = 30.000000000000000000
+    Position.Y = 5.000000000000000000
+    Size.Width = 70.000000000000000000
+    Size.Height = 20.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Sequence '#8594
+    TabOrder = 2
+  end
+  object Image1: TImage
+    MultiResBitmap = <
+      item
+      end>
+    Align = Client
+    DisableInterpolation = True
+    Margins.Left = 30.000000000000000000
+    Margins.Top = 30.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Margins.Bottom = 10.000000000000000000
+    Size.Width = 512.000000000000000000
+    Size.Height = 512.000000000000000000
+    Size.PlatformDefault = False
+    WrapMode = Stretch
   end
 end

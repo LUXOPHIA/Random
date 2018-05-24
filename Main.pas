@@ -5,20 +5,21 @@ interface //####################################################################
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
-  FMX.Controls.Presentation, FMX.ScrollBox, FMX.Memo,
+  FMX.StdCtrls, FMX.Objects, FMX.Controls.Presentation,
   LUX, LUX.D3, LUX.D4,
-  LUX.Random, LUX.Random.Xorshift, FMX.StdCtrls;
+  LUX.Random, LUX.Random.Xorshift;
 
 type
   TForm1 = class(TForm)
-    Memo1: TMemo;
+    Label1: TLabel;
+    Label2: TLabel;
+    Image1: TImage;
     Panel1: TPanel;
       GroupBox1: TGroupBox;
         RadioButton1: TRadioButton;
         RadioButton2: TRadioButton;
         RadioButton3: TRadioButton;
         RadioButton4: TRadioButton;
-      CheckBox1: TCheckBox;
       Button1: TButton;
     procedure FormCreate(Sender: TObject);
     procedure RadioButton1Change(Sender: TObject);
@@ -32,12 +33,10 @@ type
     procedure ShowRands;
   public
     { public 宣言 }
-    _RandClass :CRandom;
-    _Rands     :TArray<Double>;
-    _RandsN    :Integer;
-    ///// メソッド
-    procedure MakeRandsST;
-    procedure MakeRandsMT;
+    _RandomC  :CRandom;
+    _Randoms  :TArray2<Double>;
+    _ThreadsN :Integer;
+    _SequensN :Integer;
   end;
 
 var
@@ -47,7 +46,7 @@ implementation //###############################################################
 
 {$R *.fmx}
 
-uses System.Threading;
+uses System.Math, System.Threading;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -55,20 +54,32 @@ uses System.Threading;
 
 procedure TForm1.ShowRands;
 var
-   I :Integer;
+   B :TBitmapData;
+   C :Single;
 begin
-     with Memo1 do
+     with Image1.Bitmap do
      begin
-          BeginUpdate;
-          with Lines do
-          begin
-               Clear;
-               for I := 0 to High( _Rands ) do Add( _Rands[ I ].ToString );
-          end;
-          EndUpdate;
+          SetSize( _SequensN, _ThreadsN );
 
-          SelectAll;
-          SetFocus;
+          Map( TMapAccess.Write, B );
+
+          TParallel.For( 0, _ThreadsN-1, procedure( Y:Integer )
+          var
+             X :Integer;
+             P :PAlphaColor;
+          begin
+               P := B.GetScanline( Y );
+
+               for X := 0 to _SequensN-1 do
+               begin
+                    C := Power( _Randoms[ Y, X ], 1 / 2.2 );
+
+                    P^ := $FF000000 or $00010101 * Floor( 256 * C );  Inc( P );
+               end;
+
+          end );
+
+          Unmap( B );
      end;
 end;
 
@@ -76,70 +87,54 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TForm1.MakeRandsST;
-var
-   R :IRandom;
-   I :Integer;
-begin
-     R := _RandClass.Create;
-
-     for I := 0 to High( _Rands ) do
-     begin
-          _Rands[ I ] := R.Value;
-     end;
-end;
-
-procedure TForm1.MakeRandsMT;
-begin
-     TParallel.For( 0, High( _Rands ), procedure( I:Integer )
-     var
-        R :IRandom;
-     begin
-          R := _RandClass.Create;
-
-          _Rands[ I ] := R.Value;
-
-     end );
-end;
-
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
      RadioButton1.IsChecked := True;
-     CheckBox1   .IsChecked := True;
-
-     SetLength( _Rands, 10000 );
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
 procedure TForm1.RadioButton1Change(Sender: TObject);
 begin
-     _RandClass := TRandomXOR32;
+     _RandomC := TRandomXOR32;
 end;
 
 procedure TForm1.RadioButton2Change(Sender: TObject);
 begin
-     _RandClass := TRandomXOR64;
+     _RandomC := TRandomXOR64;
 end;
 
 procedure TForm1.RadioButton3Change(Sender: TObject);
 begin
-     _RandClass := TRandomXOR96;
+     _RandomC := TRandomXOR96;
 end;
 
 procedure TForm1.RadioButton4Change(Sender: TObject);
 begin
-     _RandClass := TRandomXOR128;
+     _RandomC := TRandomXOR128;
 end;
 
 //------------------------------------------------------------------------------
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
-     if CheckBox1.IsChecked then MakeRandsMT
-                            else MakeRandsST;
+     _ThreadsN := 128;
+     _SequensN := 128;
+
+     SetLength( _Randoms, _ThreadsN, _SequensN );
+
+     TParallel.For( 0, _ThreadsN-1, procedure( Y:Integer )
+     var
+        R :IRandom;
+        X :Integer;
+     begin
+          R := _RandomC.Create;
+
+          for X := 0 to _SequensN-1 do _Randoms[ Y, X ] := R.Value;
+
+     end );
 
      ShowRands;
 end;
