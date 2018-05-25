@@ -35,6 +35,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Seed :UInt32;
      public
        constructor Create; overload; override;
+       constructor Create( const Random_:IRandom ); overload; override;
        constructor Create( const Seed_:UInt32 ); overload;
        ///// メソッド
        function GetRand32 :UInt32; override;
@@ -49,10 +50,12 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Seed :UInt64;
      public
        constructor Create; overload; override;
+       constructor Create( const Random_:IRandom ); overload; override;
        constructor Create( const Seed_:UInt64 ); overload;
        ///// メソッド
        function GetRand32 :UInt32; override;
        function GetRand48 :UInt64;
+       function GetRand64 :UInt64; override;
        function Value :Double; override;
      end;
 
@@ -64,10 +67,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Seed :UInt64;
      public
        constructor Create; overload; override;
+       constructor Create( const Random_:IRandom ); overload; override;
        constructor Create( const Seed_:UInt64 ); overload;
        ///// メソッド
        function GetRand32 :UInt32; override;
-       function GetRand64 :UInt64;
+       function GetRand64 :UInt64; override;
        function Value :Double; override;
      end;
 
@@ -103,9 +107,12 @@ uses System.SysUtils;
 
 constructor TRandomLCG32.Create;
 begin
-     inherited;
+     Create( GetGlobalSeed32 );
+end;
 
-     _Seed := GetGlobalSeed32;
+constructor TRandomLCG32.Create( const Random_:IRandom );
+begin
+     Create( Random_.GetRand32 );
 end;
 
 constructor TRandomLCG32.Create( const Seed_:UInt32 );
@@ -187,16 +194,19 @@ end;
 
 constructor TRandomLCG48.Create;
 begin
-     inherited;
+     Create( GetGlobalSeed64 );
+end;
 
-     _Seed := GetGlobalSeed64 and 281474976710655{= 2^48-1 };
+constructor TRandomLCG48.Create( const Random_:IRandom );
+begin
+     Create( Random_.GetRand64 );
 end;
 
 constructor TRandomLCG48.Create( const Seed_:UInt64 );
 begin
      inherited Create;
 
-     _Seed := Seed_;
+     _Seed := Seed_ and 281474976710655{= 2^48-1 };
 end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
@@ -242,6 +252,11 @@ begin
      Result := _Seed;
 end;
 
+function TRandomLCG48.GetRand64 :UInt64;
+begin
+     Result := ( GetRand48 shr 16 shl 32 ) or ( GetRand48 shr 16 );
+end;
+
 //------------------------------------------------------------------------------
 
 function TRandomLCG48.Value :Double;
@@ -258,14 +273,13 @@ end;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 constructor TRandomLCG64.Create;
-var
-   R :IRandomLCG;
 begin
-     inherited;
+     Create( GetGlobalSeed64 );
+end;
 
-     R := TRandomLCG32.Create;
-
-     _Seed := R.GetRand32 shl 32 or R.GetRand32;
+constructor TRandomLCG64.Create( const Random_:IRandom );
+begin
+     Create( Random_.GetRand64 );
 end;
 
 constructor TRandomLCG64.Create( const Seed_:UInt64 );
