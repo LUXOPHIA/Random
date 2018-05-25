@@ -27,6 +27,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
        ///// メソッド
        class function GetGlobalSeed32 :UInt32; override;
+       class function GetGlobalSeed64 :UInt64; override;
        function Value :Double; override;
      end;
 
@@ -38,6 +39,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Seed :UInt32;
      public
        constructor Create; overload; override;
+       constructor Create( const Random_:IRandom ); overload; override;
        constructor Create( const Seed_:UInt32 ); overload;
        ///// メソッド
        function GetRand32 :UInt32; override;
@@ -51,6 +53,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Seed :Uint64;
      public
        constructor Create; overload; override;
+       constructor Create( const Random_:IRandom ); overload; override;
        constructor Create( const Seed_:Uint64 ); overload;
        ///// メソッド
        function GetRand32 :UInt32; override;
@@ -64,7 +67,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Seed :TCardinal3D;
      public
        constructor Create; overload; override;
-       constructor Create( const Seed_:TCardinal3D ); overload;
+       constructor Create( const Random_:IRandom ); overload; override;
+       constructor Create( const SeedX_,SeedY_,SeedZ_:UInt32 ); overload;
        ///// メソッド
        function GetRand32 :UInt32; override;
      end;
@@ -77,7 +81,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Seed :TCardinal4D;
      public
        constructor Create; overload; override;
-       constructor Create( const Seed_:TCardinal4D ); overload;
+       constructor Create( const Random_:IRandom ); overload; override;
+       constructor Create( const SeedX_,SeedY_,SeedZ_,SeedW_:UInt32 ); overload;
        ///// メソッド
        function GetRand32 :UInt32; override;
      end;
@@ -108,12 +113,25 @@ uses System.SysUtils;
 
 class function TRandomXOR.GetGlobalSeed32 :UInt32;
 begin
-     Result := ( 1 + GetGlobalSeed64 ) and UInt32.MaxValue;
+     repeat
+           Result := inherited GetGlobalSeed32;
+
+     until Result > 0;
 end;
+
+class function TRandomXOR.GetGlobalSeed64 :UInt64;
+begin
+     repeat
+           Result := inherited GetGlobalSeed64;
+
+     until Result > 0;
+end;
+
+//------------------------------------------------------------------------------
 
 function TRandomXOR.Value :Double;
 begin
-     Result := GetRand32 / $100000000{= $FFFFFFFF+1 };
+     Result := GetRand32 / 4294967296.0{= 2^32 };
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR32
@@ -126,11 +144,12 @@ end;
 
 constructor TRandomXOR32.Create;
 begin
-     inherited;
+     Create( GetGlobalSeed32 );
+end;
 
-     _Seed := GetGlobalSeed32;
-
-     GetRand32; GetRand32; GetRand32; GetRand32; {←EVEN}
+constructor TRandomXOR32.Create( const Random_:IRandom );
+begin
+     Create( Random_.GetRand32 );
 end;
 
 constructor TRandomXOR32.Create( const Seed_:UInt32 );
@@ -160,16 +179,13 @@ end;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 constructor TRandomXOR64.Create;
-var
-   R :IRandomXOR;
 begin
-     inherited;
+     Create( GetGlobalSeed64 );
+end;
 
-     R := TRandomXOR32.Create;
-
-     _Seed := ( R.GetRand32 shl 32 ) or R.GetRand32;
-
-     GetRand32; GetRand32; {←EVEN}
+constructor TRandomXOR64.Create( const Random_:IRandom );
+begin
+     Create( Random_.GetRand64 );
 end;
 
 constructor TRandomXOR64.Create( const Seed_:Uint64 );
@@ -199,26 +215,26 @@ end;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 constructor TRandomXOR96.Create;
-var
-   R :IRandomXOR;
 begin
-     inherited;
-
-     R := TRandomXOR64.Create;
-
-     with _Seed do
-     begin
-          X := R.GetRand32;
-          Y := R.GetRand32;
-          Z := R.GetRand32;
-     end;
+     Create( GetGlobalSeed32,
+             GetGlobalSeed32,
+             GetGlobalSeed32 );
 end;
 
-constructor TRandomXOR96.Create( const Seed_:TCardinal3D );
+constructor TRandomXOR96.Create( const Random_:IRandom );
+begin
+     Create( Random_.GetRand32,
+             Random_.GetRand32,
+             Random_.GetRand32 );
+end;
+
+constructor TRandomXOR96.Create( const SeedX_,SeedY_,SeedZ_:UInt32 );
 begin
      inherited Create;
 
-     _Seed := Seed_;
+     _Seed.X := SeedX_;
+     _Seed.Y := SeedY_;
+     _Seed.Z := SeedZ_;
 end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
@@ -247,24 +263,28 @@ constructor TRandomXOR128.Create;
 var
    R :IRandomXOR;
 begin
-     inherited;
-
-     R := TRandomXOR96.Create;
-
-     with _Seed do
-     begin
-          X := R.GetRand32;
-          Y := R.GetRand32;
-          Z := R.GetRand32;
-          W := R.GetRand32;
-     end;
+     Create( GetGlobalSeed32,
+             GetGlobalSeed32,
+             GetGlobalSeed32,
+             GetGlobalSeed32 );
 end;
 
-constructor TRandomXOR128.Create( const Seed_:TCardinal4D );
+constructor TRandomXOR128.Create( const Random_:IRandom );
+begin
+     Create( Random_.GetRand32,
+             Random_.GetRand32,
+             Random_.GetRand32,
+             Random_.GetRand32 );
+end;
+
+constructor TRandomXOR128.Create( const SeedX_,SeedY_,SeedZ_,SeedW_:UInt32 );
 begin
      inherited Create;
 
-     _Seed := Seed_;
+     _Seed.X := SeedX_;
+     _Seed.Y := SeedY_;
+     _Seed.Z := SeedZ_;
+     _Seed.W := SeedW_;
 end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
