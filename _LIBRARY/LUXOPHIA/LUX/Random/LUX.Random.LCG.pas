@@ -17,8 +17,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      ['{CB661983-1A3A-4FC1-82AF-988943DF8256}']
      {protected}
      {public}
-       ///// メソッド
-       function GetRand :UInt32;
      end;
 
      //-------------------------------------------------------------------------
@@ -27,9 +25,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
      public
-       ///// メソッド
-       function GetRand :UInt32; virtual; abstract;
-       function Value :Double; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG32
@@ -42,7 +37,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create; overload; override;
        constructor Create( const Seed_:UInt32 ); overload;
        ///// メソッド
-       function GetRand :UInt32; override;
+       function GetRand32 :UInt32;
+       function Value :Double; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG48
@@ -53,9 +49,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Seed :UInt64;
      public
        constructor Create; overload; override;
-       constructor Create( const Seed_:UInt32 ); overload;
+       constructor Create( const Seed_:UInt64 ); overload;
        ///// メソッド
-       function GetRand :UInt32; override;
+       function GetRand32 :UInt64;
+       function GetRand48 :UInt64;
+       function Value :Double; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG64
@@ -66,9 +64,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Seed :UInt64;
      public
        constructor Create; overload; override;
-       constructor Create( const Seed_:UInt32 ); overload;
+       constructor Create( const Seed_:UInt64 ); overload;
        ///// メソッド
-       function GetRand :UInt32; override;
+       function GetRand32 :UInt64;
+       function GetRand64 :UInt64;
+       function Value :Double; override;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -92,13 +92,6 @@ uses System.SysUtils;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-/////////////////////////////////////////////////////////////////////// メソッド
-
-function TRandomLCG.Value :Double;
-begin
-     Result := GetRand / $100000000{= $FFFFFFFF+1 };
-end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG32
 
@@ -124,7 +117,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomLCG32.GetRand :UInt32;
+function TRandomLCG32.GetRand32 :UInt32;
 const
      ///// Numerical Recipes
      A :UInt32 = 1664525;
@@ -177,6 +170,13 @@ begin
      Result := _Seed;
 end;
 
+//------------------------------------------------------------------------------
+
+function TRandomLCG32.Value :Double;
+begin
+     Result := GetRand32 / 4294967296.0{= 2^32 };
+end;
+
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG48
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
@@ -189,10 +189,10 @@ constructor TRandomLCG48.Create;
 begin
      inherited;
 
-     _Seed := GetGlobalSeed32;
+     _Seed := GetGlobalSeed64 and 281474976710655{= 2^48-1 };
 end;
 
-constructor TRandomLCG48.Create( const Seed_:UInt32 );
+constructor TRandomLCG48.Create( const Seed_:UInt64 );
 begin
      inherited Create;
 
@@ -201,11 +201,16 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomLCG48.GetRand :UInt32;
+function TRandomLCG48.GetRand32 :UInt64;
+begin
+     Result := GetRand48 shr 16;
+end;
+
+function TRandomLCG48.GetRand48 :UInt64;
 const
      A  :UInt64 = 25214903917;
      C  :UInt64 = 11;
-     M1 :UInt64 = 281474976710655;
+     M1 :UInt64 = 281474976710655{= 2^48-1 };
 begin
      //        96              64              48              32              16               0
      //         |               |               |               |               |               |
@@ -237,6 +242,13 @@ begin
      Result := _Seed;
 end;
 
+//------------------------------------------------------------------------------
+
+function TRandomLCG48.Value :Double;
+begin
+     Result := GetRand48 / 281474976710656.0{= 2^48 };
+end;
+
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG64
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
@@ -249,10 +261,10 @@ constructor TRandomLCG64.Create;
 begin
      inherited;
 
-     _Seed := GetGlobalSeed32;
+     _Seed := GetGlobalSeed64;
 end;
 
-constructor TRandomLCG64.Create( const Seed_:UInt32 );
+constructor TRandomLCG64.Create( const Seed_:UInt64 );
 begin
      inherited Create;
 
@@ -261,7 +273,12 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomLCG64.GetRand :UInt32;
+function TRandomLCG64.GetRand32 :UInt64;
+begin
+     Result := GetRand64 shr 32;
+end;
+
+function TRandomLCG64.GetRand64 :UInt64;
 const
      A :UInt64 = 6364136223846793005;
      C :UInt64 = 1442695040888963407;
@@ -294,6 +311,14 @@ begin
      _Seed := A * _Seed + C;
 
      Result := _Seed;
+end;
+
+//------------------------------------------------------------------------------
+
+function TRandomLCG64.Value :Double;
+begin
+
+     Result := GetRand64 / 18446744073709551616.0{= 2^64 };
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
