@@ -31,13 +31,13 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _SeedCS  :TCriticalSection;
      private
      protected
-       ///// メソッド
-       function GetGloSeed :UInt32;
      public
        class constructor Create;
        constructor Create; overload; virtual;
        class destructor Destroy;
        ///// メソッド
+       class function GetGlobalSeed64 :UInt64; virtual;
+       class function GetGlobalSeed32 :UInt32; virtual;
        function Value :Double; virtual; abstract;  // 0 <= Value < 1
      end;
 
@@ -70,17 +70,18 @@ uses System.SysUtils
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-function TRandom.GetGloSeed :UInt32;
+class function TRandom.GetGlobalSeed64 :UInt64;
 begin
      _SeedCS.Enter;
 
-     Result := _GloSeed;
-
-     if _GloSeed = UInt32.MaxValue then _GloSeed := 0;
-
-     Inc( _GloSeed );
+       Result := _GloSeed;  Inc( _GloSeed );
 
      _SeedCS.Leave;
+end;
+
+class function TRandom.GetGlobalSeed32 :UInt32;
+begin
+     Result := GetGlobalSeed64 and UInt32.MaxValue;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -91,7 +92,7 @@ begin
 
      _SeedCS := TCriticalSection.Create;
 
-     _GloSeed := ( 1 + GetClockCount ) and UInt32.MaxValue;
+     _GloSeed := GetClockCount;
 end;
 
 constructor TRandom.Create;
