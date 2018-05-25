@@ -36,8 +36,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create; overload; virtual;
        class destructor Destroy;
        ///// メソッド
-       class function GetGlobalSeed64 :UInt64; virtual;
        class function GetGlobalSeed32 :UInt32; virtual;
+       class function GetGlobalSeed64 :UInt64; virtual;
+       class procedure GetGlobalSeed( out Seeds_:array of UInt32 ); overload; virtual;
+       class procedure GetGlobalSeed( out Seeds_:array of UInt64 ); overload; virtual;
        function Value :Double; virtual; abstract;  // 0 <= Value < 1
      end;
 
@@ -70,6 +72,15 @@ uses System.SysUtils
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
+class function TRandom.GetGlobalSeed32 :UInt32;
+begin
+     _SeedCS.Enter;
+
+       Result := _GloSeed;  Inc( _GloSeed );
+
+     _SeedCS.Leave;
+end;
+
 class function TRandom.GetGlobalSeed64 :UInt64;
 begin
      _SeedCS.Enter;
@@ -79,9 +90,32 @@ begin
      _SeedCS.Leave;
 end;
 
-class function TRandom.GetGlobalSeed32 :UInt32;
+class procedure TRandom.GetGlobalSeed( out Seeds_:array of UInt32 );
+var
+   I :Integer;
 begin
-     Result := GetGlobalSeed64 and UInt32.MaxValue;
+     _SeedCS.Enter;
+
+       for I := 0 to High( Seeds_ ) do
+       begin
+            Seeds_[ I ] := _GloSeed;  Inc( _GloSeed );
+       end;
+
+     _SeedCS.Leave;
+end;
+
+class procedure TRandom.GetGlobalSeed( out Seeds_:array of UInt64 );
+var
+   I :Integer;
+begin
+     _SeedCS.Enter;
+
+       for I := 0 to High( Seeds_ ) do
+       begin
+            Seeds_[ I ] := _GloSeed;  Inc( _GloSeed );
+       end;
+
+     _SeedCS.Leave;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
