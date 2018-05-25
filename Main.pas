@@ -16,32 +16,50 @@ type
     Label1: TLabel;
     Label2: TLabel;
     Image1: TImage;
-    Panel1: TPanel;
-      GroupBox1: TGroupBox;
-        RadioButtonAL1: TRadioButton;
-        RadioButtonAL2: TRadioButton;
-        RadioButtonAL3: TRadioButton;
-        RadioButtonAX1: TRadioButton;
-        RadioButtonAX2: TRadioButton;
-        RadioButtonAX3: TRadioButton;
-        RadioButtonAX4: TRadioButton;
     Timer1: TTimer;
+    Panel1: TPanel;
+      GroupBoxS: TGroupBox;
+        RadioButtonS0: TRadioButton;
+        RadioButtonSL1: TRadioButton;
+        RadioButtonSL2: TRadioButton;
+        RadioButtonSL3: TRadioButton;
+        RadioButtonSX1: TRadioButton;
+        RadioButtonSX2: TRadioButton;
+        RadioButtonSX3: TRadioButton;
+        RadioButtonSX4: TRadioButton;
+      GroupBoxG: TGroupBox;
+        RadioButtonGX1: TRadioButton;
+        RadioButtonGX2: TRadioButton;
+        RadioButtonGX3: TRadioButton;
+        RadioButtonGX4: TRadioButton;
+        RadioButtonGL1: TRadioButton;
+        RadioButtonGL2: TRadioButton;
+        RadioButtonGL3: TRadioButton;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
-    procedure RadioButtonAL1Change(Sender: TObject);
-    procedure RadioButtonAL2Change(Sender: TObject);
-    procedure RadioButtonAL3Change(Sender: TObject);
-    procedure RadioButtonAX1Change(Sender: TObject);
-    procedure RadioButtonAX2Change(Sender: TObject);
-    procedure RadioButtonAX3Change(Sender: TObject);
-    procedure RadioButtonAX4Change(Sender: TObject);
+    procedure RadioButtonS0Change(Sender: TObject);
+    procedure RadioButtonSL1Change(Sender: TObject);
+    procedure RadioButtonSL2Change(Sender: TObject);
+    procedure RadioButtonSL3Change(Sender: TObject);
+    procedure RadioButtonSX1Change(Sender: TObject);
+    procedure RadioButtonSX2Change(Sender: TObject);
+    procedure RadioButtonSX3Change(Sender: TObject);
+    procedure RadioButtonSX4Change(Sender: TObject);
+    procedure RadioButtonGL1Change(Sender: TObject);
+    procedure RadioButtonGL2Change(Sender: TObject);
+    procedure RadioButtonGL3Change(Sender: TObject);
+    procedure RadioButtonGX1Change(Sender: TObject);
+    procedure RadioButtonGX2Change(Sender: TObject);
+    procedure RadioButtonGX3Change(Sender: TObject);
+    procedure RadioButtonGX4Change(Sender: TObject);
   private
     { private 宣言 }
     ///// メソッド
     procedure ShowRandoms;
   public
     { public 宣言 }
-    _RandomC  :CRandom;
+    _ScramblC :CRandom;
+    _GeneratC :CRandom;
     _Randoms  :TArray2<Double>;
     _ThreadsN :Integer;
     _SequensN :Integer;
@@ -101,7 +119,8 @@ begin
 
      SetLength( _Randoms, _ThreadsN, _SequensN );
 
-     RadioButtonAL1.IsChecked := True;
+     RadioButtonS0 .IsChecked := True;
+     RadioButtonGL1.IsChecked := True;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -113,7 +132,8 @@ var
 begin
      for Y := 0 to _ThreadsN-1 do
      begin
-          R := _RandomC.Create;
+          if Assigned( _ScramblC ) then R := _GeneratC.Create( _ScramblC.Create )
+                                   else R := _GeneratC.Create;
 
           for X := 0 to _SequensN-1 do _Randoms[ Y, X ] := R.Value;
      end;
@@ -123,39 +143,81 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TForm1.RadioButtonAL1Change(Sender: TObject);
+procedure TForm1.RadioButtonS0Change(Sender: TObject);
 begin
-     _RandomC := TRandomLCG32;
+     _ScramblC := nil;
 end;
 
-procedure TForm1.RadioButtonAL2Change(Sender: TObject);
+procedure TForm1.RadioButtonSL1Change(Sender: TObject);
 begin
-     _RandomC := TRandomLCG48;
+     _ScramblC := TRandomLCG32;
 end;
 
-procedure TForm1.RadioButtonAL3Change(Sender: TObject);
+procedure TForm1.RadioButtonSL2Change(Sender: TObject);
 begin
-     _RandomC := TRandomLCG64;
+     _ScramblC := TRandomLCG48;
 end;
 
-procedure TForm1.RadioButtonAX1Change(Sender: TObject);
+procedure TForm1.RadioButtonSL3Change(Sender: TObject);
 begin
-     _RandomC := TRandomXOR32;
+     _ScramblC := TRandomLCG64;
 end;
 
-procedure TForm1.RadioButtonAX2Change(Sender: TObject);
+procedure TForm1.RadioButtonSX1Change(Sender: TObject);
 begin
-     _RandomC := TRandomXOR64;
+     _ScramblC := TRandomXOR32;
 end;
 
-procedure TForm1.RadioButtonAX3Change(Sender: TObject);
+procedure TForm1.RadioButtonSX2Change(Sender: TObject);
 begin
-     _RandomC := TRandomXOR96;
+     _ScramblC := TRandomXOR64;
 end;
 
-procedure TForm1.RadioButtonAX4Change(Sender: TObject);
+procedure TForm1.RadioButtonSX3Change(Sender: TObject);
 begin
-     _RandomC := TRandomXOR128;
+     _ScramblC := TRandomXOR96;
+end;
+
+procedure TForm1.RadioButtonSX4Change(Sender: TObject);
+begin
+     _ScramblC := TRandomXOR128;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TForm1.RadioButtonGL1Change(Sender: TObject);
+begin
+     _GeneratC := TRandomLCG32;
+end;
+
+procedure TForm1.RadioButtonGL2Change(Sender: TObject);
+begin
+     _GeneratC := TRandomLCG48;
+end;
+
+procedure TForm1.RadioButtonGL3Change(Sender: TObject);
+begin
+     _GeneratC := TRandomLCG64;
+end;
+
+procedure TForm1.RadioButtonGX1Change(Sender: TObject);
+begin
+     _GeneratC := TRandomXOR32;
+end;
+
+procedure TForm1.RadioButtonGX2Change(Sender: TObject);
+begin
+     _GeneratC := TRandomXOR64;
+end;
+
+procedure TForm1.RadioButtonGX3Change(Sender: TObject);
+begin
+     _GeneratC := TRandomXOR96;
+end;
+
+procedure TForm1.RadioButtonGX4Change(Sender: TObject);
+begin
+     _GeneratC := TRandomXOR128;
 end;
 
 end. //######################################################################### ■

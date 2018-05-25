@@ -19,15 +19,113 @@ object Form1: TForm1
     Size.PlatformDefault = False
     StyleLookup = 'pushpanel'
     TabOrder = 0
-    object GroupBox1: TGroupBox
+    object GroupBoxS: TGroupBox
       Position.X = 10.000000000000000000
-      Position.Y = 10.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 110.000000000000000000
+      Size.Height = 190.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Scramble'
+      TabOrder = 1
+      object RadioButtonSX1: TRadioButton
+        GroupName = 'SCRAMBLE'
+        Position.X = 10.000000000000000000
+        Position.Y = 100.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 7
+        Text = 'Xorshift 32'
+        OnChange = RadioButtonSX1Change
+      end
+      object RadioButtonSX2: TRadioButton
+        GroupName = 'SCRAMBLE'
+        Position.X = 10.000000000000000000
+        Position.Y = 120.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 3
+        Text = 'Xorshift 64'
+        OnChange = RadioButtonSX2Change
+      end
+      object RadioButtonSX3: TRadioButton
+        GroupName = 'SCRAMBLE'
+        Position.X = 10.000000000000000000
+        Position.Y = 140.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = 'Xorshift 96'
+        OnChange = RadioButtonSX3Change
+      end
+      object RadioButtonSX4: TRadioButton
+        GroupName = 'SCRAMBLE'
+        Position.X = 10.000000000000000000
+        Position.Y = 160.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Xorshift 128'
+        OnChange = RadioButtonSX4Change
+      end
+      object RadioButtonSL1: TRadioButton
+        GroupName = 'SCRAMBLE'
+        Position.X = 10.000000000000000000
+        Position.Y = 40.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 6
+        Text = 'LCG 32'
+        OnChange = RadioButtonSL1Change
+      end
+      object RadioButtonSL2: TRadioButton
+        GroupName = 'SCRAMBLE'
+        Position.X = 10.000000000000000000
+        Position.Y = 60.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 5
+        Text = 'LCG 48'
+        OnChange = RadioButtonSL2Change
+      end
+      object RadioButtonSL3: TRadioButton
+        GroupName = 'SCRAMBLE'
+        Position.X = 10.000000000000000000
+        Position.Y = 80.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 4
+        Text = 'LCG 64'
+        OnChange = RadioButtonSL3Change
+      end
+      object RadioButtonS0: TRadioButton
+        GroupName = 'SCRAMBLE'
+        Position.X = 10.000000000000000000
+        Position.Y = 20.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = '-'
+        OnChange = RadioButtonS0Change
+      end
+    end
+    object GroupBoxG: TGroupBox
+      Position.X = 10.000000000000000000
+      Position.Y = 200.000000000000000000
       Size.Width = 110.000000000000000000
       Size.Height = 170.000000000000000000
       Size.PlatformDefault = False
-      Text = 'Algorithm'
+      Text = 'Generate'
       TabOrder = 0
-      object RadioButtonAX1: TRadioButton
+      object RadioButtonGX1: TRadioButton
+        GroupName = 'GENERATE'
         Position.X = 10.000000000000000000
         Position.Y = 80.000000000000000000
         Size.Width = 90.000000000000000000
@@ -35,9 +133,10 @@ object Form1: TForm1
         Size.PlatformDefault = False
         TabOrder = 6
         Text = 'Xorshift 32'
-        OnChange = RadioButtonAX1Change
+        OnChange = RadioButtonGX1Change
       end
-      object RadioButtonAX2: TRadioButton
+      object RadioButtonGX2: TRadioButton
+        GroupName = 'GENERATE'
         Position.X = 10.000000000000000000
         Position.Y = 100.000000000000000000
         Size.Width = 90.000000000000000000
@@ -45,9 +144,10 @@ object Form1: TForm1
         Size.PlatformDefault = False
         TabOrder = 2
         Text = 'Xorshift 64'
-        OnChange = RadioButtonAX2Change
+        OnChange = RadioButtonGX2Change
       end
-      object RadioButtonAX3: TRadioButton
+      object RadioButtonGX3: TRadioButton
+        GroupName = 'GENERATE'
         Position.X = 10.000000000000000000
         Position.Y = 120.000000000000000000
         Size.Width = 90.000000000000000000
@@ -55,9 +155,10 @@ object Form1: TForm1
         Size.PlatformDefault = False
         TabOrder = 1
         Text = 'Xorshift 96'
-        OnChange = RadioButtonAX3Change
+        OnChange = RadioButtonGX3Change
       end
-      object RadioButtonAX4: TRadioButton
+      object RadioButtonGX4: TRadioButton
+        GroupName = 'GENERATE'
         Position.X = 10.000000000000000000
         Position.Y = 140.000000000000000000
         Size.Width = 90.000000000000000000
@@ -65,9 +166,10 @@ object Form1: TForm1
         Size.PlatformDefault = False
         TabOrder = 0
         Text = 'Xorshift 128'
-        OnChange = RadioButtonAX4Change
+        OnChange = RadioButtonGX4Change
       end
-      object RadioButtonAL1: TRadioButton
+      object RadioButtonGL1: TRadioButton
+        GroupName = 'GENERATE'
         Position.X = 10.000000000000000000
         Position.Y = 20.000000000000000000
         Size.Width = 90.000000000000000000
@@ -75,9 +177,10 @@ object Form1: TForm1
         Size.PlatformDefault = False
         TabOrder = 5
         Text = 'LCG 32'
-        OnChange = RadioButtonAL1Change
+        OnChange = RadioButtonGL1Change
       end
-      object RadioButtonAL2: TRadioButton
+      object RadioButtonGL2: TRadioButton
+        GroupName = 'GENERATE'
         Position.X = 10.000000000000000000
         Position.Y = 40.000000000000000000
         Size.Width = 90.000000000000000000
@@ -85,9 +188,10 @@ object Form1: TForm1
         Size.PlatformDefault = False
         TabOrder = 4
         Text = 'LCG 48'
-        OnChange = RadioButtonAL2Change
+        OnChange = RadioButtonGL2Change
       end
-      object RadioButtonAL3: TRadioButton
+      object RadioButtonGL3: TRadioButton
+        GroupName = 'GENERATE'
         Position.X = 10.000000000000000000
         Position.Y = 60.000000000000000000
         Size.Width = 90.000000000000000000
@@ -95,7 +199,7 @@ object Form1: TForm1
         Size.PlatformDefault = False
         TabOrder = 3
         Text = 'LCG 64'
-        OnChange = RadioButtonAL3Change
+        OnChange = RadioButtonGL3Change
       end
     end
   end
