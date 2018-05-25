@@ -2,7 +2,8 @@
 
 interface //#################################################################### ■
 
-uses LUX, LUX.D3, LUX.D4, LUX.Random;
+uses LUX, LUX.D3, LUX.D4,
+     LUX.Random;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
@@ -12,7 +13,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR
 
-     IRandomXOR = interface
+     IRandomXOR = interface( IRandom )
      ['{FDD69CB5-D221-4FDD-89C9-BB3CF352BD74}']
      {protected}
      {public}
@@ -27,6 +28,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
      public
        ///// メソッド
+       class function GetGlobalSeed32 :UInt32; override;
        function GetRand :Cardinal; virtual; abstract;
        function Value :Double; override;
      end;
@@ -91,7 +93,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 implementation //############################################################### ■
 
-uses System.SysUtils, System.SyncObjs, System.Diagnostics;
+uses System.SysUtils;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
@@ -106,6 +108,11 @@ uses System.SysUtils, System.SyncObjs, System.Diagnostics;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 /////////////////////////////////////////////////////////////////////// メソッド
+
+class function TRandomXOR.GetGlobalSeed32 :UInt32;
+begin
+     Result := ( 1 + GetGlobalSeed64 ) and UInt32.MaxValue;
+end;
 
 function TRandomXOR.Value :Double;
 begin
@@ -124,7 +131,7 @@ constructor TRandomXOR32.Create;
 begin
      inherited;
 
-     _Seed := GetGloSeed;
+     _Seed := GetGlobalSeed32;
 
      GetRand; GetRand; GetRand; GetRand; {←EVEN}
 end;
