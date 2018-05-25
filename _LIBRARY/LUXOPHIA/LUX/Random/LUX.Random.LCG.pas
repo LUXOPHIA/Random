@@ -37,7 +37,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create; overload; override;
        constructor Create( const Seed_:UInt32 ); overload;
        ///// メソッド
-       function GetRand32 :UInt32;
+       function GetRand32 :UInt32; override;
        function Value :Double; override;
      end;
 
@@ -51,7 +51,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create; overload; override;
        constructor Create( const Seed_:UInt64 ); overload;
        ///// メソッド
-       function GetRand32 :UInt64;
+       function GetRand32 :UInt32; override;
        function GetRand48 :UInt64;
        function Value :Double; override;
      end;
@@ -66,7 +66,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create; overload; override;
        constructor Create( const Seed_:UInt64 ); overload;
        ///// メソッド
-       function GetRand32 :UInt64;
+       function GetRand32 :UInt32; override;
        function GetRand64 :UInt64;
        function Value :Double; override;
      end;
@@ -201,7 +201,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomLCG48.GetRand32 :UInt64;
+function TRandomLCG48.GetRand32 :UInt32;
 begin
      Result := GetRand48 shr 16;
 end;
@@ -258,10 +258,14 @@ end;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 constructor TRandomLCG64.Create;
+var
+   R :IRandomLCG;
 begin
      inherited;
 
-     _Seed := GetGlobalSeed64;
+     R := TRandomLCG32.Create;
+
+     _Seed := R.GetRand32 shl 32 or R.GetRand32;
 end;
 
 constructor TRandomLCG64.Create( const Seed_:UInt64 );
@@ -273,7 +277,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomLCG64.GetRand32 :UInt64;
+function TRandomLCG64.GetRand32 :UInt32;
 begin
      Result := GetRand64 shr 32;
 end;
@@ -317,7 +321,6 @@ end;
 
 function TRandomLCG64.Value :Double;
 begin
-
      Result := GetRand64 / 18446744073709551616.0{= 2^64 };
 end;
 
