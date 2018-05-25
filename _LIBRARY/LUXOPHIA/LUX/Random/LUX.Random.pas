@@ -20,6 +20,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      {protected}
      {public}
        ///// メソッド
+       function GetRand32 :UInt32;
        function Value :Double;
      end;
 
@@ -40,6 +41,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class function GetGlobalSeed64 :UInt64; virtual;
        class procedure GetGlobalSeed( out Seeds_:array of UInt32 ); overload; virtual;
        class procedure GetGlobalSeed( out Seeds_:array of UInt64 ); overload; virtual;
+       function GetRand32 :UInt32; virtual; abstract;
        function Value :Double; virtual; abstract;  // 0 <= Value < 1
      end;
 
