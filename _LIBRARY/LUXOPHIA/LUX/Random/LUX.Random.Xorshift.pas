@@ -17,8 +17,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      ['{FDD69CB5-D221-4FDD-89C9-BB3CF352BD74}']
      {protected}
      {public}
-       ///// メソッド
-       function GetRand :Cardinal;
      end;
 
      //-------------------------------------------------------------------------
@@ -29,7 +27,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
        ///// メソッド
        class function GetGlobalSeed32 :UInt32; override;
-       function GetRand :Cardinal; virtual; abstract;
        function Value :Double; override;
      end;
 
@@ -38,12 +35,12 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandomXOR32 = class( TRandomXOR )
      private
      protected
-       _Seed :Cardinal;
+       _Seed :UInt32;
      public
        constructor Create; overload; override;
-       constructor Create( const Seed_:Cardinal ); overload;
+       constructor Create( const Seed_:UInt32 ); overload;
        ///// メソッド
-       function GetRand :Cardinal; override;
+       function GetRand32 :UInt32; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR64
@@ -56,7 +53,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create; overload; override;
        constructor Create( const Seed_:Uint64 ); overload;
        ///// メソッド
-       function GetRand :Cardinal; override;
+       function GetRand32 :UInt32; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR96
@@ -69,7 +66,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create; overload; override;
        constructor Create( const Seed_:TCardinal3D ); overload;
        ///// メソッド
-       function GetRand :Cardinal; override;
+       function GetRand32 :UInt32; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR128
@@ -82,7 +79,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create; overload; override;
        constructor Create( const Seed_:TCardinal4D ); overload;
        ///// メソッド
-       function GetRand :Cardinal; override;
+       function GetRand32 :UInt32; override;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -116,7 +113,7 @@ end;
 
 function TRandomXOR.Value :Double;
 begin
-     Result := GetRand / $100000000{= $FFFFFFFF+1 };
+     Result := GetRand32 / $100000000{= $FFFFFFFF+1 };
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR32
@@ -133,10 +130,10 @@ begin
 
      _Seed := GetGlobalSeed32;
 
-     GetRand; GetRand; GetRand; GetRand; {←EVEN}
+     GetRand32; GetRand32; GetRand32; GetRand32; {←EVEN}
 end;
 
-constructor TRandomXOR32.Create( const Seed_:Cardinal );
+constructor TRandomXOR32.Create( const Seed_:UInt32 );
 begin
      inherited Create;
 
@@ -145,7 +142,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomXOR32.GetRand :Cardinal;
+function TRandomXOR32.GetRand32 :UInt32;
 begin
      _Seed := _Seed xor ( _Seed shl 13 );
      _Seed := _Seed xor ( _Seed shr 17 );
@@ -170,9 +167,9 @@ begin
 
      R := TRandomXOR32.Create;
 
-     _Seed := ( R.GetRand shl 32 ) or R.GetRand;
+     _Seed := ( R.GetRand32 shl 32 ) or R.GetRand32;
 
-     GetRand; GetRand; {←EVEN}
+     GetRand32; GetRand32; {←EVEN}
 end;
 
 constructor TRandomXOR64.Create( const Seed_:Uint64 );
@@ -184,7 +181,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomXOR64.GetRand :Cardinal;
+function TRandomXOR64.GetRand32 :UInt32;
 begin
      _Seed := _Seed xor ( _Seed shl 13 );
      _Seed := _Seed xor ( _Seed shr  7 );
@@ -211,9 +208,9 @@ begin
 
      with _Seed do
      begin
-          X := R.GetRand;
-          Y := R.GetRand;
-          Z := R.GetRand;
+          X := R.GetRand32;
+          Y := R.GetRand32;
+          Z := R.GetRand32;
      end;
 end;
 
@@ -226,7 +223,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomXOR96.GetRand :Cardinal;
+function TRandomXOR96.GetRand32 :UInt32;
 begin
      with _Seed do
      begin
@@ -256,10 +253,10 @@ begin
 
      with _Seed do
      begin
-          X := R.GetRand;
-          Y := R.GetRand;
-          Z := R.GetRand;
-          W := R.GetRand;
+          X := R.GetRand32;
+          Y := R.GetRand32;
+          Z := R.GetRand32;
+          W := R.GetRand32;
      end;
 end;
 
@@ -272,9 +269,9 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomXOR128.GetRand :Cardinal;
+function TRandomXOR128.GetRand32 :UInt32;
 var
-   T :Cardinal;
+   T :UInt32;
 begin
      with _Seed do
      begin
