@@ -23,61 +23,80 @@ object Form1: TForm1
       Position.X = 10.000000000000000000
       Position.Y = 10.000000000000000000
       Size.Width = 110.000000000000000000
-      Size.Height = 110.000000000000000000
+      Size.Height = 170.000000000000000000
       Size.PlatformDefault = False
       Text = 'Algorithm'
       TabOrder = 0
-      object RadioButton1: TRadioButton
-        Position.X = 10.000000000000000000
-        Position.Y = 20.000000000000000000
-        Size.Width = 90.000000000000000000
-        Size.Height = 20.000000000000000000
-        Size.PlatformDefault = False
-        TabOrder = 3
-        Text = 'Xorshift 32'
-        OnChange = RadioButton1Change
-      end
-      object RadioButton2: TRadioButton
-        Position.X = 10.000000000000000000
-        Position.Y = 40.000000000000000000
-        Size.Width = 90.000000000000000000
-        Size.Height = 20.000000000000000000
-        Size.PlatformDefault = False
-        TabOrder = 2
-        Text = 'Xorshift 64'
-        OnChange = RadioButton2Change
-      end
-      object RadioButton3: TRadioButton
-        Position.X = 10.000000000000000000
-        Position.Y = 60.000000000000000000
-        Size.Width = 90.000000000000000000
-        Size.Height = 20.000000000000000000
-        Size.PlatformDefault = False
-        TabOrder = 1
-        Text = 'Xorshift 96'
-        OnChange = RadioButton3Change
-      end
-      object RadioButton4: TRadioButton
+      object RadioButtonAX1: TRadioButton
         Position.X = 10.000000000000000000
         Position.Y = 80.000000000000000000
         Size.Width = 90.000000000000000000
         Size.Height = 20.000000000000000000
         Size.PlatformDefault = False
+        TabOrder = 6
+        Text = 'Xorshift 32'
+        OnChange = RadioButtonAX1Change
+      end
+      object RadioButtonAX2: TRadioButton
+        Position.X = 10.000000000000000000
+        Position.Y = 100.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = 'Xorshift 64'
+        OnChange = RadioButtonAX2Change
+      end
+      object RadioButtonAX3: TRadioButton
+        Position.X = 10.000000000000000000
+        Position.Y = 120.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Xorshift 96'
+        OnChange = RadioButtonAX3Change
+      end
+      object RadioButtonAX4: TRadioButton
+        Position.X = 10.000000000000000000
+        Position.Y = 140.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
         TabOrder = 0
         Text = 'Xorshift 128'
-        OnChange = RadioButton4Change
+        OnChange = RadioButtonAX4Change
       end
-    end
-    object Button1: TButton
-      Default = True
-      Position.X = 10.000000000000000000
-      Position.Y = 130.000000000000000000
-      Size.Width = 106.000000000000000000
-      Size.Height = 50.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 1
-      Text = 'Genarate'
-      OnClick = Button1Click
+      object RadioButtonAL1: TRadioButton
+        Position.X = 10.000000000000000000
+        Position.Y = 20.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 5
+        Text = 'LCG 32'
+        OnChange = RadioButtonAL1Change
+      end
+      object RadioButtonAL2: TRadioButton
+        Position.X = 10.000000000000000000
+        Position.Y = 40.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 4
+        Text = 'LCG 48'
+        OnChange = RadioButtonAL2Change
+      end
+      object RadioButtonAL3: TRadioButton
+        Position.X = 10.000000000000000000
+        Position.Y = 60.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 3
+        Text = 'LCG 64'
+        OnChange = RadioButtonAL3Change
+      end
     end
   end
   object Label2: TLabel
@@ -116,5 +135,11 @@ object Form1: TForm1
     Size.Height = 512.000000000000000000
     Size.PlatformDefault = False
     WrapMode = Stretch
+  end
+  object Timer1: TTimer
+    Interval = 10
+    OnTimer = Timer1Timer
+    Left = 45
+    Top = 45
   end
 end
