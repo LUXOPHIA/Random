@@ -21,6 +21,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      {public}
        ///// メソッド
        function GetRand32 :UInt32;
+       function GetRand64 :UInt64;
        function Value :Double;
      end;
 
@@ -35,6 +36,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
        class constructor Create;
        constructor Create; overload; virtual;
+       constructor Create( const Random_:IRandom ); overload; virtual; abstract;
        class destructor Destroy;
        ///// メソッド
        class function GetGlobalSeed32 :UInt32; virtual;
@@ -42,6 +44,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class procedure GetGlobalSeed( out Seeds_:array of UInt32 ); overload; virtual;
        class procedure GetGlobalSeed( out Seeds_:array of UInt64 ); overload; virtual;
        function GetRand32 :UInt32; virtual; abstract;
+       function GetRand64 :UInt64; virtual;
        function Value :Double; virtual; abstract;  // 0 <= Value < 1
      end;
 
@@ -73,6 +76,32 @@ uses System.SysUtils
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+class constructor TRandom.Create;
+begin
+     inherited;
+
+     _SeedCS := TCriticalSection.Create;
+
+     _GloSeed := GetClockCount;
+end;
+
+constructor TRandom.Create;
+begin
+     inherited;
+
+end;
+
+class destructor TRandom.Destroy;
+begin
+     _SeedCS.DisposeOf;
+
+     inherited;
+end;
+
+////////////////////////////////////////////////////////////////////////////////
 
 class function TRandom.GetGlobalSeed32 :UInt32;
 begin
@@ -120,28 +149,11 @@ begin
      _SeedCS.Leave;
 end;
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+//------------------------------------------------------------------------------
 
-class constructor TRandom.Create;
+function TRandom.GetRand64 :UInt64;
 begin
-     inherited;
-
-     _SeedCS := TCriticalSection.Create;
-
-     _GloSeed := GetClockCount;
-end;
-
-constructor TRandom.Create;
-begin
-     inherited;
-
-end;
-
-class destructor TRandom.Destroy;
-begin
-     _SeedCS.DisposeOf;
-
-     inherited;
+     Result := ( GetRand32 shl 32 ) or GetRand32;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
