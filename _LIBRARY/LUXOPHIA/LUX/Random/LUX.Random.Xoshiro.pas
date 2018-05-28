@@ -611,7 +611,10 @@ constructor TRandom64XOS256.Create;
 begin
      _SeedCS.Enter;
 
-       Create( _Random.State );  _Random.NextState128;
+       with _Random do
+       begin
+            Create( State );  NextState128;
+       end;
 
      _SeedCS.Leave;
 end;
