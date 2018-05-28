@@ -54,8 +54,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create; overload; override;
        constructor Create( const Random_:IRandom ); overload; override;
        ///// メソッド
-       function GetRand64 :Int64u; override;
-       function Value :Double; override;
+       function GetRand32 :Int32u; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR96
@@ -220,20 +219,13 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomXOR64.GetRand64 :Int64u;
+function TRandomXOR64.GetRand32 :Int32u;
 begin
      _State := _State xor ( _State shl 13 );
      _State := _State xor ( _State shr  7 );
      _State := _State xor ( _State shl 17 );
 
      Result := _State;
-end;
-
-//------------------------------------------------------------------------------
-
-function TRandomXOR64.Value :Double;
-begin
-     Result := GetRand64 / 18446744073709551616.0{= 2^64 };
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR96
