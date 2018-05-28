@@ -2,7 +2,8 @@
 
 interface //#################################################################### ■
 
-uses LUX, LUX.D3, LUX.D4, LUX.Random;
+uses LUX, LUX.D3, LUX.D4,
+     LUX.Random;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
@@ -12,12 +13,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR
 
-     IRandomXOR = interface
+     IRandomXOR = interface( IRandom )
      ['{FDD69CB5-D221-4FDD-89C9-BB3CF352BD74}']
      {protected}
      {public}
-       ///// メソッド
-       function GetRand :Cardinal;
      end;
 
      //-------------------------------------------------------------------------
@@ -27,7 +26,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
      public
        ///// メソッド
-       function GetRand :Cardinal; virtual; abstract;
+       class function GetGlobalSeed32 :UInt32; override;
+       class function GetGlobalSeed64 :UInt64; override;
        function Value :Double; override;
      end;
 
@@ -36,12 +36,13 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandomXOR32 = class( TRandomXOR )
      private
      protected
-       _Seed :Cardinal;
+       _Seed :UInt32;
      public
        constructor Create; overload; override;
-       constructor Create( const Seed_:Cardinal ); overload;
+       constructor Create( const Random_:IRandom ); overload; override;
+       constructor Create( const Seed_:UInt32 ); overload;
        ///// メソッド
-       function GetRand :Cardinal; override;
+       function GetRand32 :UInt32; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR64
@@ -52,9 +53,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Seed :Uint64;
      public
        constructor Create; overload; override;
+       constructor Create( const Random_:IRandom ); overload; override;
        constructor Create( const Seed_:Uint64 ); overload;
        ///// メソッド
-       function GetRand :Cardinal; override;
+       function GetRand32 :UInt32; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR96
@@ -65,9 +67,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Seed :TCardinal3D;
      public
        constructor Create; overload; override;
-       constructor Create( const Seed_:TCardinal3D ); overload;
+       constructor Create( const Random_:IRandom ); overload; override;
+       constructor Create( const SeedX_,SeedY_,SeedZ_:UInt32 ); overload;
        ///// メソッド
-       function GetRand :Cardinal; override;
+       function GetRand32 :UInt32; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR128
@@ -78,9 +81,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Seed :TCardinal4D;
      public
        constructor Create; overload; override;
-       constructor Create( const Seed_:TCardinal4D ); overload;
+       constructor Create( const Random_:IRandom ); overload; override;
+       constructor Create( const SeedX_,SeedY_,SeedZ_,SeedW_:UInt32 ); overload;
        ///// メソッド
-       function GetRand :Cardinal; override;
+       function GetRand32 :UInt32; override;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -91,7 +95,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 implementation //############################################################### ■
 
-uses System.SysUtils, System.SyncObjs, System.Diagnostics;
+uses System.SysUtils;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
@@ -107,9 +111,27 @@ uses System.SysUtils, System.SyncObjs, System.Diagnostics;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
+class function TRandomXOR.GetGlobalSeed32 :UInt32;
+begin
+     repeat
+           Result := inherited GetGlobalSeed32;
+
+     until Result > 0;
+end;
+
+class function TRandomXOR.GetGlobalSeed64 :UInt64;
+begin
+     repeat
+           Result := inherited GetGlobalSeed64;
+
+     until Result > 0;
+end;
+
+//------------------------------------------------------------------------------
+
 function TRandomXOR.Value :Double;
 begin
-     Result := GetRand / $100000000{= $FFFFFFFF+1 };
+     Result := GetRand32 / 4294967296.0{= 2^32 };
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR32
@@ -122,14 +144,15 @@ end;
 
 constructor TRandomXOR32.Create;
 begin
-     inherited;
-
-     _Seed := GetGloSeed;
-
-     GetRand; GetRand; GetRand; GetRand; {←EVEN}
+     Create( GetGlobalSeed32 );
 end;
 
-constructor TRandomXOR32.Create( const Seed_:Cardinal );
+constructor TRandomXOR32.Create( const Random_:IRandom );
+begin
+     Create( Random_.GetRand32 );
+end;
+
+constructor TRandomXOR32.Create( const Seed_:UInt32 );
 begin
      inherited Create;
 
@@ -138,7 +161,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomXOR32.GetRand :Cardinal;
+function TRandomXOR32.GetRand32 :UInt32;
 begin
      _Seed := _Seed xor ( _Seed shl 13 );
      _Seed := _Seed xor ( _Seed shr 17 );
@@ -156,14 +179,13 @@ end;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 constructor TRandomXOR64.Create;
-var
-   R :IRandomXOR;
 begin
-     inherited;
+     Create( GetGlobalSeed64 );
+end;
 
-     R := TRandomXOR32.Create;
-
-     _Seed := ( R.GetRand shl 32 ) and R.GetRand;
+constructor TRandomXOR64.Create( const Random_:IRandom );
+begin
+     Create( Random_.GetRand64 );
 end;
 
 constructor TRandomXOR64.Create( const Seed_:Uint64 );
@@ -175,13 +197,13 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomXOR64.GetRand :Cardinal;
+function TRandomXOR64.GetRand32 :UInt32;
 begin
      _Seed := _Seed xor ( _Seed shl 13 );
      _Seed := _Seed xor ( _Seed shr  7 );
      _Seed := _Seed xor ( _Seed shl 17 );
 
-     Result := _Seed;
+     Result := _Seed and UInt32.MaxValue;
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR96
@@ -193,31 +215,31 @@ end;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 constructor TRandomXOR96.Create;
-var
-   R :IRandomXOR;
 begin
-     inherited;
-
-     R := TRandomXOR64.Create;
-
-     with _Seed do
-     begin
-          X := R.GetRand;
-          Y := R.GetRand;
-          Z := R.GetRand;
-     end;
+     Create( GetGlobalSeed32,
+             GetGlobalSeed32,
+             GetGlobalSeed32 );
 end;
 
-constructor TRandomXOR96.Create( const Seed_:TCardinal3D );
+constructor TRandomXOR96.Create( const Random_:IRandom );
+begin
+     Create( Random_.GetRand32,
+             Random_.GetRand32,
+             Random_.GetRand32 );
+end;
+
+constructor TRandomXOR96.Create( const SeedX_,SeedY_,SeedZ_:UInt32 );
 begin
      inherited Create;
 
-     _Seed := Seed_;
+     _Seed.X := SeedX_;
+     _Seed.Y := SeedY_;
+     _Seed.Z := SeedZ_;
 end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomXOR96.GetRand :Cardinal;
+function TRandomXOR96.GetRand32 :UInt32;
 begin
      with _Seed do
      begin
@@ -241,31 +263,35 @@ constructor TRandomXOR128.Create;
 var
    R :IRandomXOR;
 begin
-     inherited;
-
-     R := TRandomXOR96.Create;
-
-     with _Seed do
-     begin
-          X := R.GetRand;
-          Y := R.GetRand;
-          Z := R.GetRand;
-          W := R.GetRand;
-     end;
+     Create( GetGlobalSeed32,
+             GetGlobalSeed32,
+             GetGlobalSeed32,
+             GetGlobalSeed32 );
 end;
 
-constructor TRandomXOR128.Create( const Seed_:TCardinal4D );
+constructor TRandomXOR128.Create( const Random_:IRandom );
+begin
+     Create( Random_.GetRand32,
+             Random_.GetRand32,
+             Random_.GetRand32,
+             Random_.GetRand32 );
+end;
+
+constructor TRandomXOR128.Create( const SeedX_,SeedY_,SeedZ_,SeedW_:UInt32 );
 begin
      inherited Create;
 
-     _Seed := Seed_;
+     _Seed.X := SeedX_;
+     _Seed.Y := SeedY_;
+     _Seed.Z := SeedZ_;
+     _Seed.W := SeedW_;
 end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomXOR128.GetRand :Cardinal;
+function TRandomXOR128.GetRand32 :UInt32;
 var
-   T :Cardinal;
+   T :UInt32;
 begin
      with _Seed do
      begin
