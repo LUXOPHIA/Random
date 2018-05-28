@@ -22,7 +22,8 @@ uses
   LUX.D4.V4 in '_LIBRARY\LUXOPHIA\LUX\LUX.D4.V4.pas',
   LUX.Random in '_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.pas',
   LUX.Random.Xorshift in '_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.Xorshift.pas',
-  LUX.Random.LCG in '_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.LCG.pas';
+  LUX.Random.LCG in '_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.LCG.pas',
+  LUX.Random.Xoshiro in '_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.Xoshiro.pas';
 
 {$R *.res}
 
