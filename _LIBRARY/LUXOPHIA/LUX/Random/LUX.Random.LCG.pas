@@ -42,23 +42,23 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG48
 
-     TRandomLCG48 = class( TRandomLCG<UInt64> )
+     TRandomLCG48 = class( TRandomLCG<Int64u> )
      private
      protected
      public
        constructor Create; overload; override;
        constructor Create( const Random_:IRandom ); overload; override;
-       constructor Create( const Seed_:UInt64 ); overload; override;
+       constructor Create( const Seed_:Int64u ); overload; override;
        ///// メソッド
        function GetRand32 :Int32u; override;
-       function GetRand48 :UInt64;
-       function GetRand64 :UInt64; override;
+       function GetRand48 :Int64u;
+       function GetRand64 :Int64u; override;
        function Value :Double; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG64
 
-     TRandomLCG64 = class( TRandomLCG<UInt64> )
+     TRandomLCG64 = class( TRandomLCG<Int64u> )
      private
      protected
      public
@@ -66,7 +66,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create( const Random_:IRandom ); overload; override;
        ///// メソッド
        function GetRand32 :Int32u; override;
-       function GetRand64 :UInt64; override;
+       function GetRand64 :Int64u; override;
        function Value :Double; override;
      end;
 
@@ -119,20 +119,20 @@ const
      C :Int32u = 1013904223;
      {
      ///// Borland C/C++
-     A :UInt64 = 22695477;
-     C :UInt64 = 1;
+     A :Int32u = 22695477;
+     C :Int32u = 1;
      ///// Borland Delphi, Virtual Pascal, Turbo Pascal
-     A :UInt64 = 134775813;
-     C :UInt64 = 	1;
+     A :Int32u = 134775813;
+     C :Int32u = 	1;
      ///// Microsoft Visual/Quick C/C++
-     A :UInt64 = 214013;
-     C :UInt64 = 2531011;
+     A :Int32u = 214013;
+     C :Int32u = 2531011;
      ///// VMS's MTH$RANDOM, old versions of glibc
-     A :UInt64 = 69069;
-     C :UInt64 = 1;
+     A :Int32u = 69069;
+     C :Int32u = 1;
      ///// cc65
-     A :UInt64 = 16843009;
-     C :UInt64 = 826366247;
+     A :Int32u = 16843009;
+     C :Int32u = 826366247;
      }
 begin
      //          48              32              16               0
@@ -190,7 +190,7 @@ begin
      Create( Random_.GetRand64 );
 end;
 
-constructor TRandomLCG48.Create( const Seed_:UInt64 );
+constructor TRandomLCG48.Create( const Seed_:Int64u );
 begin
      inherited Create( Seed_ and 281474976710655{= 2^48-1 } );
 end;
@@ -202,11 +202,11 @@ begin
      Result := GetRand48 shr 16;
 end;
 
-function TRandomLCG48.GetRand48 :UInt64;
+function TRandomLCG48.GetRand48 :Int64u;
 const
-     A  :UInt64 = 25214903917;
-     C  :UInt64 = 11;
-     M1 :UInt64 = 281474976710655{= 2^48-1 };
+     A  :Int64u = 25214903917;
+     C  :Int64u = 11;
+     M1 :Int64u = 281474976710655{= 2^48-1 };
 begin
      //        96              64              48              32              16               0
      //         |               |               |               |               |               |
@@ -238,7 +238,7 @@ begin
      Result := _State;
 end;
 
-function TRandomLCG48.GetRand64 :UInt64;
+function TRandomLCG48.GetRand64 :Int64u;
 begin
      Result := ( GetRand48 shr 16 shl 32 ) or ( GetRand48 shr 16 );
 end;
@@ -275,10 +275,10 @@ begin
      Result := GetRand64 shr 32;
 end;
 
-function TRandomLCG64.GetRand64 :UInt64;
+function TRandomLCG64.GetRand64 :Int64u;
 const
-     A :UInt64 = 6364136223846793005;
-     C :UInt64 = 1442695040888963407;
+     A :Int64u = 6364136223846793005;
+     C :Int64u = 1442695040888963407;
 begin
      //                   128             112              96              64              48              32              16               0
      //                     |               |               |               |               |               |               |               |
