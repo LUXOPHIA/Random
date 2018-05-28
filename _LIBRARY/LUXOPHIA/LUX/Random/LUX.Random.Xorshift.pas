@@ -47,7 +47,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR64
 
-     TRandomXOR64 = class( TRandomXOR<Uint64> )
+     TRandomXOR64 = class( TRandomXOR<Int64u> )
      private
      protected
      public
