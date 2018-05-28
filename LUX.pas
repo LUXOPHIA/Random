@@ -6,6 +6,20 @@ uses System.Types, System.SysUtils, System.Classes, System.Math.Vectors, System.
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
+     Int08u = Byte    ;  Int8u = Int08u;
+     Int08s = Shortint;  Int8s = Int08s;
+     Int16u = Word    ;
+     Int16s = Smallint;
+     Int32u = Cardinal;
+     Int32s = Integer ;
+     Int64u = UInt64  ;
+     Int64s = Int64   ;
+
+     Flo32s = Single  ;
+     Flo64s = Double  ;
+
+     //-------------------------------------------------------------------------
+
      PPByte    = ^PByte;
      PPLongint = ^PLongint;
 
