@@ -20,6 +20,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      {protected}
      {public}
        ///// メソッド
+       procedure NextState;
        function GetRand32 :Int32u;
        function GetRand64 :UInt64;
        function Value :Double;
@@ -44,6 +45,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class function GetTime64 :Int64u; virtual;
        class procedure GetTimes( out Times_:array of Int32u ); overload; virtual;
        class procedure GetTimes( out Times_:array of Int64u ); overload; virtual;
+       procedure NextState; virtual; abstract;
        function GetRand32 :Int32u; virtual;
        function GetRand64 :Int64u; virtual;
        function Value :Double; virtual; abstract;  // 0 <= Value < 1
