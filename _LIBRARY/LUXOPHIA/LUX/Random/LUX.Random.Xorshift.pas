@@ -260,8 +260,6 @@ end;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 constructor TRandomXOR128.Create;
-var
-   R :IRandomXOR;
 begin
      Create( GetGlobalSeed32,
              GetGlobalSeed32,
