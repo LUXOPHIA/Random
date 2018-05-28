@@ -32,13 +32,13 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandomLCG32 = class( TRandomLCG )
      private
      protected
-       _Seed :UInt32;
+       _Seed :Int32u;
      public
        constructor Create; overload; override;
        constructor Create( const Random_:IRandom ); overload; override;
-       constructor Create( const Seed_:UInt32 ); overload;
+       constructor Create( const Seed_:Int32u ); overload;
        ///// メソッド
-       function GetRand32 :UInt32; override;
+       function GetRand32 :Int32u; override;
        function Value :Double; override;
      end;
 
@@ -53,7 +53,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create( const Random_:IRandom ); overload; override;
        constructor Create( const Seed_:UInt64 ); overload;
        ///// メソッド
-       function GetRand32 :UInt32; override;
+       function GetRand32 :Int32u; override;
        function GetRand48 :UInt64;
        function GetRand64 :UInt64; override;
        function Value :Double; override;
@@ -70,7 +70,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create( const Random_:IRandom ); overload; override;
        constructor Create( const Seed_:UInt64 ); overload;
        ///// メソッド
-       function GetRand32 :UInt32; override;
+       function GetRand32 :Int32u; override;
        function GetRand64 :UInt64; override;
        function Value :Double; override;
      end;
@@ -115,7 +115,7 @@ begin
      Create( Random_.GetRand32 );
 end;
 
-constructor TRandomLCG32.Create( const Seed_:UInt32 );
+constructor TRandomLCG32.Create( const Seed_:Int32u );
 begin
      inherited Create;
 
@@ -124,11 +124,11 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomLCG32.GetRand32 :UInt32;
+function TRandomLCG32.GetRand32 :Int32u;
 const
      ///// Numerical Recipes
-     A :UInt32 = 1664525;
-     C :UInt32 = 1013904223;
+     A :Int32u = 1664525;
+     C :Int32u = 1013904223;
      {
      ///// Borland C/C++
      A :UInt64 = 22695477;
@@ -211,7 +211,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomLCG48.GetRand32 :UInt32;
+function TRandomLCG48.GetRand32 :Int32u;
 begin
      Result := GetRand48 shr 16;
 end;
@@ -291,7 +291,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomLCG64.GetRand32 :UInt32;
+function TRandomLCG64.GetRand32 :Int32u;
 begin
      Result := GetRand64 shr 32;
 end;
