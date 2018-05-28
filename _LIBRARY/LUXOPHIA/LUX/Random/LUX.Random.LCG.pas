@@ -13,7 +13,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG<_TState_>
 
-     IRandomLCG = interface( IRandom )
+     IRandomLCG<_TState_:record> = interface( IRandom<_TState_> )
      ['{CB661983-1A3A-4FC1-82AF-988943DF8256}']
      {protected}
      {public}
@@ -21,7 +21,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TRandomLCG<_TState_:record> = class( TRandom<_TState_>, IRandomLCG )
+     TRandomLCG<_TState_:record> = class( TRandom<_TState_>, IRandomLCG<_TState_> )
      private
      protected
      public

@@ -13,7 +13,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOS<_TState_>
 
-     IRandomXOS = interface( IRandom )
+     IRandomXOS<_TState_:record> = interface( IRandom<_TState_> )
      ['{FDD69CB5-D221-4FDD-89C9-BB3CF352BD74}']
      {protected}
      {public}
@@ -21,7 +21,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TRandomXOS<_TState_:record> = class( TRandom<_TState_>, IRandomXOS )
+     TRandomXOS<_TState_:record> = class( TRandom<_TState_>, IRandomXOS<_TState_> )
      private
      protected
      public
@@ -29,7 +29,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS<_TState_>
 
-     IRandom32XOS = interface( IRandom )
+     IRandom32XOS<_TState_:record> = interface( IRandomXOS<_TState_> )
      ['{17D5D4B8-C9FE-4671-BEF4-16E6E7AA512C}']
      {protected}
      {public}
@@ -37,7 +37,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TRandom32XOS<_TState_:record> = class( TRandomXOS<_TState_>, IRandom32XOS )
+     TRandom32XOS<_TState_:record> = class( TRandomXOS<_TState_>, IRandom32XOS<_TState_> )
      private
      protected
        ///// メソッド
@@ -49,7 +49,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS<_TState_>
 
-     IRandom64XOS = interface( IRandom )
+     IRandom64XOS<_TState_:record> = interface( IRandomXOS<_TState_> )
      ['{8A73E446-332B-45AE-B78C-43696454A409}']
      {protected}
      {public}
@@ -57,7 +57,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TRandom64XOS<_TState_:record> = class( TRandomXOS<_TState_>, IRandom64XOS )
+     TRandom64XOS<_TState_:record> = class( TRandomXOS<_TState_>, IRandom64XOS<_TState_> )
      private
      protected
        ///// メソッド
@@ -170,17 +170,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS256
 
-     IRandom64XOS256 = interface( IRandom64XOS )
+     IRandom64XOS256 = interface( IRandom64XOS<TInt64u4D> )
      ['{3D863AF1-3DF8-46A2-BD16-09C34EFB8D36}']
      {protected}
-       ///// アクセス
-       function GetState :TInt64u4D;
-       procedure SetState( const Seed_:TInt64u4D );
      {public}
-       ///// プロパティ
-       property Seed :TInt64u4D read GetState;
        ///// メソッド
-       procedure NextState;
        procedure NextState128;
      end;
 
@@ -617,7 +611,7 @@ constructor TRandom64XOS256.Create;
 begin
      _SeedCS.Enter;
 
-       Create( _Random.Seed );  _Random.NextState128;
+       Create( _Random.State );  _Random.NextState128;
 
      _SeedCS.Leave;
 end;

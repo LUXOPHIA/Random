@@ -53,7 +53,20 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom<_TState_>
 
-     TRandom<_TState_> = class( TRandom, IRandom )
+     IRandom<_TState_:record> = interface( IRandom )
+     ['{FF14FAF6-6AF9-488B-A6B2-570921BC7547}']
+     {protected}
+       ///// アクセス
+       function GetState :_TState_;
+       procedure SetState( const State_:_TState_ );
+     {public}
+       ///// プロパティ
+       property State :_TState_ read GetState write SetState;
+     end;
+
+     //-------------------------------------------------------------------------
+
+     TRandom<_TState_:record> = class( TRandom, IRandom<_TState_> )
      private
      protected
        _State :_TState_;
