@@ -5,11 +5,12 @@ interface //####################################################################
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
-  FMX.StdCtrls, FMX.Objects, FMX.Controls.Presentation,
+  FMX.ListBox, FMX.Objects, FMX.StdCtrls, FMX.Controls.Presentation,
   LUX, LUX.D3, LUX.D4,
   LUX.Random,
   LUX.Random.LCG,
-  LUX.Random.Xorshift;
+  LUX.Random.Xorshift,
+  LUX.Random.Xoshiro;
 
 type
   TForm1 = class(TForm)
@@ -18,40 +19,14 @@ type
     Image1: TImage;
     Timer1: TTimer;
     Panel1: TPanel;
-      GroupBoxS: TGroupBox;
-        RadioButtonS0: TRadioButton;
-        RadioButtonSL1: TRadioButton;
-        RadioButtonSL2: TRadioButton;
-        RadioButtonSL3: TRadioButton;
-        RadioButtonSX1: TRadioButton;
-        RadioButtonSX2: TRadioButton;
-        RadioButtonSX3: TRadioButton;
-        RadioButtonSX4: TRadioButton;
-      GroupBoxG: TGroupBox;
-        RadioButtonGX1: TRadioButton;
-        RadioButtonGX2: TRadioButton;
-        RadioButtonGX3: TRadioButton;
-        RadioButtonGX4: TRadioButton;
-        RadioButtonGL1: TRadioButton;
-        RadioButtonGL2: TRadioButton;
-        RadioButtonGL3: TRadioButton;
+      Label3: TLabel;
+      ComboBox1: TComboBox;
+      Label4: TLabel;
+      ComboBox2: TComboBox;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
-    procedure RadioButtonS0Change(Sender: TObject);
-    procedure RadioButtonSL1Change(Sender: TObject);
-    procedure RadioButtonSL2Change(Sender: TObject);
-    procedure RadioButtonSL3Change(Sender: TObject);
-    procedure RadioButtonSX1Change(Sender: TObject);
-    procedure RadioButtonSX2Change(Sender: TObject);
-    procedure RadioButtonSX3Change(Sender: TObject);
-    procedure RadioButtonSX4Change(Sender: TObject);
-    procedure RadioButtonGL1Change(Sender: TObject);
-    procedure RadioButtonGL2Change(Sender: TObject);
-    procedure RadioButtonGL3Change(Sender: TObject);
-    procedure RadioButtonGX1Change(Sender: TObject);
-    procedure RadioButtonGX2Change(Sender: TObject);
-    procedure RadioButtonGX3Change(Sender: TObject);
-    procedure RadioButtonGX4Change(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
+    procedure ComboBox2Change(Sender: TObject);
   private
     { private 宣言 }
     ///// メソッド
@@ -119,8 +94,8 @@ begin
 
      SetLength( _Randoms, _ThreadsN, _SequensN );
 
-     RadioButtonS0 .IsChecked := True;
-     RadioButtonGL1.IsChecked := True;
+     ComboBox1.ItemIndex := 0;
+     ComboBox2.ItemIndex := 0;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -143,81 +118,47 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TForm1.RadioButtonS0Change(Sender: TObject);
+procedure TForm1.ComboBox1Change(Sender: TObject);
 begin
-     _ScramblC := nil;
+     case ComboBox1.ItemIndex of
+      00: _ScramblC := nil;
+      01: _ScramblC := TRandomLCG32;       // LCG 32
+      02: _ScramblC := TRandomLCG48;       // LCG 48
+      03: _ScramblC := TRandomLCG64;       // LCG 64
+      04: _ScramblC := TRandomXOR32;       // Xorshift 32
+      05: _ScramblC := TRandomXOR64;       // Xorshift 64
+      06: _ScramblC := TRandomXOR96;       // Xorshift 96
+      07: _ScramblC := TRandomXOR128;      // Xorshift 128
+      08: _ScramblC := TRandom32XOS64s;    // xoroshiro 64*
+      09: _ScramblC := TRandom32XOS64ss;   // xoroshiro 64**
+      10: _ScramblC := TRandom32XOS128p;   // xoshiro128+
+      11: _ScramblC := TRandom32XOS128ss;  // xoshiro128**
+      12: _ScramblC := TRandom64XOS128p;   // xoroshiro128+
+      13: _ScramblC := TRandom64XOS128ss;  // xoroshiro128**
+      14: _ScramblC := TRandom64XOS256p;   // xoshiro256+
+      15: _ScramblC := TRandom64XOS256ss;  // xoshiro256**
+     end;
 end;
 
-procedure TForm1.RadioButtonSL1Change(Sender: TObject);
+procedure TForm1.ComboBox2Change(Sender: TObject);
 begin
-     _ScramblC := TRandomLCG32;
-end;
-
-procedure TForm1.RadioButtonSL2Change(Sender: TObject);
-begin
-     _ScramblC := TRandomLCG48;
-end;
-
-procedure TForm1.RadioButtonSL3Change(Sender: TObject);
-begin
-     _ScramblC := TRandomLCG64;
-end;
-
-procedure TForm1.RadioButtonSX1Change(Sender: TObject);
-begin
-     _ScramblC := TRandomXOR32;
-end;
-
-procedure TForm1.RadioButtonSX2Change(Sender: TObject);
-begin
-     _ScramblC := TRandomXOR64;
-end;
-
-procedure TForm1.RadioButtonSX3Change(Sender: TObject);
-begin
-     _ScramblC := TRandomXOR96;
-end;
-
-procedure TForm1.RadioButtonSX4Change(Sender: TObject);
-begin
-     _ScramblC := TRandomXOR128;
-end;
-
-//------------------------------------------------------------------------------
-
-procedure TForm1.RadioButtonGL1Change(Sender: TObject);
-begin
-     _GeneratC := TRandomLCG32;
-end;
-
-procedure TForm1.RadioButtonGL2Change(Sender: TObject);
-begin
-     _GeneratC := TRandomLCG48;
-end;
-
-procedure TForm1.RadioButtonGL3Change(Sender: TObject);
-begin
-     _GeneratC := TRandomLCG64;
-end;
-
-procedure TForm1.RadioButtonGX1Change(Sender: TObject);
-begin
-     _GeneratC := TRandomXOR32;
-end;
-
-procedure TForm1.RadioButtonGX2Change(Sender: TObject);
-begin
-     _GeneratC := TRandomXOR64;
-end;
-
-procedure TForm1.RadioButtonGX3Change(Sender: TObject);
-begin
-     _GeneratC := TRandomXOR96;
-end;
-
-procedure TForm1.RadioButtonGX4Change(Sender: TObject);
-begin
-     _GeneratC := TRandomXOR128;
+     case ComboBox2.ItemIndex of
+      00: _GeneratC := TRandomLCG32;       // LCG 32
+      01: _GeneratC := TRandomLCG48;       // LCG 48
+      02: _GeneratC := TRandomLCG64;       // LCG 64
+      03: _GeneratC := TRandomXOR32;       // Xorshift 32
+      04: _GeneratC := TRandomXOR64;       // Xorshift 64
+      05: _GeneratC := TRandomXOR96;       // Xorshift 96
+      06: _GeneratC := TRandomXOR128;      // Xorshift 128
+      07: _GeneratC := TRandom32XOS64s;    // xoroshiro 64*
+      08: _GeneratC := TRandom32XOS64ss;   // xoroshiro 64**
+      09: _GeneratC := TRandom32XOS128p;   // xoshiro128+
+      10: _GeneratC := TRandom32XOS128ss;  // xoshiro128**
+      11: _GeneratC := TRandom64XOS128p;   // xoroshiro128+
+      12: _GeneratC := TRandom64XOS128ss;  // xoroshiro128**
+      13: _GeneratC := TRandom64XOS256p;   // xoshiro256+
+      14: _GeneratC := TRandom64XOS256ss;  // xoshiro256**
+     end;
 end;
 
 end. //######################################################################### ■
