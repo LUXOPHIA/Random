@@ -20,7 +20,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      {protected}
      {public}
        ///// メソッド
-       function GetRand32 :UInt32;
+       procedure NextState;
+       function GetRand32 :Int32u;
        function GetRand64 :UInt64;
        function Value :Double;
      end;
@@ -29,8 +30,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      TRandom = class( TInterfacedObject, IRandom )
      protected class var
-       _GloSeed :UInt32;
-       _SeedCS  :TCriticalSection;
+       _Time64 :Int64u;
+       _TimeCS :TCriticalSection;
+       _SeedCS :TCriticalSection;
      private
      protected
      public
@@ -39,13 +41,42 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create( const Random_:IRandom ); overload; virtual; abstract;
        class destructor Destroy;
        ///// メソッド
-       class function GetGlobalSeed32 :UInt32; virtual;
-       class function GetGlobalSeed64 :UInt64; virtual;
-       class procedure GetGlobalSeed( out Seeds_:array of UInt32 ); overload; virtual;
-       class procedure GetGlobalSeed( out Seeds_:array of UInt64 ); overload; virtual;
-       function GetRand32 :UInt32; virtual; abstract;
-       function GetRand64 :UInt64; virtual;
+       class function GetTime32 :Int32u; virtual;
+       class function GetTime64 :Int64u; virtual;
+       class procedure GetTimes( out Times_:array of Int32u ); overload; virtual;
+       class procedure GetTimes( out Times_:array of Int64u ); overload; virtual;
+       procedure NextState; virtual; abstract;
+       function GetRand32 :Int32u; virtual;
+       function GetRand64 :Int64u; virtual;
        function Value :Double; virtual; abstract;  // 0 <= Value < 1
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom<_TState_>
+
+     IRandom<_TState_:record> = interface( IRandom )
+     ['{FF14FAF6-6AF9-488B-A6B2-570921BC7547}']
+     {protected}
+       ///// アクセス
+       function GetState :_TState_;
+       procedure SetState( const State_:_TState_ );
+     {public}
+       ///// プロパティ
+       property State :_TState_ read GetState write SetState;
+     end;
+
+     //-------------------------------------------------------------------------
+
+     TRandom<_TState_:record> = class( TRandom, IRandom<_TState_> )
+     private
+     protected
+       _State :_TState_;
+       ///// アクセス
+       function GetState :_TState_;
+       procedure SetState( const State_:_TState_ );
+     public
+       constructor Create( const State_:_TState_ ); overload; virtual;
+       ///// プロパティ
+       property State :_TState_ read GetState write SetState;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -54,7 +85,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
 
-function GetClockCount :UInt64;
+function GetClockCount :Int64u;
 
 implementation //############################################################### ■
 
@@ -83,9 +114,10 @@ class constructor TRandom.Create;
 begin
      inherited;
 
+     _TimeCS := TCriticalSection.Create;
      _SeedCS := TCriticalSection.Create;
 
-     _GloSeed := GetClockCount;
+     _Time64 := GetClockCount;
 end;
 
 constructor TRandom.Create;
@@ -96,6 +128,7 @@ end;
 
 class destructor TRandom.Destroy;
 begin
+     _TimeCS.DisposeOf;
      _SeedCS.DisposeOf;
 
      inherited;
@@ -103,72 +136,100 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-class function TRandom.GetGlobalSeed32 :UInt32;
+class function TRandom.GetTime32 :Int32u;
 begin
-     _SeedCS.Enter;
-
-       Result := _GloSeed;  Inc( _GloSeed );
-
-     _SeedCS.Leave;
+     Result := GetTime64;
 end;
 
-class function TRandom.GetGlobalSeed64 :UInt64;
+class function TRandom.GetTime64 :Int64u;
 begin
-     _SeedCS.Enter;
+     _TimeCS.Enter;
 
-       Result := _GloSeed;  Inc( _GloSeed );
+       Result := _Time64;  Inc( _Time64 );
 
-     _SeedCS.Leave;
+     _TimeCS.Leave;
 end;
 
-class procedure TRandom.GetGlobalSeed( out Seeds_:array of UInt32 );
+class procedure TRandom.GetTimes( out Times_:array of Int32u );
 var
-   I :Integer;
+   I :Int32s;
 begin
-     _SeedCS.Enter;
+     _TimeCS.Enter;
 
-       for I := 0 to High( Seeds_ ) do
+       for I := 0 to High( Times_ ) do
        begin
-            Seeds_[ I ] := _GloSeed;  Inc( _GloSeed );
+            Times_[ I ] := _Time64;  Inc( _Time64 );
        end;
 
-     _SeedCS.Leave;
+     _TimeCS.Leave;
 end;
 
-class procedure TRandom.GetGlobalSeed( out Seeds_:array of UInt64 );
+class procedure TRandom.GetTimes( out Times_:array of Int64u );
 var
-   I :Integer;
+   I :Int32s;
 begin
-     _SeedCS.Enter;
+     _TimeCS.Enter;
 
-       for I := 0 to High( Seeds_ ) do
+       for I := 0 to High( Times_ ) do
        begin
-            Seeds_[ I ] := _GloSeed;  Inc( _GloSeed );
+            Times_[ I ] := _Time64;  Inc( _Time64 );
        end;
 
-     _SeedCS.Leave;
+     _TimeCS.Leave;
 end;
 
 //------------------------------------------------------------------------------
 
-function TRandom.GetRand64 :UInt64;
+function TRandom.GetRand32 :Int32u;
+begin
+     Result := GetRand64 shr 32;
+end;
+
+function TRandom.GetRand64 :Int64u;
 begin
      Result := ( GetRand32 shl 32 ) or GetRand32;
 end;
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom<_TState_>
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+/////////////////////////////////////////////////////////////////////// アクセス
+
+function TRandom<_TState_>.GetState :_TState_;
+begin
+     Result := _State;
+end;
+
+procedure TRandom<_TState_>.SetState( const State_:_TState_ );
+begin
+     _State := State_;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TRandom<_TState_>.Create( const State_:_TState_ );
+begin
+     inherited Create;
+
+     _State := State_;
+end;
+
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
 
-function GetClockCount :UInt64;
+function GetClockCount :Int64u;
 {$IFDEF MSWINDOWS }
 var
    Counter :Int64;
 begin
-     if QueryPerformanceCounter( Counter ) then Result := Counter       // Int64
-                                           else Result := GetTickCount; //UInt32
+     if QueryPerformanceCounter( Counter ) then Result := Counter       //Int64s
+                                           else Result := GetTickCount; //Int32u
 end;
 {$ELSEIF MACOS }
 begin
-     Result := AbsoluteToNanoseconds( MachAbsoluteTime );  //UInt64
+     Result := AbsoluteToNanoseconds( MachAbsoluteTime );  //Int64u
 end;
 {$ELSEIF Defined( LINUX ) or Defined( ANDROID ) }
 var
