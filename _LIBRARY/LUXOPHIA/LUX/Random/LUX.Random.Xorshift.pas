@@ -25,12 +25,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
      public
-       ///// メソッド
-       class function GetTime32 :Int32u; override;
-       class function GetTime64 :Int64u; override;
-       class procedure GetTimes( out Times_:array of Int32u ); overload; override;
-       class procedure GetTimes( out Times_:array of Int64u ); overload; override;
-       function Value :Double; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR32
@@ -38,11 +32,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandomXOR32 = class( TRandomXOR<Int32u> )
      private
      protected
-     public
-       constructor Create; overload; override;
-       constructor Create( const Random_:IRandom ); overload; override;
        ///// メソッド
-       function GetRand32 :Int32u; override;
+       procedure CalcNextState; override;
+       function CalcRand32 :Int32u; override;
+     public
+       constructor Create( const Random_:IRandom ); overload; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR64
@@ -50,35 +44,35 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandomXOR64 = class( TRandomXOR<Int64u> )
      private
      protected
-     public
-       constructor Create; overload; override;
-       constructor Create( const Random_:IRandom ); overload; override;
        ///// メソッド
-       function GetRand32 :Int32u; override;
+       procedure CalcNextState; override;
+       function CalcRand32 :Int32u; override;
+     public
+       constructor Create( const Random_:IRandom ); overload; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR96
 
-     TRandomXOR96 = class( TRandomXOR<TCardinal3D> )
+     TRandomXOR96 = class( TRandomXOR<TInt32u3D> )
      private
      protected
-     public
-       constructor Create; overload; override;
-       constructor Create( const Random_:IRandom ); overload; override;
        ///// メソッド
-       function GetRand32 :Int32u; override;
+       procedure CalcNextState; override;
+       function CalcRand32 :Int32u; override;
+     public
+       constructor Create( const Random_:IRandom ); overload; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR128
 
-     TRandomXOR128 = class( TRandomXOR<TCardinal4D> )
+     TRandomXOR128 = class( TRandomXOR<TInt32u4D> )
      private
      protected
-     public
-       constructor Create; overload; override;
-       constructor Create( const Random_:IRandom ); overload; override;
        ///// メソッド
-       function GetRand32 :Int32u; override;
+       procedure CalcNextState; override;
+       function CalcRand32 :Int32u; override;
+     public
+       constructor Create( const Random_:IRandom ); overload; override;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -103,100 +97,31 @@ uses System.SysUtils, System.SyncObjs;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-/////////////////////////////////////////////////////////////////////// メソッド
-
-class function TRandomXOR<_TState_>.GetTime32 :Int32u;
-begin
-     _TimeCS.Enter;
-
-       repeat
-             Result := _Time64;  Inc( _Time64 );
-
-       until Result > 0;
-
-     _TimeCS.Leave;
-end;
-
-class function TRandomXOR<_TState_>.GetTime64 :Int64u;
-begin
-     _TimeCS.Enter;
-
-       repeat
-             Result := _Time64;  Inc( _Time64 );
-
-       until Result > 0;
-
-     _TimeCS.Leave;
-end;
-
-class procedure TRandomXOR<_TState_>.GetTimes( out Times_:array of Int32u );
-var
-   I :Int32s;
-begin
-     _TimeCS.Enter;
-
-       for I := 0 to High( Times_ ) do
-       begin
-            repeat
-                  Times_[ I ] := _Time64;  Inc( _Time64 );
-
-            until Times_[ I ] > 0;
-       end;
-
-     _TimeCS.Leave;
-end;
-
-class procedure TRandomXOR<_TState_>.GetTimes( out Times_:array of Int64u );
-var
-   I :Int32s;
-begin
-     _TimeCS.Enter;
-
-       for I := 0 to High( Times_ ) do
-       begin
-            repeat
-                  Times_[ I ] := _Time64;  Inc( _Time64 );
-
-            until Times_[ I ] > 0;
-       end;
-
-     _TimeCS.Leave;
-end;
-
-//------------------------------------------------------------------------------
-
-function TRandomXOR<_TState_>.Value :Double;
-begin
-     Result := GetRand32 / 4294967296.0{= 2^32 };
-end;
-
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR32
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-constructor TRandomXOR32.Create;
-begin
-     Create( GetTime32 );
-end;
-
-constructor TRandomXOR32.Create( const Random_:IRandom );
-begin
-     Create( Random_.GetRand32 );
-end;
-
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomXOR32.GetRand32 :Int32u;
+procedure TRandomXOR32.CalcNextState;
 begin
      _State := _State xor ( _State shl 13 );
      _State := _State xor ( _State shr 17 );
      _State := _State xor ( _State shl 15 );
+end;
 
+function TRandomXOR32.CalcRand32 :Int32u;
+begin
      Result := _State;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TRandomXOR32.Create( const Random_:IRandom );
+begin
+     Create( Random_.GetRandInt32u );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR64
@@ -205,27 +130,25 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-constructor TRandomXOR64.Create;
-begin
-     Create( GetTime64 );
-end;
-
-constructor TRandomXOR64.Create( const Random_:IRandom );
-begin
-     Create( Random_.GetRand64 );
-end;
-
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomXOR64.GetRand32 :Int32u;
+procedure TRandomXOR64.CalcNextState;
 begin
      _State := _State xor ( _State shl 13 );
      _State := _State xor ( _State shr  7 );
      _State := _State xor ( _State shl 17 );
+end;
 
+function TRandomXOR64.CalcRand32 :Int32u;
+begin
      Result := _State;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TRandomXOR64.Create( const Random_:IRandom );
+begin
+     Create( Random_.GetRandInt64u );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR96
@@ -234,40 +157,34 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-constructor TRandomXOR96.Create;
-var
-   S :TCardinal3D;
-begin
-     GetTimes( S._ );
-
-     Create( S );
-end;
-
-constructor TRandomXOR96.Create( const Random_:IRandom );
-var
-   S :TCardinal3D;
-begin
-     S.X := Random_.GetRand32;
-     S.Y := Random_.GetRand32;
-     S.Z := Random_.GetRand32;
-
-     Create( S );
-end;
-
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomXOR96.GetRand32 :Int32u;
+procedure TRandomXOR96.CalcNextState;
+var
+   T :Int32u;
 begin
      with _State do
      begin
-          Result := ( X xor ( X shl  3 ) )
-                xor ( Y xor ( Y shr 19 ) )
-                xor ( Z xor ( Z shl  6 ) );
+          T := ( X xor ( X shl  3 ) )
+           xor ( Y xor ( Y shr 19 ) )
+           xor ( Z xor ( Z shl  6 ) );
 
-          X := Y;  Y := Z;  Z := Result;
+          X := Y;  Y := Z;  Z := T;
      end;
+end;
+
+function TRandomXOR96.CalcRand32 :Int32u;
+begin
+     Result := _State.Z;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TRandomXOR96.Create( const Random_:IRandom );
+begin
+     Create( TInt32u3D.Create( Random_.GetRandInt32u,
+                               Random_.GetRandInt32u,
+                               Random_.GetRandInt32u ) );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR128
@@ -276,32 +193,9 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-constructor TRandomXOR128.Create;
-var
-   S :TCardinal4D;
-begin
-     GetTimes( S._ );
-
-     Create( S );
-end;
-
-constructor TRandomXOR128.Create( const Random_:IRandom );
-var
-   S :TCardinal4D;
-begin
-     S.X := Random_.GetRand32;
-     S.Y := Random_.GetRand32;
-     S.Z := Random_.GetRand32;
-     S.W := Random_.GetRand32;
-
-     Create( S );
-end;
-
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomXOR128.GetRand32 :Int32u;
+procedure TRandomXOR128.CalcNextState;
 var
    T :Int32u;
 begin
@@ -313,9 +207,22 @@ begin
 
           W := ( W xor ( W shr 19 ) )
            xor ( T xor ( T shr  8 ) );
-
-          Result := W;
      end;
+end;
+
+function TRandomXOR128.CalcRand32 :Int32u;
+begin
+     Result := _State.W;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TRandomXOR128.Create( const Random_:IRandom );
+begin
+     Create( TInt32u4D.Create( Random_.GetRandInt32u,
+                               Random_.GetRandInt32u,
+                               Random_.GetRandInt32u,
+                               Random_.GetRandInt32u ) );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
