@@ -7,6 +7,24 @@ uses LUX, LUX.D2, LUX.D3, LUX.D4,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
+     IRandomXOS<_TState_:record> = interface;
+
+     TRandomXOS<_TState_:record>     = class;
+       TRandom32XOS<_TState_:record> = class;
+         TRandom32XOS64              = class;
+           TRandom32XOS64s           = class;
+           TRandom32XOS64ss          = class;
+         TRandom32XOS128             = class;
+           TRandom32XOS128p          = class;
+           TRandom32XOS128ss         = class;
+       TRandom64XOS<_TState_:record> = class;
+         TRandom64XOS128             = class;
+           TRandom64XOS128p          = class;
+           TRandom64XOS128ss         = class;
+         TRandom64XOS256             = class;
+           TRandom64XOS256p          = class;
+           TRandom64XOS256ss         = class;
+
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
@@ -29,42 +47,22 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS<_TState_>
 
-     IRandom32XOS<_TState_:record> = interface( IRandomXOS<_TState_> )
-     ['{17D5D4B8-C9FE-4671-BEF4-16E6E7AA512C}']
-     {protected}
-     {public}
-     end;
-
-     //-------------------------------------------------------------------------
-
-     TRandom32XOS<_TState_:record> = class( TRandomXOS<_TState_>, IRandom32XOS<_TState_> )
+     TRandom32XOS<_TState_:record> = class( TRandomXOS<_TState_> )
      private
      protected
        ///// メソッド
        function Rot( const X_:Int32u; const K_:Int32s ) :Int32u; overload; inline;
      public
-       ///// メソッド
-       function Value :Double; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS<_TState_>
 
-     IRandom64XOS<_TState_:record> = interface( IRandomXOS<_TState_> )
-     ['{8A73E446-332B-45AE-B78C-43696454A409}']
-     {protected}
-     {public}
-     end;
-
-     //-------------------------------------------------------------------------
-
-     TRandom64XOS<_TState_:record> = class( TRandomXOS<_TState_>, IRandom64XOS<_TState_> )
+     TRandom64XOS<_TState_:record> = class( TRandomXOS<_TState_> )
      private
      protected
        ///// メソッド
        function Rot( const X_:Int64u; const K_:Int64s ) :Int64u; overload; inline;
      public
-       ///// メソッド
-       function Value :Double; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS64
@@ -72,12 +70,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandom32XOS64 = class( TRandom32XOS<TInt32u2D> )
      private
      protected
-     public
-       constructor Create; overload; override;
-       constructor Create( const Random_:IRandom ); overload; override;
-       constructor Create( const SeedX_,SeedY_:Int32u ); overload;
        ///// メソッド
-       procedure NextState; override;
+       procedure CalcNextState; override;
+     public
+       constructor Create( const Random_:IRandom ); overload; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS64s
@@ -85,9 +81,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandom32XOS64s = class( TRandom32XOS64 )
      private
      protected
-     public
        ///// メソッド
-       function GetRand32 :Int32u; override;
+       function CalcRand32 :Int32u; override;
+     public
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS64ss
@@ -95,9 +91,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandom32XOS64ss = class( TRandom32XOS64 )
      private
      protected
-     public
        ///// メソッド
-       function GetRand32 :Int32u; override;
+       function CalcRand32 :Int32u; override;
+     public
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS128
@@ -105,13 +101,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandom32XOS128 = class( TRandom32XOS<TInt32u4D> )
      private
      protected
-     public
-       constructor Create; overload; override;
-       constructor Create( const Random_:IRandom ); overload; override;
-       constructor Create( const SeedX_,SeedY_,SeedZ_,SeedW_:Int32u ); overload;
        ///// メソッド
-       procedure NextState; override;
+       procedure CalcNextState; override;
        procedure NextState64;
+     public
+       constructor Create( const Random_:IRandom ); overload; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS128p
@@ -119,9 +113,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandom32XOS128p = class( TRandom32XOS128 )
      private
      protected
-     public
        ///// メソッド
-       function GetRand32 :Int32u; override;
+       function CalcRand32 :Int32u; override;
+     public
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS128ss
@@ -129,9 +123,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandom32XOS128ss = class( TRandom32XOS128 )
      private
      protected
-     public
        ///// メソッド
-       function GetRand32 :Int32u; override;
+       function CalcRand32 :Int32u; override;
+     public
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS128
@@ -139,13 +133,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandom64XOS128 = class( TRandom64XOS<TInt64u2D> )
      private
      protected
-     public
-       constructor Create; overload; override;
-       constructor Create( const Random_:IRandom ); overload; override;
-       constructor Create( const SeedX_,SeedY_:Int64u ); overload;
        ///// メソッド
-       procedure NextState; override;
+       procedure CalcNextState; override;
        procedure NextState64;
+     public
+       constructor Create( const Random_:IRandom ); overload; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS128p
@@ -153,9 +145,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandom64XOS128p = class( TRandom64XOS128 )
      private
      protected
-     public
        ///// メソッド
-       function GetRand64 :Int64u; override;
+       function CalcRand64 :Int64u; override;
+     public
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS128ss
@@ -163,35 +155,21 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandom64XOS128ss = class( TRandom64XOS128 )
      private
      protected
-     public
        ///// メソッド
-       function GetRand64 :Int64u; override;
+       function CalcRand64 :Int64u; override;
+     public
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS256
 
-     IRandom64XOS256 = interface( IRandom64XOS<TInt64u4D> )
-     ['{3D863AF1-3DF8-46A2-BD16-09C34EFB8D36}']
-     {protected}
-     {public}
-       ///// メソッド
-       procedure NextState128;
-     end;
-
-     //-------------------------------------------------------------------------
-
-     TRandom64XOS256 = class( TRandom64XOS<TInt64u4D>, IRandom64XOS256 )
-     protected class var
-       _Random :IRandom64XOS256;
+     TRandom64XOS256 = class( TRandom64XOS<TInt64u4D> )
      private
      protected
-     public
-       class constructor Create;
-       constructor Create; overload; override;
-       constructor Create( const Random_:IRandom ); overload; override;
        ///// メソッド
-       procedure NextState; override;
+       procedure CalcNextState; override;
        procedure NextState128;
+     public
+       constructor Create( const Random_:IRandom ); overload; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS256p
@@ -199,9 +177,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandom64XOS256p = class( TRandom64XOS256 )
      private
      protected
-     public
        ///// メソッド
-       function GetRand64 :Int64u; override;
+       function CalcRand64 :Int64u; override;
+     public
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS256ss
@@ -209,9 +187,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandom64XOS256ss = class( TRandom64XOS256 )
      private
      protected
-     public
        ///// メソッド
-       function GetRand64 :Int64u; override;
+       function CalcRand64 :Int64u; override;
+     public
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -228,7 +206,7 @@ uses System.SysUtils, System.SyncObjs;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOS<_TState_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -236,7 +214,7 @@ uses System.SysUtils, System.SyncObjs;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS<_TState_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -251,14 +229,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-/////////////////////////////////////////////////////////////////////// メソッド
-
-function TRandom32XOS<_TState_>.Value :Double;
-begin
-     Result := GetRand32 / 4294967296.0{= 2^32 };
-end;
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS<_TState_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -273,92 +244,70 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-/////////////////////////////////////////////////////////////////////// メソッド
-
-function TRandom64XOS<_TState_>.Value :Double;
-begin
-     Result := GetRand64 / 18446744073709551616.0{= 2^64 };
-end;
-
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS64
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-constructor TRandom32XOS64.Create;
-begin
-     Create( GetTime32,
-             GetTime32 );
-end;
-
-constructor TRandom32XOS64.Create( const Random_:IRandom );
-begin
-     Create( Random_.GetRand32,
-             Random_.GetRand32 );
-end;
-
-constructor TRandom32XOS64.Create( const SeedX_,SeedY_:Int32u );
-begin
-     inherited Create;
-
-     _State.X := SeedX_;
-     _State.Y := SeedY_;
-end;
-
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandom32XOS64.NextState;
+procedure TRandom32XOS64.CalcNextState;
 var
    S :TInt32u2D;
 begin
      S := _State;
 
-     S.Y := S.Y xor S.X;
+     with S do
+     begin
+          Y := Y xor X;
 
-     _State.X := Rot( S.X, 26 ) xor S.Y xor ( S.Y shl 9 );  // a, b
-     _State.Y := Rot( S.Y, 13 );                            // c
+          _State.X := Rot( X, 26 ) xor Y xor ( Y shl 9 );  // a, b
+          _State.Y := Rot( Y, 13 );                        // c
+     end;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TRandom32XOS64.Create( const Random_:IRandom );
+begin
+     Create( TInt32u2D.Create( Random_.GetRandInt32u,
+                               Random_.GetRandInt32u ) );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS64s
 
+{ http://xoshiro.di.unimi.it/xoroshiro64star.c }
+
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
 /////////////////////////////////////////////////////////////////////// メソッド
 
-{ http://xoshiro.di.unimi.it/xoroshiro64star.c }
-
-function TRandom32XOS64s.GetRand32 :Int32u;
+function TRandom32XOS64s.CalcRand32 :Int32u;
 begin
 	   Result := _State.X * $9E3779BB;
-
-     NextState;
 end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS64ss
 
+{ http://xoshiro.di.unimi.it/xoroshiro64starstar.c }
+
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
 /////////////////////////////////////////////////////////////////////// メソッド
 
-{ http://xoshiro.di.unimi.it/xoroshiro64starstar.c }
-
-function TRandom32XOS64ss.GetRand32 :Int32u;
+function TRandom32XOS64ss.CalcRand32 :Int32u;
 begin
 	   Result := Rot( _State.X * $9E3779BB, 5 ) * 5;
-
-     NextState;
 end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS128
 
@@ -366,57 +315,35 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-constructor TRandom32XOS128.Create;
-begin
-     Create( GetTime32,
-             GetTime32,
-             GetTime32,
-             GetTime32 );
-end;
-
-constructor TRandom32XOS128.Create( const Random_:IRandom );
-begin
-     Create( Random_.GetRand32,
-             Random_.GetRand32,
-             Random_.GetRand32,
-             Random_.GetRand32 );
-end;
-
-constructor TRandom32XOS128.Create( const SeedX_,SeedY_,SeedZ_,SeedW_:Int32u );
-begin
-     inherited Create;
-
-     _State.X := SeedX_;
-     _State.Y := SeedY_;
-     _State.Z := SeedZ_;
-     _State.W := SeedW_;
-end;
-
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandom32XOS128.NextState;
+procedure TRandom32XOS128.CalcNextState;
 var
    T :Int32u;
 begin
-     T := _State.Y shl 9;
+     with _State do
+     begin
+          T := Y shl 9;
 
-     _State.Z := _State.Z xor _State.X;
-     _State.W := _State.W xor _State.Y;
-     _State.Y := _State.Y xor _State.Z;
-     _State.X := _State.X xor _State.W;
+          Z := Z xor X;
+          W := W xor Y;
+          Y := Y xor Z;
+          X := X xor W;
 
-     _State.Z := _State.Z xor T;
+          Z := Z xor T;
 
-     _State.W := Rot( _State.W, 11 );
+          W := Rot( W, 11 );
+     end;
 end;
 
 //------------------------------------------------------------------------------
 
 procedure TRandom32XOS128.NextState64;
 const
-     JUMP :array [ 0..4-1 ] of Int32u = ( $8764000b, $f542d2d3, $6fa035c3, $77f2db5b );
+     JUMP :array [ 0..4-1 ] of Int32u = ( $8764000b,
+                                          $f542d2d3,
+                                          $6fa035c3,
+                                          $77f2db5b );
 var
    S :TInt32u4D;
    I, B :Int32s;
@@ -429,56 +356,65 @@ begin
           begin
                if JUMP[ I ] and ( 1 shl B ) = 1 then
                begin
-                    S.X := S.X xor _State.X;
-                    S.Y := S.Y xor _State.Y;
-                    S.Z := S.Z xor _State.Z;
-                    S.W := S.W xor _State.W;
+                    with S do
+                    begin
+                         X := X xor _State.X;
+                         Y := Y xor _State.Y;
+                         Z := Z xor _State.Z;
+                         W := W xor _State.W;
+                    end;
                end;
 
-               GetRand32;
+               CalcNextState;
           end;
      end;
 
      _State := S;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS128p
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-/////////////////////////////////////////////////////////////////////// メソッド
-
-{ http://xoshiro.di.unimi.it/xoshiro128plus.c }
-
-function TRandom32XOS128p.GetRand32 :UInt32;
+constructor TRandom32XOS128.Create( const Random_:IRandom );
 begin
-     Result := _State.X + _State.W;
-
-     NextState;
+     Create( TInt32u4D.Create( Random_.GetRandInt32u,
+                               Random_.GetRandInt32u,
+                               Random_.GetRandInt32u,
+                               Random_.GetRandInt32u ) );
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS128ss
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS128p
+
+{ http://xoshiro.di.unimi.it/xoshiro128plus.c }
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
+/////////////////////////////////////////////////////////////////////// メソッド
+
+function TRandom32XOS128p.CalcRand32 :UInt32;
+begin
+     with _State do Result := X + W;
+end;
+
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-/////////////////////////////////////////////////////////////////////// メソッド
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS128ss
 
 { http://xoshiro.di.unimi.it/xoshiro128plus.c }
 
-function TRandom32XOS128ss.GetRand32 :UInt32;
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+/////////////////////////////////////////////////////////////////////// メソッド
+
+function TRandom32XOS128ss.CalcRand32 :UInt32;
 begin
      Result := Rot( _State.X * 5, 7 ) * 9;
-
-     NextState;
 end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS128
 
@@ -486,47 +422,29 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-constructor TRandom64XOS128.Create;
-begin
-     Create( GetTime64,
-             GetTime64 );
-end;
-
-constructor TRandom64XOS128.Create( const Random_:IRandom );
-begin
-     Create( Random_.GetRand64,
-             Random_.GetRand64 );
-end;
-
-constructor TRandom64XOS128.Create( const SeedX_,SeedY_:Int64u );
-begin
-     inherited Create;
-
-     _State.X := SeedX_;
-     _State.Y := SeedY_;
-end;
-
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandom64XOS128.NextState;
+procedure TRandom64XOS128.CalcNextState;
 var
    S :TInt64u2D;
 begin
      S := _State;
 
-     S.Y := S.Y xor S.X;
+     with S do
+     begin
+          Y := Y xor X;
 
-     _State.X := Rot( S.X, 24 ) xor S.Y xor ( S.Y shl 16 );  // a, b
-     _State.Y := Rot( S.Y, 37 );                             // c
+          _State.X := Rot( X, 24 ) xor Y xor ( Y shl 16 );  // a, b
+          _State.Y := Rot( Y, 37 );                         // c
+     end;
 end;
 
 //------------------------------------------------------------------------------
 
 procedure TRandom64XOS128.NextState64;
 const
-     JUMP :array [ 0..2-1 ] of Int64u = ( $df900294d8f554a5, $170865df4b3201fc );
+     JUMP :array [ 0..2-1 ] of Int64u = ( $df900294d8f554a5,
+                                          $170865df4b3201fc );
 var
    S :TInt64u2D;
    I, B :Int64s;
@@ -539,54 +457,61 @@ begin
           begin
                if JUMP[ I ] and ( 1 shl B ) = 1 then
                begin
-                    S.X := S.X xor _State.X;
-                    S.Y := S.Y xor _State.Y;
+                    with S do
+                    begin
+                         X := X xor _State.X;
+                         Y := Y xor _State.Y;
+                    end;
                end;
 
-               NextState;
+               CalcNextState;
           end;
      end;
 
      _State := S;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS128p
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-/////////////////////////////////////////////////////////////////////// メソッド
+constructor TRandom64XOS128.Create( const Random_:IRandom );
+begin
+     Create( TInt64u2D.Create( Random_.GetRandInt64u,
+                               Random_.GetRandInt64u ) );
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS128p
 
 { http://xoshiro.di.unimi.it/xoroshiro128plus.c }
 
-function TRandom64XOS128p.GetRand64 :Int64u;
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+/////////////////////////////////////////////////////////////////////// メソッド
+
+function TRandom64XOS128p.CalcRand64 :Int64u;
 begin
 	   with _State do Result := X + Y;
-
-     NextState;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS128ss
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS128ss
+
+{ http://xoshiro.di.unimi.it/xoroshiro128starstar.c }
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
 /////////////////////////////////////////////////////////////////////// メソッド
 
-{ http://xoshiro.di.unimi.it/xoroshiro128starstar.c }
-
-function TRandom64XOS128ss.GetRand64 :Int64u;
+function TRandom64XOS128ss.CalcRand64 :Int64u;
 begin
-	   with _State do Result := Rot( X * 5, 7 ) * 9;
-
-     NextState;
+	   Result := Rot( _State.X * 5, 7 ) * 9;
 end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS256
 
@@ -594,46 +519,9 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-class constructor TRandom64XOS256.Create;
-var
-   S :TInt64u4D;
-begin
-     inherited;
-
-     GetTimes( S._ );
-
-     _Random := TRandom64XOS256.Create( S );
-end;
-
-constructor TRandom64XOS256.Create;
-begin
-     _SeedCS.Enter;
-
-       with _Random do
-       begin
-            Create( State );  NextState128;
-       end;
-
-     _SeedCS.Leave;
-end;
-
-constructor TRandom64XOS256.Create( const Random_:IRandom );
-var
-   S :TInt64u4D;
-begin
-     S.X := Random_.GetRand64;
-     S.Y := Random_.GetRand64;
-     S.Z := Random_.GetRand64;
-     S.W := Random_.GetRand64;
-
-     Create( S );
-end;
-
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandom64XOS256.NextState;
+procedure TRandom64XOS256.CalcNextState;
 var
    T :Int64u;
 begin
@@ -681,50 +569,56 @@ begin
                     end;
                end;
 
-               NextState;
+               CalcNextState;
           end;
      end;
 
      _State := S;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS256p
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-/////////////////////////////////////////////////////////////////////// メソッド
+constructor TRandom64XOS256.Create( const Random_:IRandom );
+begin
+     Create( TInt64u4D.Create( Random_.GetRandInt64u,
+                               Random_.GetRandInt64u,
+                               Random_.GetRandInt64u,
+                               Random_.GetRandInt64u ) );
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS256p
 
 { http://xoshiro.di.unimi.it/xoshiro256plus.c }
 
-function TRandom64XOS256p.GetRand64 :Int64u;
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+/////////////////////////////////////////////////////////////////////// メソッド
+
+function TRandom64XOS256p.CalcRand64 :Int64u;
 begin
      with _State do Result := X + W;
-
-     NextState;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS256ss
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS256ss
+
+{ http://xoshiro.di.unimi.it/xoshiro256starstar.c }
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
 /////////////////////////////////////////////////////////////////////// メソッド
 
-{ http://xoshiro.di.unimi.it/xoshiro256starstar.c }
-
-function TRandom64XOS256ss.GetRand64 :Int64u;
+function TRandom64XOS256ss.CalcRand64 :Int64u;
 begin
-     with _State do Result := Rot( Y * 5, 7 ) * 9;
-
-     NextState;
+     Result := Rot( _State.Y * 5, 7 ) * 9;
 end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
 
