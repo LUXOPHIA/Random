@@ -336,8 +336,8 @@
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\LUX.D4.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\LUX.D4.V4.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.Xorshift.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.LCG.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.Xorshift.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.Xoshiro.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

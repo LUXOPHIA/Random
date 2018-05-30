@@ -7,37 +7,34 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
   FMX.ListBox, FMX.Objects, FMX.StdCtrls, FMX.Controls.Presentation,
   LUX, LUX.D3, LUX.D4,
-  LUX.Random,
-  LUX.Random.LCG,
-  LUX.Random.Xorshift,
-  LUX.Random.Xoshiro;
+  LUX.Random;
 
 type
   TForm1 = class(TForm)
-    Label1: TLabel;
-    Label2: TLabel;
+    LabelX: TLabel;
+    LabelY: TLabel;
     Image1: TImage;
     Timer1: TTimer;
     Panel1: TPanel;
-      Label3: TLabel;
-      ComboBox1: TComboBox;
-      Label4: TLabel;
-      ComboBox2: TComboBox;
+      LabelS: TLabel;
+      ComboBoxS: TComboBox;
+      LabelR: TLabel;
+      ComboBoxR: TComboBox;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
-    procedure ComboBox1Change(Sender: TObject);
-    procedure ComboBox2Change(Sender: TObject);
+    procedure ComboBoxSChange(Sender: TObject);
+    procedure ComboBoxRChange(Sender: TObject);
   private
     { private 宣言 }
     ///// メソッド
     procedure ShowRandoms;
   public
     { public 宣言 }
-    _ScramblC :CRandom;
-    _GeneratC :CRandom;
-    _Randoms  :TArray2<Double>;
-    _ThreadsN :Integer;
-    _SequensN :Integer;
+    _SeedO  :IRandom;
+    _RandC  :CRandom;
+    _Rands  :TArray2<Double>;
+    _ThresN :Integer;
+    _SequsN :Integer;
   end;
 
 var
@@ -47,7 +44,10 @@ implementation //###############################################################
 
 {$R *.fmx}
 
-uses System.Math, System.Threading;
+uses System.Math, System.Threading,
+     LUX.Random.LCG,
+     LUX.Random.Xorshift,
+     LUX.Random.Xoshiro;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -59,21 +59,21 @@ var
 begin
      with Image1.Bitmap do
      begin
-          SetSize( _SequensN, _ThreadsN );
+          SetSize( _SequsN, _ThresN );
 
           Map( TMapAccess.Write, B );
 
-          TParallel.For( 16, 0, _ThreadsN-1, procedure( Y:Integer )
+          TParallel.For( 16, 0, _ThresN-1, procedure( Y:Integer )
           var
              X :Integer;
              P :PAlphaColor;
              C :Single;
           begin
-               P := B.GetScanline( _ThreadsN-1 - Y );
+               P := B.GetScanline( _ThresN-1 - Y );
 
-               for X := 0 to _SequensN-1 do
+               for X := 0 to _SequsN-1 do
                begin
-                    C := Power( _Randoms[ Y, X ], 1 / 2.2 );
+                    C := Power( _Rands[ Y, X ], 1 / 2.2{Gamma} );
 
                     P^ := TAlphaColorF.Create( C, C, C ).ToAlphaColor;  Inc( P );
                end;
@@ -89,13 +89,13 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-     _ThreadsN := 256;
-     _SequensN := 256;
+     _ThresN := 256;
+     _SequsN := 256;
 
-     SetLength( _Randoms, _ThreadsN, _SequensN );
+     SetLength( _Rands, _ThresN, _SequsN );
 
-     ComboBox1.ItemIndex := 0;
-     ComboBox2.ItemIndex := 0;
+     ComboBoxS.ItemIndex := 0;
+     ComboBoxR.ItemIndex := 0;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -105,12 +105,11 @@ var
    Y, X :Integer;
    R :IRandom;
 begin
-     for Y := 0 to _ThreadsN-1 do
+     for Y := 0 to _ThresN-1 do
      begin
-          if Assigned( _ScramblC ) then R := _GeneratC.Create( _ScramblC.Create )
-                                   else R := _GeneratC.Create;
+          R := _RandC.Create( _SeedO );
 
-          for X := 0 to _SequensN-1 do _Randoms[ Y, X ] := R.Value;
+          for X := 0 to _SequsN-1 do _Rands[ Y, X ] := R.GetRandFlo64s;
      end;
 
      ShowRandoms;
@@ -118,46 +117,46 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TForm1.ComboBox1Change(Sender: TObject);
+procedure TForm1.ComboBoxSChange(Sender: TObject);
 begin
-     case ComboBox1.ItemIndex of
-      00: _ScramblC := nil;
-      01: _ScramblC := TRandomLCG32;       // LCG 32
-      02: _ScramblC := TRandomLCG48;       // LCG 48
-      03: _ScramblC := TRandomLCG64;       // LCG 64
-      04: _ScramblC := TRandomXOR32;       // Xorshift 32
-      05: _ScramblC := TRandomXOR64;       // Xorshift 64
-      06: _ScramblC := TRandomXOR96;       // Xorshift 96
-      07: _ScramblC := TRandomXOR128;      // Xorshift 128
-      08: _ScramblC := TRandom32XOS64s;    // xoroshiro 64*
-      09: _ScramblC := TRandom32XOS64ss;   // xoroshiro 64**
-      10: _ScramblC := TRandom32XOS128p;   // xoshiro128+
-      11: _ScramblC := TRandom32XOS128ss;  // xoshiro128**
-      12: _ScramblC := TRandom64XOS128p;   // xoroshiro128+
-      13: _ScramblC := TRandom64XOS128ss;  // xoroshiro128**
-      14: _ScramblC := TRandom64XOS256p;   // xoshiro256+
-      15: _ScramblC := TRandom64XOS256ss;  // xoshiro256**
+     case ComboBoxS.ItemIndex of
+      00: _SeedO := TRandomZero      .Create;
+      01: _SeedO := TRandomLCG32     .Create;  // LCG 32
+      02: _SeedO := TRandomLCG48     .Create;  // LCG 48
+      03: _SeedO := TRandomLCG64     .Create;  // LCG 64
+      04: _SeedO := TRandomXOR32     .Create;  // Xorshift 32
+      05: _SeedO := TRandomXOR64     .Create;  // Xorshift 64
+      06: _SeedO := TRandomXOR96     .Create;  // Xorshift 96
+      07: _SeedO := TRandomXOR128    .Create;  // Xorshift 128
+      08: _SeedO := TRandom32XOS64s  .Create;  // xoroshiro 64*
+      09: _SeedO := TRandom32XOS64ss .Create;  // xoroshiro 64**
+      10: _SeedO := TRandom32XOS128p .Create;  // xoshiro128+
+      11: _SeedO := TRandom32XOS128ss.Create;  // xoshiro128**
+      12: _SeedO := TRandom64XOS128p .Create;  // xoroshiro128+
+      13: _SeedO := TRandom64XOS128ss.Create;  // xoroshiro128**
+      14: _SeedO := TRandom64XOS256p .Create;  // xoshiro256+
+      15: _SeedO := TRandom64XOS256ss.Create;  // xoshiro256**
      end;
 end;
 
-procedure TForm1.ComboBox2Change(Sender: TObject);
+procedure TForm1.ComboBoxRChange(Sender: TObject);
 begin
-     case ComboBox2.ItemIndex of
-      00: _GeneratC := TRandomLCG32;       // LCG 32
-      01: _GeneratC := TRandomLCG48;       // LCG 48
-      02: _GeneratC := TRandomLCG64;       // LCG 64
-      03: _GeneratC := TRandomXOR32;       // Xorshift 32
-      04: _GeneratC := TRandomXOR64;       // Xorshift 64
-      05: _GeneratC := TRandomXOR96;       // Xorshift 96
-      06: _GeneratC := TRandomXOR128;      // Xorshift 128
-      07: _GeneratC := TRandom32XOS64s;    // xoroshiro 64*
-      08: _GeneratC := TRandom32XOS64ss;   // xoroshiro 64**
-      09: _GeneratC := TRandom32XOS128p;   // xoshiro128+
-      10: _GeneratC := TRandom32XOS128ss;  // xoshiro128**
-      11: _GeneratC := TRandom64XOS128p;   // xoroshiro128+
-      12: _GeneratC := TRandom64XOS128ss;  // xoroshiro128**
-      13: _GeneratC := TRandom64XOS256p;   // xoshiro256+
-      14: _GeneratC := TRandom64XOS256ss;  // xoshiro256**
+     case ComboBoxR.ItemIndex of
+      00: _RandC := TRandomLCG32     ;  // LCG 32
+      01: _RandC := TRandomLCG48     ;  // LCG 48
+      02: _RandC := TRandomLCG64     ;  // LCG 64
+      03: _RandC := TRandomXOR32     ;  // Xorshift 32
+      04: _RandC := TRandomXOR64     ;  // Xorshift 64
+      05: _RandC := TRandomXOR96     ;  // Xorshift 96
+      06: _RandC := TRandomXOR128    ;  // Xorshift 128
+      07: _RandC := TRandom32XOS64s  ;  // xoroshiro 64*
+      08: _RandC := TRandom32XOS64ss ;  // xoroshiro 64**
+      09: _RandC := TRandom32XOS128p ;  // xoshiro128+
+      10: _RandC := TRandom32XOS128ss;  // xoshiro128**
+      11: _RandC := TRandom64XOS128p ;  // xoroshiro128+
+      12: _RandC := TRandom64XOS128ss;  // xoroshiro128**
+      13: _RandC := TRandom64XOS256p ;  // xoshiro256+
+      14: _RandC := TRandom64XOS256ss;  // xoshiro256**
      end;
 end;
 

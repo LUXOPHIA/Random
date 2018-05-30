@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   Caption = 'Random'
   ClientHeight = 552
-  ClientWidth = 662
+  ClientWidth = 672
   Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
@@ -14,12 +14,12 @@ object Form1: TForm1
     Align = Right
     Margins.Left = -10.000000000000000000
     Position.X = 542.000000000000000000
-    Size.Width = 120.000000000000000000
+    Size.Width = 130.000000000000000000
     Size.Height = 552.000000000000000000
     Size.PlatformDefault = False
     StyleLookup = 'pushpanel'
     TabOrder = 0
-    object ComboBox1: TComboBox
+    object ComboBoxS: TComboBox
       Items.Strings = (
         ''
         'LCG 32'
@@ -39,13 +39,13 @@ object Form1: TForm1
         'xoshiro256**')
       Position.X = 10.000000000000000000
       Position.Y = 35.000000000000000000
-      Size.Width = 100.000000000000000000
+      Size.Width = 110.000000000000000000
       Size.Height = 25.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
-      OnChange = ComboBox1Change
+      OnChange = ComboBoxSChange
     end
-    object ComboBox2: TComboBox
+    object ComboBoxR: TComboBox
       Items.Strings = (
         'LCG 32'
         'LCG 48'
@@ -64,32 +64,32 @@ object Form1: TForm1
         'xoshiro256**')
       Position.X = 10.000000000000000000
       Position.Y = 95.000000000000000000
-      Size.Width = 100.000000000000000000
+      Size.Width = 110.000000000000000000
       Size.Height = 25.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 0
-      OnChange = ComboBox2Change
+      OnChange = ComboBoxRChange
     end
-    object Label3: TLabel
+    object LabelS: TLabel
       Position.X = 10.000000000000000000
       Position.Y = 10.000000000000000000
-      Size.Width = 100.000000000000000000
+      Size.Width = 110.000000000000000000
       Size.Height = 20.000000000000000000
       Size.PlatformDefault = False
       Text = 'Seed Method :'
       TabOrder = 3
     end
-    object Label4: TLabel
+    object LabelR: TLabel
       Position.X = 10.000000000000000000
       Position.Y = 70.000000000000000000
-      Size.Width = 100.000000000000000000
+      Size.Width = 110.000000000000000000
       Size.Height = 20.000000000000000000
       Size.PlatformDefault = False
       Text = 'Rand Method :'
       TabOrder = 2
     end
   end
-  object Label2: TLabel
+  object LabelY: TLabel
     Position.X = 5.000000000000000000
     Position.Y = 85.000000000000000000
     RotationAngle = -90.000000000000000000
@@ -102,7 +102,7 @@ object Form1: TForm1
     Text = #8592' Thread'
     TabOrder = 1
   end
-  object Label1: TLabel
+  object LabelX: TLabel
     Position.X = 30.000000000000000000
     Position.Y = 5.000000000000000000
     Size.Width = 70.000000000000000000
