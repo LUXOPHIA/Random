@@ -7,6 +7,16 @@ uses System.SyncObjs,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
+     IRandom                    = interface;
+       IRandom<_TState_:record> = interface;
+         IRandomZero            = interface;
+
+     TRandom                    = class;
+       TRandom<_TState_:record> = class;
+         TRandomZero            = class;
+
+     ///////////////////////////////////////////////////////////////////////////
+
      CRandom = class of TRandom;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
@@ -20,41 +30,50 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      {protected}
      {public}
        ///// メソッド
-       procedure NextState;
-       function GetRand32 :Int32u;
-       function GetRand64 :UInt64;
-       function Value :Double;
+       procedure GoNextState;
+       procedure GetRand( out Rand_:Int32u ); overload;
+       procedure GetRand( out Rand_:Int64u ); overload;
+       procedure GetRand( out Rand_:Flo32s ); overload;
+       procedure GetRand( out Rand_:Flo64s ); overload;
+       function GetRandInt32u :Int32u;
+       function GetRandInt64u :Int64u;
+       function GetRandFlo32s :Single;
+       function GetRandFlo64s :Double;
      end;
 
      //-------------------------------------------------------------------------
 
      TRandom = class( TInterfacedObject, IRandom )
      protected class var
-       _Time64 :Int64u;
-       _TimeCS :TCriticalSection;
-       _SeedCS :TCriticalSection;
+       _Zero :IRandomZero;
      private
      protected
+       _SeedCS :TCriticalSection;
+       ///// メソッド
+       procedure CalcNextState; virtual; abstract;
+       function CalcRand32 :Int32u; virtual;
+       function CalcRand64 :Int64u; virtual;
      public
        class constructor Create;
        constructor Create; overload; virtual;
        constructor Create( const Random_:IRandom ); overload; virtual; abstract;
-       class destructor Destroy;
+       destructor Destroy; override;
        ///// メソッド
-       class function GetTime32 :Int32u; virtual;
-       class function GetTime64 :Int64u; virtual;
-       class procedure GetTimes( out Times_:array of Int32u ); overload; virtual;
-       class procedure GetTimes( out Times_:array of Int64u ); overload; virtual;
-       procedure NextState; virtual; abstract;
-       function GetRand32 :Int32u; virtual;
-       function GetRand64 :Int64u; virtual;
-       function Value :Double; virtual; abstract;  // 0 <= Value < 1
+       procedure GoNextState;
+       procedure GetRand( out Rand_:Int32u ); overload;  // 0 <= Value < 4,294,967,296              = $1,0000,0000           = 2^32
+       procedure GetRand( out Rand_:Int64u ); overload;  // 0 <= Value < 18,446,744,073,709,551,616 = $1,0000,0000,0000,0000 = 2^64
+       procedure GetRand( out Rand_:Flo32s ); overload;  // 0 <= Value < 1
+       procedure GetRand( out Rand_:Flo64s ); overload;  // 0 <= Value < 1
+       function GetRandInt32u :Int32u;                   // 0 <= Value < 4,294,967,296              = $1,0000,0000           = 2^32
+       function GetRandInt64u :Int64u;                   // 0 <= Value < 18,446,744,073,709,551,616 = $1,0000,0000,0000,0000 = 2^64
+       function GetRandFlo32s :Single;                   // 0 <= Value < 1
+       function GetRandFlo64s :Double;                   // 0 <= Value < 1
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom<_TState_>
 
      IRandom<_TState_:record> = interface( IRandom )
-     ['{FF14FAF6-6AF9-488B-A6B2-570921BC7547}']
+     ['{BF700E87-C812-4802-9470-4922D1653C72}']
      {protected}
        ///// アクセス
        function GetState :_TState_;
@@ -62,6 +81,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      {public}
        ///// プロパティ
        property State :_TState_ read GetState write SetState;
+       ///// メソッド
+       procedure GetSeed( out Rand_:_TState_ ); overload;
+       function GetSeed :_TState_; overload;
      end;
 
      //-------------------------------------------------------------------------
@@ -74,9 +96,39 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function GetState :_TState_;
        procedure SetState( const State_:_TState_ );
      public
+       constructor Create; overload; override;
+       constructor CreateFromSeed( const Random_:IRandom<_TState_> );
        constructor Create( const State_:_TState_ ); overload; virtual;
        ///// プロパティ
        property State :_TState_ read GetState write SetState;
+       ///// メソッド
+       procedure GetSeed( out Rand_:_TState_ ); overload;
+       function GetSeed :_TState_; overload;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomZero
+
+     IRandomZero = interface( IRandom<Int64u> )
+     ['{38D34A14-0D1E-466C-A969-13BDA7BB0E56}']
+     {protected}
+     {public}
+     end;
+
+     //-------------------------------------------------------------------------
+
+     TRandomZero = class( TRandom<Int64u>, IRandomZero )
+     protected class var
+       _Time64 :Int64u;
+       _TimeCS :TCriticalSection;
+     private
+     protected
+       ///// メソッド
+       procedure CalcNextState; override;
+       function CalcRand64 :Int64u; override;
+     public
+       class constructor Create;
+       constructor Create( const Random_:IRandom ); overload; override;
+       class destructor Destroy;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -85,7 +137,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
 
-function GetClockCount :Int64u;
+function GetTimeCount :Int64u;
 
 implementation //############################################################### ■
 
@@ -108,86 +160,104 @@ uses System.SysUtils
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
+/////////////////////////////////////////////////////////////////////// メソッド
+
+function TRandom.CalcRand32 :Int32u;
+begin
+     Result := CalcRand64 and $FFFFFFFF{= 2^32-1 };
+end;
+
+function TRandom.CalcRand64 :Int64u;
+begin
+     Result := GetRandInt32u;  CalcNextState;
+
+     Result := ( Result shl 32 ) or CalcRand32;
+end;
+
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 class constructor TRandom.Create;
 begin
      inherited;
 
-     _TimeCS := TCriticalSection.Create;
-     _SeedCS := TCriticalSection.Create;
-
-     _Time64 := GetClockCount;
+     _Zero := TRandomZero.Create( nil );
 end;
 
 constructor TRandom.Create;
 begin
      inherited;
 
+     _SeedCS := TCriticalSection.Create;
 end;
 
-class destructor TRandom.Destroy;
+destructor TRandom.Destroy;
 begin
-     _TimeCS.DisposeOf;
      _SeedCS.DisposeOf;
 
      inherited;
 end;
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////// メソッド
 
-class function TRandom.GetTime32 :Int32u;
+procedure TRandom.GoNextState;
 begin
-     Result := GetTime64;
-end;
+     _SeedCS.Enter;
 
-class function TRandom.GetTime64 :Int64u;
-begin
-     _TimeCS.Enter;
+       CalcNextState;
 
-       Result := _Time64;  Inc( _Time64 );
-
-     _TimeCS.Leave;
-end;
-
-class procedure TRandom.GetTimes( out Times_:array of Int32u );
-var
-   I :Int32s;
-begin
-     _TimeCS.Enter;
-
-       for I := 0 to High( Times_ ) do
-       begin
-            Times_[ I ] := _Time64;  Inc( _Time64 );
-       end;
-
-     _TimeCS.Leave;
-end;
-
-class procedure TRandom.GetTimes( out Times_:array of Int64u );
-var
-   I :Int32s;
-begin
-     _TimeCS.Enter;
-
-       for I := 0 to High( Times_ ) do
-       begin
-            Times_[ I ] := _Time64;  Inc( _Time64 );
-       end;
-
-     _TimeCS.Leave;
+     _SeedCS.Leave;
 end;
 
 //------------------------------------------------------------------------------
 
-function TRandom.GetRand32 :Int32u;
+procedure TRandom.GetRand( out Rand_:Int32u );
 begin
-     Result := GetRand64 shr 32;
+     _SeedCS.Enter;
+
+       Rand_ := CalcRand32;  CalcNextState;
+
+     _SeedCS.Leave;
 end;
 
-function TRandom.GetRand64 :Int64u;
+procedure TRandom.GetRand( out Rand_:Int64u );
 begin
-     Result := ( GetRand32 shl 32 ) or GetRand32;
+     _SeedCS.Enter;
+
+       Rand_ := CalcRand64;  CalcNextState;
+
+     _SeedCS.Leave;
+end;
+
+procedure TRandom.GetRand( out Rand_:Flo32s );
+begin
+     Rand_ := GetRandInt32u / 4294967296.0{= 2^32 };
+end;
+
+procedure TRandom.GetRand( out Rand_:Flo64s );
+begin
+     Rand_ := GetRandInt64u / 18446744073709551616.0{= 2^64 };
+end;
+
+//------------------------------------------------------------------------------
+
+function TRandom.GetRandInt32u :Int32u;
+begin
+     GetRand( Result );
+end;
+
+function TRandom.GetRandInt64u :Int64u;
+begin
+     GetRand( Result );
+end;
+
+function TRandom.GetRandFlo32s :Single;
+begin
+     GetRand( Result );
+end;
+
+function TRandom.GetRandFlo64s :Double;
+begin
+     GetRand( Result );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom<_TState_>
@@ -210,6 +280,16 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
+constructor TRandom<_TState_>.Create;
+begin
+     Create( _Zero );
+end;
+
+constructor TRandom<_TState_>.CreateFromSeed( const Random_:IRandom<_TState_> );
+begin
+     Create( Random_.GetSeed );
+end;
+
 constructor TRandom<_TState_>.Create( const State_:_TState_ );
 begin
      inherited Create;
@@ -217,9 +297,70 @@ begin
      _State := State_;
 end;
 
+/////////////////////////////////////////////////////////////////////// メソッド
+
+procedure TRandom<_TState_>.GetSeed( out Rand_:_TState_ );
+begin
+     _SeedCS.Enter;
+
+       Rand_ := _State;  CalcNextState;
+
+     _SeedCS.Leave;
+end;
+
+function TRandom<_TState_>.GetSeed :_TState_;
+begin
+     GetSeed( Result );
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomZero
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+/////////////////////////////////////////////////////////////////////// メソッド
+
+procedure TRandomZero.CalcNextState;
+begin
+     Inc( _State );
+end;
+
+function TRandomZero.CalcRand64 :Int64u;
+begin
+     Result := _State;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+class constructor TRandomZero.Create;
+begin
+     inherited;
+
+     _TimeCS := TCriticalSection.Create;
+
+     _Time64 := GetTimeCount;
+end;
+
+constructor TRandomZero.Create( const Random_:IRandom );
+begin
+     _TimeCS.Enter;
+
+       Create( _Time64 );  Inc( _Time64 );
+
+     _TimeCS.Leave;
+end;
+
+class destructor TRandomZero.Destroy;
+begin
+     _TimeCS.DisposeOf;
+
+     inherited;
+end;
+
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
 
-function GetClockCount :Int64u;
+function GetTimeCount :Int64u;
 {$IFDEF MSWINDOWS }
 var
    Counter :Int64;
