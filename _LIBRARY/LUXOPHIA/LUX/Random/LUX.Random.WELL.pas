@@ -1390,13 +1390,13 @@ end;
 
 //function TRandomWEL44497a.MAT2( const a:Int32u; const v:Int32u ) :Int32u;
 //begin
-//     if v and 1 = 0 then Result := ( v shr 1 ) xor a
-//                    else Result :=   v shr 1;
+//     if v and 1 <> 0 then Result := ( v shr 1 ) xor a
+//                     else Result :=   v shr 1;
 //end;
 
 //function TRandomWEL44497a.MAT3POS( const t:Int32u; const v:Int32u ) :Int32u;
 //begin
-//     Result := v shr t;
+//     Result := v shr +t;
 //end;
 
 function TRandomWEL44497a.MAT3NEG( const t:Int32s; const v:Int32u ) :Int32u;
@@ -1406,7 +1406,7 @@ end;
 
 //function TRandomWEL44497a.MAT4POS( const t:Int32u; const b,v:Int32u ) :Int32u;
 //begin
-//     Result := v shl -t;
+//     Result := v xor ( ( v shr +t ) and b );
 //end;
 
 //function TRandomWEL44497a.MAT4NEG( const t:Int32s; const b,v:Int32u ) :Int32u;
@@ -1416,8 +1416,8 @@ end;
 
 function TRandomWEL44497a.MAT5( const r:Int32s; const a,ds,dt,v:Int32u ) :Int32u;
 begin
-     if v and dt = 0 then Result := ( ( ( v shl r ) xor ( v shr ( _Seed.W - r ) ) ) and ds ) xor a
-                     else Result :=   ( ( v shl r ) xor ( v shr ( _Seed.W - r ) ) ) and ds;
+     if v and dt <> 0 then Result := ( ( ( v shl r ) xor ( v shr ( _Seed.W - r ) ) ) and ds ) xor a
+                      else Result :=   ( ( v shl r ) xor ( v shr ( _Seed.W - r ) ) ) and ds;
 end;
 
 //function TRandomWEL44497a.MAT7( const v:Int32u ) :Int32u;
