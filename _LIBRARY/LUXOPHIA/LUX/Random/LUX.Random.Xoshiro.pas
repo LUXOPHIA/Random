@@ -82,7 +82,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       function CalcRand32 :Int32u; override;
+       function CalcRandInt32u :Int32u; override;
      public
      end;
 
@@ -92,7 +92,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       function CalcRand32 :Int32u; override;
+       function CalcRandInt32u :Int32u; override;
      public
      end;
 
@@ -114,7 +114,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       function CalcRand32 :Int32u; override;
+       function CalcRandInt32u :Int32u; override;
      public
      end;
 
@@ -124,7 +124,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       function CalcRand32 :Int32u; override;
+       function CalcRandInt32u :Int32u; override;
      public
      end;
 
@@ -146,7 +146,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       function CalcRand64 :Int64u; override;
+       function CalcRandInt64u :Int64u; override;
      public
      end;
 
@@ -156,7 +156,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       function CalcRand64 :Int64u; override;
+       function CalcRandInt64u :Int64u; override;
      public
      end;
 
@@ -178,7 +178,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       function CalcRand64 :Int64u; override;
+       function CalcRandInt64u :Int64u; override;
      public
      end;
 
@@ -188,7 +188,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       function CalcRand64 :Int64u; override;
+       function CalcRandInt64u :Int64u; override;
      public
      end;
 
@@ -285,7 +285,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandom32XOS64s.CalcRand32 :Int32u;
+function TRandom32XOS64s.CalcRandInt32u :Int32u;
 begin
 	   Result := _Seed.X * $9E3779BB;
 end;
@@ -302,7 +302,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandom32XOS64ss.CalcRand32 :Int32u;
+function TRandom32XOS64ss.CalcRandInt32u :Int32u;
 begin
 	   Result := Rot( _Seed.X * $9E3779BB, 5 ) * 5;
 end;
@@ -392,7 +392,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandom32XOS128p.CalcRand32 :UInt32;
+function TRandom32XOS128p.CalcRandInt32u :UInt32;
 begin
      with _Seed do Result := X + W;
 end;
@@ -409,7 +409,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandom32XOS128ss.CalcRand32 :UInt32;
+function TRandom32XOS128ss.CalcRandInt32u :UInt32;
 begin
      Result := Rot( _Seed.X * 5, 7 ) * 9;
 end;
@@ -489,7 +489,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandom64XOS128p.CalcRand64 :Int64u;
+function TRandom64XOS128p.CalcRandInt64u :Int64u;
 begin
 	   with _Seed do Result := X + Y;
 end;
@@ -506,7 +506,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandom64XOS128ss.CalcRand64 :Int64u;
+function TRandom64XOS128ss.CalcRandInt64u :Int64u;
 begin
 	   Result := Rot( _Seed.X * 5, 7 ) * 9;
 end;
@@ -596,7 +596,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandom64XOS256p.CalcRand64 :Int64u;
+function TRandom64XOS256p.CalcRandInt64u :Int64u;
 begin
      with _Seed do Result := X + W;
 end;
@@ -613,7 +613,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandom64XOS256ss.CalcRand64 :Int64u;
+function TRandom64XOS256ss.CalcRandInt64u :Int64u;
 begin
      Result := Rot( _Seed.Y * 5, 7 ) * 9;
 end;

@@ -51,8 +51,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _SeedCS :TCriticalSection;
        ///// メソッド
        procedure CalcNextSeed; virtual; abstract;
-       function CalcRand32 :Int32u; virtual;
-       function CalcRand64 :Int64u; virtual;
+       function CalcRandInt32u :Int32u; virtual;
+       function CalcRandInt64u :Int64u; virtual;
      public
        class constructor Create;
        constructor Create; overload; virtual;
@@ -126,7 +126,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        ///// メソッド
        procedure CalcNextSeed; override;
-       function CalcRand64 :Int64u; override;
+       function CalcRandInt64u :Int64u; override;
      public
        class constructor Create;
        constructor Create; overload; override;
@@ -165,16 +165,16 @@ uses System.SysUtils
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandom.CalcRand32 :Int32u;
+function TRandom.CalcRandInt32u :Int32u;
 begin
-     Result := CalcRand64 and $FFFFFFFF{= 2^32-1 };
+     Result := CalcRandInt64u and $FFFFFFFF{= 2^32-1 };
 end;
 
-function TRandom.CalcRand64 :Int64u;
+function TRandom.CalcRandInt64u :Int64u;
 begin
-     Result := CalcRand32;  CalcNextSeed;
+     Result := CalcRandInt32u;  CalcNextSeed;
 
-     Result := ( Result shl 32 ) or CalcRand32;
+     Result := ( Result shl 32 ) or CalcRandInt32u;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -217,7 +217,7 @@ procedure TRandom.DrawRand( out Rand_:Int32u );
 begin
      _SeedCS.Enter;
 
-       Rand_ := CalcRand32;  CalcNextSeed;
+       Rand_ := CalcRandInt32u;  CalcNextSeed;
 
      _SeedCS.Leave;
 end;
@@ -226,7 +226,7 @@ procedure TRandom.DrawRand( out Rand_:Int64u );
 begin
      _SeedCS.Enter;
 
-       Rand_ := CalcRand64;  CalcNextSeed;
+       Rand_ := CalcRandInt64u;  CalcNextSeed;
 
      _SeedCS.Leave;
 end;
@@ -336,7 +336,7 @@ begin
      Inc( _Seed );
 end;
 
-function TRandomZero.CalcRand64 :Int64u;
+function TRandomZero.CalcRandInt64u :Int64u;
 begin
      Result := _Seed;
 end;

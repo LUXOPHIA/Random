@@ -34,7 +34,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        ///// メソッド
        procedure CalcNextSeed; override;
-       function CalcRand32 :Int32u; override;
+       function CalcRandInt32u :Int32u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
@@ -46,7 +46,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        ///// メソッド
        procedure CalcNextSeed; override;
-       function CalcRand32 :Int32u; override;
+       function CalcRandInt32u :Int32u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
@@ -58,7 +58,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        ///// メソッド
        procedure CalcNextSeed; override;
-       function CalcRand32 :Int32u; override;
+       function CalcRandInt32u :Int32u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
@@ -70,7 +70,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        ///// メソッド
        procedure CalcNextSeed; override;
-       function CalcRand32 :Int32u; override;
+       function CalcRandInt32u :Int32u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
@@ -112,7 +112,7 @@ begin
      _Seed := _Seed xor ( _Seed shl 15 );
 end;
 
-function TRandomXOR32.CalcRand32 :Int32u;
+function TRandomXOR32.CalcRandInt32u :Int32u;
 begin
      Result := _Seed;
 end;
@@ -139,7 +139,7 @@ begin
      _Seed := _Seed xor ( _Seed shl 17 );
 end;
 
-function TRandomXOR64.CalcRand32 :Int32u;
+function TRandomXOR64.CalcRandInt32u :Int32u;
 begin
      Result := _Seed;
 end;
@@ -173,7 +173,7 @@ begin
      end;
 end;
 
-function TRandomXOR96.CalcRand32 :Int32u;
+function TRandomXOR96.CalcRandInt32u :Int32u;
 begin
      Result := _Seed.Z;
 end;
@@ -210,7 +210,7 @@ begin
      end;
 end;
 
-function TRandomXOR128.CalcRand32 :Int32u;
+function TRandomXOR128.CalcRandInt32u :Int32u;
 begin
      Result := _Seed.W;
 end;

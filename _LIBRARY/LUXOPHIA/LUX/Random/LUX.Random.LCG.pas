@@ -34,7 +34,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        ///// メソッド
        procedure CalcNextSeed; override;
-       function CalcRand32 :Int32u; override;
+       function CalcRandInt32u :Int32u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
@@ -46,14 +46,14 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        ///// メソッド
        procedure CalcNextSeed; override;
-       function CalcRand32 :Int32u; override;
-       function CalcRand48 :Int64u;
-       function CalcRand64 :Int64u; override;
+       function CalcRandInt32u :Int32u; override;
+       function CalcRandInt48u :Int64u;
+       function CalcRandInt64u :Int64u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
        constructor Create( const Seed_:Int64u ); overload; override;
        ///// メソッド
-       function DrawRand48 :Int64u;
+       function DrawRandInt48u :Int64u;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG64
@@ -63,8 +63,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        ///// メソッド
        procedure CalcNextSeed; override;
-       function CalcRand32 :Int32u; override;
-       function CalcRand64 :Int64u; override;
+       function CalcRandInt32u :Int32u; override;
+       function CalcRandInt64u :Int64u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
@@ -150,7 +150,7 @@ begin
      _Seed := A * _Seed + C;
 end;
 
-function TRandomLCG32.CalcRand32 :Int32u;
+function TRandomLCG32.CalcRandInt32u :Int32u;
 begin
      Result := _Seed;
 end;
@@ -204,21 +204,21 @@ begin
      _Seed := ( A * _Seed + C ) and M1;
 end;
 
-function TRandomLCG48.CalcRand32 :Int32u;
+function TRandomLCG48.CalcRandInt32u :Int32u;
 begin
-     Result := CalcRand48 shr 16;
+     Result := CalcRandInt48u shr 16;
 end;
 
-function TRandomLCG48.CalcRand48 :Int64u;
+function TRandomLCG48.CalcRandInt48u :Int64u;
 begin
      Result := _Seed;
 end;
 
-function TRandomLCG48.CalcRand64 :Int64u;
+function TRandomLCG48.CalcRandInt64u :Int64u;
 begin
-     Result := CalcRand48 shr 16;  CalcNextSeed;
+     Result := CalcRandInt48u shr 16;  CalcNextSeed;
 
-     Result := ( Result shl 32 ) or ( CalcRand48 shr 16 );
+     Result := ( Result shl 32 ) or ( CalcRandInt48u shr 16 );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -235,11 +235,11 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomLCG48.DrawRand48 :Int64u;
+function TRandomLCG48.DrawRandInt48u :Int64u;
 begin
      _SeedCS.Enter;
 
-       Result := CalcRand48;  CalcNextSeed;
+       Result := CalcRandInt48u;  CalcNextSeed;
 
      _SeedCS.Leave;
 end;
@@ -285,12 +285,12 @@ begin
      _Seed := A * _Seed + C;
 end;
 
-function TRandomLCG64.CalcRand32 :Int32u;
+function TRandomLCG64.CalcRandInt32u :Int32u;
 begin
      Result := DrawRandInt64u shr 32;
 end;
 
-function TRandomLCG64.CalcRand64 :Int64u;
+function TRandomLCG64.CalcRandInt64u :Int64u;
 begin
      Result := _Seed;
 end;
