@@ -103,7 +103,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        ///// メソッド
        procedure CalcNextSeed; override;
-       procedure NextSeed64;
+       procedure CalcNextSeed64;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
@@ -135,7 +135,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        ///// メソッド
        procedure CalcNextSeed; override;
-       procedure NextSeed64;
+       procedure CalcNextSeed64;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
@@ -167,7 +167,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        ///// メソッド
        procedure CalcNextSeed; override;
-       procedure NextSeed128;
+       procedure CalcNextSeed128;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
@@ -338,7 +338,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TRandom32XOS128.NextSeed64;
+procedure TRandom32XOS128.CalcNextSeed64;
 const
      JUMP :array [ 0..4-1 ] of Int32u = ( $8764000b,
                                           $f542d2d3,
@@ -441,7 +441,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TRandom64XOS128.NextSeed64;
+procedure TRandom64XOS128.CalcNextSeed64;
 const
      JUMP :array [ 0..2-1 ] of Int64u = ( $df900294d8f554a5,
                                           $170865df4b3201fc );
@@ -542,7 +542,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TRandom64XOS256.NextSeed128;
+procedure TRandom64XOS256.CalcNextSeed128;
 const
      JUMP :array [ 0..4-1 ] of Int64u = ( $180ec6d33cfd0aba,
                                           $d5a61266f0c9392c,
