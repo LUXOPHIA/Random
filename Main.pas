@@ -109,7 +109,7 @@ begin
      begin
           R := _RandC.Create( _SeedO );
 
-          for X := 0 to _SequsN-1 do _Rands[ Y, X ] := R.GetRandFlo64s;
+          for X := 0 to _SequsN-1 do _Rands[ Y, X ] := R.DrawRandFlo64s;
      end;
 
      ShowRandoms;
