@@ -11,9 +11,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR<_TState_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR<_TSeed_>
 
-     IRandomXOR<_TState_:record> = interface( IRandom<_TState_> )
+     IRandomXOR<_TSeed_:record> = interface( IRandom<_TSeed_> )
      ['{FDD69CB5-D221-4FDD-89C9-BB3CF352BD74}']
      {protected}
      {public}
@@ -21,7 +21,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TRandomXOR<_TState_:record> = class( TRandom<_TState_>, IRandomXOR<_TState_> )
+     TRandomXOR<_TSeed_:record> = class( TRandom<_TSeed_>, IRandomXOR<_TSeed_> )
      private
      protected
      public
@@ -33,7 +33,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure CalcNextState; override;
+       procedure CalcNextSeed; override;
        function CalcRand32 :Int32u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
@@ -45,7 +45,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure CalcNextState; override;
+       procedure CalcNextSeed; override;
        function CalcRand32 :Int32u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
@@ -57,7 +57,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure CalcNextState; override;
+       procedure CalcNextSeed; override;
        function CalcRand32 :Int32u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
@@ -69,7 +69,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure CalcNextState; override;
+       procedure CalcNextSeed; override;
        function CalcRand32 :Int32u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
@@ -89,7 +89,7 @@ uses System.SysUtils, System.SyncObjs;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR<_TState_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOR<_TSeed_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -105,16 +105,16 @@ uses System.SysUtils, System.SyncObjs;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandomXOR32.CalcNextState;
+procedure TRandomXOR32.CalcNextSeed;
 begin
-     _State := _State xor ( _State shl 13 );
-     _State := _State xor ( _State shr 17 );
-     _State := _State xor ( _State shl 15 );
+     _Seed := _Seed xor ( _Seed shl 13 );
+     _Seed := _Seed xor ( _Seed shr 17 );
+     _Seed := _Seed xor ( _Seed shl 15 );
 end;
 
 function TRandomXOR32.CalcRand32 :Int32u;
 begin
-     Result := _State;
+     Result := _Seed;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -132,16 +132,16 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandomXOR64.CalcNextState;
+procedure TRandomXOR64.CalcNextSeed;
 begin
-     _State := _State xor ( _State shl 13 );
-     _State := _State xor ( _State shr  7 );
-     _State := _State xor ( _State shl 17 );
+     _Seed := _Seed xor ( _Seed shl 13 );
+     _Seed := _Seed xor ( _Seed shr  7 );
+     _Seed := _Seed xor ( _Seed shl 17 );
 end;
 
 function TRandomXOR64.CalcRand32 :Int32u;
 begin
-     Result := _State;
+     Result := _Seed;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -159,11 +159,11 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandomXOR96.CalcNextState;
+procedure TRandomXOR96.CalcNextSeed;
 var
    T :Int32u;
 begin
-     with _State do
+     with _Seed do
      begin
           T := ( X xor ( X shl  3 ) )
            xor ( Y xor ( Y shr 19 ) )
@@ -175,7 +175,7 @@ end;
 
 function TRandomXOR96.CalcRand32 :Int32u;
 begin
-     Result := _State.Z;
+     Result := _Seed.Z;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -195,11 +195,11 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandomXOR128.CalcNextState;
+procedure TRandomXOR128.CalcNextSeed;
 var
    T :Int32u;
 begin
-     with _State do
+     with _Seed do
      begin
           T := X xor ( X shl 11 );
 
@@ -212,7 +212,7 @@ end;
 
 function TRandomXOR128.CalcRand32 :Int32u;
 begin
-     Result := _State.W;
+     Result := _Seed.W;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public

@@ -7,13 +7,13 @@ uses System.SyncObjs,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
-     IRandom                    = interface;
-       IRandom<_TState_:record> = interface;
-         IRandomZero            = interface;
+     IRandom                   = interface;
+       IRandom<_TSeed_:record> = interface;
+         IRandomZero           = interface;
 
-     TRandom                    = class;
-       TRandom<_TState_:record> = class;
-         TRandomZero            = class;
+     TRandom                   = class;
+       TRandom<_TSeed_:record> = class;
+         TRandomZero           = class;
 
      ///////////////////////////////////////////////////////////////////////////
 
@@ -30,7 +30,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      {protected}
      {public}
        ///// メソッド
-       procedure GoNextState;
+       procedure GoNextSeed;
        procedure DrawRand( out Rand_:Int32u ); overload;
        procedure DrawRand( out Rand_:Int64u ); overload;
        procedure DrawRand( out Rand_:Flo32s ); overload;
@@ -48,9 +48,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Zero :IRandomZero;
      private
      protected
-       _StateCS :TCriticalSection;
+       _SeedCS :TCriticalSection;
        ///// メソッド
-       procedure CalcNextState; virtual; abstract;
+       procedure CalcNextSeed; virtual; abstract;
        function CalcRand32 :Int32u; virtual;
        function CalcRand64 :Int64u; virtual;
      public
@@ -60,7 +60,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor CreateFromRand( const Random_:IRandom ); overload; virtual; abstract;
        destructor Destroy; override;
        ///// メソッド
-       procedure GoNextState;
+       procedure GoNextSeed;
        procedure DrawRand( out Rand_:Int32u ); overload;  // 0 <= Value < 4,294,967,296              = $1,0000,0000           = 2^32
        procedure DrawRand( out Rand_:Int64u ); overload;  // 0 <= Value < 18,446,744,073,709,551,616 = $1,0000,0000,0000,0000 = 2^64
        procedure DrawRand( out Rand_:Flo32s ); overload;  // 0 <= Value < 1
@@ -71,41 +71,41 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function DrawRandFlo64s :Double;                   // 0 <= Value < 1
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom<_TState_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom<_TSeed_>
 
-     IRandom<_TState_:record> = interface( IRandom )
+     IRandom<_TSeed_:record> = interface( IRandom )
      ['{BF700E87-C812-4802-9470-4922D1653C72}']
      {protected}
        ///// アクセス
-       function GetState :_TState_;
-       procedure SetState( const State_:_TState_ );
+       function GetSeed :_TSeed_;
+       procedure SetSeed( const Seed_:_TSeed_ );
      {public}
        ///// プロパティ
-       property State :_TState_ read GetState write SetState;
+       property Seed :_TSeed_ read GetSeed write SetSeed;
        ///// メソッド
-       procedure DrawSeed( out Rand_:_TState_ ); overload;
-       function DrawSeed :_TState_; overload;
+       procedure DrawSeed( out Rand_:_TSeed_ ); overload;
+       function DrawSeed :_TSeed_; overload;
      end;
 
      //-------------------------------------------------------------------------
 
-     TRandom<_TState_:record> = class( TRandom, IRandom<_TState_> )
+     TRandom<_TSeed_:record> = class( TRandom, IRandom<_TSeed_> )
      private
      protected
-       _State :_TState_;
+       _Seed :_TSeed_;
        ///// アクセス
-       function GetState :_TState_;
-       procedure SetState( const State_:_TState_ );
+       function GetSeed :_TSeed_;
+       procedure SetSeed( const Seed_:_TSeed_ );
      public
        constructor Create; overload; override;
        constructor Create( const Random_:IRandom; const _:Byte = 0 ); overload; override;
-       constructor CreateFromSeed( const Random_:IRandom<_TState_> );
-       constructor Create( const State_:_TState_ ); overload; virtual;
+       constructor CreateFromSeed( const Random_:IRandom<_TSeed_> );
+       constructor Create( const Seed_:_TSeed_ ); overload; virtual;
        ///// プロパティ
-       property State :_TState_ read GetState write SetState;
+       property Seed :_TSeed_ read GetSeed write SetSeed;
        ///// メソッド
-       procedure DrawSeed( out Rand_:_TState_ ); overload;
-       function DrawSeed :_TState_; overload;
+       procedure DrawSeed( out Rand_:_TSeed_ ); overload;
+       function DrawSeed :_TSeed_; overload;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomZero
@@ -125,7 +125,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure CalcNextState; override;
+       procedure CalcNextSeed; override;
        function CalcRand64 :Int64u; override;
      public
        class constructor Create;
@@ -172,7 +172,7 @@ end;
 
 function TRandom.CalcRand64 :Int64u;
 begin
-     Result := CalcRand32;  CalcNextState;
+     Result := CalcRand32;  CalcNextSeed;
 
      Result := ( Result shl 32 ) or CalcRand32;
 end;
@@ -190,45 +190,45 @@ constructor TRandom.Create;
 begin
      inherited;
 
-     _StateCS := TCriticalSection.Create;
+     _SeedCS := TCriticalSection.Create;
 end;
 
 destructor TRandom.Destroy;
 begin
-     _StateCS.DisposeOf;
+     _SeedCS.DisposeOf;
 
      inherited;
 end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandom.GoNextState;
+procedure TRandom.GoNextSeed;
 begin
-     _StateCS.Enter;
+     _SeedCS.Enter;
 
-       CalcNextState;
+       CalcNextSeed;
 
-     _StateCS.Leave;
+     _SeedCS.Leave;
 end;
 
 //------------------------------------------------------------------------------
 
 procedure TRandom.DrawRand( out Rand_:Int32u );
 begin
-     _StateCS.Enter;
+     _SeedCS.Enter;
 
-       Rand_ := CalcRand32;  CalcNextState;
+       Rand_ := CalcRand32;  CalcNextSeed;
 
-     _StateCS.Leave;
+     _SeedCS.Leave;
 end;
 
 procedure TRandom.DrawRand( out Rand_:Int64u );
 begin
-     _StateCS.Enter;
+     _SeedCS.Enter;
 
-       Rand_ := CalcRand64;  CalcNextState;
+       Rand_ := CalcRand64;  CalcNextSeed;
 
-     _StateCS.Leave;
+     _SeedCS.Leave;
 end;
 
 procedure TRandom.DrawRand( out Rand_:Flo32s );
@@ -263,7 +263,7 @@ begin
      DrawRand( Result );
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom<_TState_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom<_TSeed_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -271,54 +271,54 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TRandom<_TState_>.GetState :_TState_;
+function TRandom<_TSeed_>.GetSeed :_TSeed_;
 begin
-     Result := _State;
+     Result := _Seed;
 end;
 
-procedure TRandom<_TState_>.SetState( const State_:_TState_ );
+procedure TRandom<_TSeed_>.SetSeed( const Seed_:_TSeed_ );
 begin
-     _State := State_;
+     _Seed := Seed_;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TRandom<_TState_>.Create;
+constructor TRandom<_TSeed_>.Create;
 begin
      Create( _Zero );
 end;
 
 { [dcc64 警告] W1029 パラメータが同じ重複した constructor 'TRandom.CreateFromRand' は C++ からアクセスできません }
-constructor TRandom<_TState_>.Create( const Random_:IRandom; const _:Byte = 0 );
+constructor TRandom<_TSeed_>.Create( const Random_:IRandom; const _:Byte = 0 );
 begin
-     if Random_ is ClassType then CreateFromSeed( Random_ as IRandom<_TState_> )
+     if Random_ is ClassType then CreateFromSeed( Random_ as IRandom<_TSeed_> )
                              else CreateFromRand( Random_ );
 end;
 
-constructor TRandom<_TState_>.CreateFromSeed( const Random_:IRandom<_TState_> );
+constructor TRandom<_TSeed_>.CreateFromSeed( const Random_:IRandom<_TSeed_> );
 begin
      Create( Random_.DrawSeed );
 end;
 
-constructor TRandom<_TState_>.Create( const State_:_TState_ );
+constructor TRandom<_TSeed_>.Create( const Seed_:_TSeed_ );
 begin
      inherited Create;
 
-     _State := State_;
+     _Seed := Seed_;
 end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandom<_TState_>.DrawSeed( out Rand_:_TState_ );
+procedure TRandom<_TSeed_>.DrawSeed( out Rand_:_TSeed_ );
 begin
-     _StateCS.Enter;
+     _SeedCS.Enter;
 
-       Rand_ := _State;  CalcNextState;
+       Rand_ := _Seed;  CalcNextSeed;
 
-     _StateCS.Leave;
+     _SeedCS.Leave;
 end;
 
-function TRandom<_TState_>.DrawSeed :_TState_;
+function TRandom<_TSeed_>.DrawSeed :_TSeed_;
 begin
      DrawSeed( Result );
 end;
@@ -331,14 +331,14 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandomZero.CalcNextState;
+procedure TRandomZero.CalcNextSeed;
 begin
-     Inc( _State );
+     Inc( _Seed );
 end;
 
 function TRandomZero.CalcRand64 :Int64u;
 begin
-     Result := _State;
+     Result := _Seed;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public

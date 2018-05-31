@@ -7,31 +7,31 @@ uses LUX, LUX.D2, LUX.D3, LUX.D4,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
-     IRandomXOS<_TState_:record> = interface;
+     IRandomXOS<_TSeed_:record>     = interface;
 
-     TRandomXOS<_TState_:record>     = class;
-       TRandom32XOS<_TState_:record> = class;
-         TRandom32XOS64              = class;
-           TRandom32XOS64s           = class;
-           TRandom32XOS64ss          = class;
-         TRandom32XOS128             = class;
-           TRandom32XOS128p          = class;
-           TRandom32XOS128ss         = class;
-       TRandom64XOS<_TState_:record> = class;
-         TRandom64XOS128             = class;
-           TRandom64XOS128p          = class;
-           TRandom64XOS128ss         = class;
-         TRandom64XOS256             = class;
-           TRandom64XOS256p          = class;
-           TRandom64XOS256ss         = class;
+     TRandomXOS<_TSeed_:record>     = class;
+       TRandom32XOS<_TSeed_:record> = class;
+         TRandom32XOS64             = class;
+           TRandom32XOS64s          = class;
+           TRandom32XOS64ss         = class;
+         TRandom32XOS128            = class;
+           TRandom32XOS128p         = class;
+           TRandom32XOS128ss        = class;
+       TRandom64XOS<_TSeed_:record> = class;
+         TRandom64XOS128            = class;
+           TRandom64XOS128p         = class;
+           TRandom64XOS128ss        = class;
+         TRandom64XOS256            = class;
+           TRandom64XOS256p         = class;
+           TRandom64XOS256ss        = class;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOS<_TState_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOS<_TSeed_>
 
-     IRandomXOS<_TState_:record> = interface( IRandom<_TState_> )
+     IRandomXOS<_TSeed_:record> = interface( IRandom<_TSeed_> )
      ['{FDD69CB5-D221-4FDD-89C9-BB3CF352BD74}']
      {protected}
      {public}
@@ -39,15 +39,15 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TRandomXOS<_TState_:record> = class( TRandom<_TState_>, IRandomXOS<_TState_> )
+     TRandomXOS<_TSeed_:record> = class( TRandom<_TSeed_>, IRandomXOS<_TSeed_> )
      private
      protected
      public
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS<_TState_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS<_TSeed_>
 
-     TRandom32XOS<_TState_:record> = class( TRandomXOS<_TState_> )
+     TRandom32XOS<_TSeed_:record> = class( TRandomXOS<_TSeed_> )
      private
      protected
        ///// メソッド
@@ -55,9 +55,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS<_TState_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS<_TSeed_>
 
-     TRandom64XOS<_TState_:record> = class( TRandomXOS<_TState_> )
+     TRandom64XOS<_TSeed_:record> = class( TRandomXOS<_TSeed_> )
      private
      protected
        ///// メソッド
@@ -71,7 +71,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure CalcNextState; override;
+       procedure CalcNextSeed; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
@@ -102,8 +102,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure CalcNextState; override;
-       procedure NextState64;
+       procedure CalcNextSeed; override;
+       procedure NextSeed64;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
@@ -134,8 +134,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure CalcNextState; override;
-       procedure NextState64;
+       procedure CalcNextSeed; override;
+       procedure NextSeed64;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
@@ -166,8 +166,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure CalcNextState; override;
-       procedure NextState128;
+       procedure CalcNextSeed; override;
+       procedure NextSeed128;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
@@ -206,7 +206,7 @@ uses System.SysUtils, System.SyncObjs;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOS<_TState_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomXOS<_TSeed_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -214,7 +214,7 @@ uses System.SysUtils, System.SyncObjs;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS<_TState_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS<_TSeed_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -222,14 +222,14 @@ uses System.SysUtils, System.SyncObjs;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandom32XOS<_TState_>.Rot( const X_:Int32u; const K_:Int32s ) :Int32u;
+function TRandom32XOS<_TSeed_>.Rot( const X_:Int32u; const K_:Int32s ) :Int32u;
 begin
      Result := ( X_ shl K_ ) or ( X_ shr ( 32 - K_ ) );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS<_TState_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS<_TSeed_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -237,7 +237,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandom64XOS<_TState_>.Rot( const X_:Int64u; const K_:Int64s ) :Int64u;
+function TRandom64XOS<_TSeed_>.Rot( const X_:Int64u; const K_:Int64s ) :Int64u;
 begin
      Result := ( X_ shl K_ ) or ( X_ shr ( 64 - K_ ) );
 end;
@@ -252,18 +252,18 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandom32XOS64.CalcNextState;
+procedure TRandom32XOS64.CalcNextSeed;
 var
    S :TInt32u2D;
 begin
-     S := _State;
+     S := _Seed;
 
      with S do
      begin
           Y := Y xor X;
 
-          _State.X := Rot( X, 26 ) xor Y xor ( Y shl 9 );  // a, b
-          _State.Y := Rot( Y, 13 );                        // c
+          _Seed.X := Rot( X, 26 ) xor Y xor ( Y shl 9 );  // a, b
+          _Seed.Y := Rot( Y, 13 );                        // c
      end;
 end;
 
@@ -287,7 +287,7 @@ end;
 
 function TRandom32XOS64s.CalcRand32 :Int32u;
 begin
-	   Result := _State.X * $9E3779BB;
+	   Result := _Seed.X * $9E3779BB;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -304,7 +304,7 @@ end;
 
 function TRandom32XOS64ss.CalcRand32 :Int32u;
 begin
-	   Result := Rot( _State.X * $9E3779BB, 5 ) * 5;
+	   Result := Rot( _Seed.X * $9E3779BB, 5 ) * 5;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -317,11 +317,11 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandom32XOS128.CalcNextState;
+procedure TRandom32XOS128.CalcNextSeed;
 var
    T :Int32u;
 begin
-     with _State do
+     with _Seed do
      begin
           T := Y shl 9;
 
@@ -338,7 +338,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TRandom32XOS128.NextState64;
+procedure TRandom32XOS128.NextSeed64;
 const
      JUMP :array [ 0..4-1 ] of Int32u = ( $8764000b,
                                           $f542d2d3,
@@ -358,18 +358,18 @@ begin
                begin
                     with S do
                     begin
-                         X := X xor _State.X;
-                         Y := Y xor _State.Y;
-                         Z := Z xor _State.Z;
-                         W := W xor _State.W;
+                         X := X xor _Seed.X;
+                         Y := Y xor _Seed.Y;
+                         Z := Z xor _Seed.Z;
+                         W := W xor _Seed.W;
                     end;
                end;
 
-               CalcNextState;
+               CalcNextSeed;
           end;
      end;
 
-     _State := S;
+     _Seed := S;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -394,7 +394,7 @@ end;
 
 function TRandom32XOS128p.CalcRand32 :UInt32;
 begin
-     with _State do Result := X + W;
+     with _Seed do Result := X + W;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -411,7 +411,7 @@ end;
 
 function TRandom32XOS128ss.CalcRand32 :UInt32;
 begin
-     Result := Rot( _State.X * 5, 7 ) * 9;
+     Result := Rot( _Seed.X * 5, 7 ) * 9;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -424,24 +424,24 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandom64XOS128.CalcNextState;
+procedure TRandom64XOS128.CalcNextSeed;
 var
    S :TInt64u2D;
 begin
-     S := _State;
+     S := _Seed;
 
      with S do
      begin
           Y := Y xor X;
 
-          _State.X := Rot( X, 24 ) xor Y xor ( Y shl 16 );  // a, b
-          _State.Y := Rot( Y, 37 );                         // c
+          _Seed.X := Rot( X, 24 ) xor Y xor ( Y shl 16 );  // a, b
+          _Seed.Y := Rot( Y, 37 );                         // c
      end;
 end;
 
 //------------------------------------------------------------------------------
 
-procedure TRandom64XOS128.NextState64;
+procedure TRandom64XOS128.NextSeed64;
 const
      JUMP :array [ 0..2-1 ] of Int64u = ( $df900294d8f554a5,
                                           $170865df4b3201fc );
@@ -459,16 +459,16 @@ begin
                begin
                     with S do
                     begin
-                         X := X xor _State.X;
-                         Y := Y xor _State.Y;
+                         X := X xor _Seed.X;
+                         Y := Y xor _Seed.Y;
                     end;
                end;
 
-               CalcNextState;
+               CalcNextSeed;
           end;
      end;
 
-     _State := S;
+     _Seed := S;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -491,7 +491,7 @@ end;
 
 function TRandom64XOS128p.CalcRand64 :Int64u;
 begin
-	   with _State do Result := X + Y;
+	   with _Seed do Result := X + Y;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -508,7 +508,7 @@ end;
 
 function TRandom64XOS128ss.CalcRand64 :Int64u;
 begin
-	   Result := Rot( _State.X * 5, 7 ) * 9;
+	   Result := Rot( _Seed.X * 5, 7 ) * 9;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -521,11 +521,11 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandom64XOS256.CalcNextState;
+procedure TRandom64XOS256.CalcNextSeed;
 var
    T :Int64u;
 begin
-     with _State do
+     with _Seed do
      begin
           T := Y shl 17;
 
@@ -542,7 +542,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TRandom64XOS256.NextState128;
+procedure TRandom64XOS256.NextSeed128;
 const
      JUMP :array [ 0..4-1 ] of Int64u = ( $180ec6d33cfd0aba,
                                           $d5a61266f0c9392c,
@@ -562,18 +562,18 @@ begin
                begin
                     with S do
                     begin
-                         X := X xor _State.X;
-                         Y := Y xor _State.Y;
-                         Z := Z xor _State.Z;
-                         W := W xor _State.W;
+                         X := X xor _Seed.X;
+                         Y := Y xor _Seed.Y;
+                         Z := Z xor _Seed.Z;
+                         W := W xor _Seed.W;
                     end;
                end;
 
-               CalcNextState;
+               CalcNextSeed;
           end;
      end;
 
-     _State := S;
+     _Seed := S;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -598,7 +598,7 @@ end;
 
 function TRandom64XOS256p.CalcRand64 :Int64u;
 begin
-     with _State do Result := X + W;
+     with _Seed do Result := X + W;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -615,7 +615,7 @@ end;
 
 function TRandom64XOS256ss.CalcRand64 :Int64u;
 begin
-     Result := Rot( _State.Y * 5, 7 ) * 9;
+     Result := Rot( _Seed.Y * 5, 7 ) * 9;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public

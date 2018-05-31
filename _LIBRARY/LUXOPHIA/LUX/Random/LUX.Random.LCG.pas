@@ -11,9 +11,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG<_TState_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG<_TSeed_>
 
-     IRandomLCG<_TState_:record> = interface( IRandom<_TState_> )
+     IRandomLCG<_TSeed_:record> = interface( IRandom<_TSeed_> )
      ['{CB661983-1A3A-4FC1-82AF-988943DF8256}']
      {protected}
      {public}
@@ -21,7 +21,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TRandomLCG<_TState_:record> = class( TRandom<_TState_>, IRandomLCG<_TState_> )
+     TRandomLCG<_TSeed_:record> = class( TRandom<_TSeed_>, IRandomLCG<_TSeed_> )
      private
      protected
      public
@@ -33,7 +33,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure CalcNextState; override;
+       procedure CalcNextSeed; override;
        function CalcRand32 :Int32u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
@@ -45,7 +45,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure CalcNextState; override;
+       procedure CalcNextSeed; override;
        function CalcRand32 :Int32u; override;
        function CalcRand48 :Int64u;
        function CalcRand64 :Int64u; override;
@@ -62,7 +62,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// メソッド
-       procedure CalcNextState; override;
+       procedure CalcNextSeed; override;
        function CalcRand32 :Int32u; override;
        function CalcRand64 :Int64u; override;
      public
@@ -83,7 +83,7 @@ uses System.SysUtils, System.SyncObjs;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG<_TState_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG<_TSeed_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -99,7 +99,7 @@ uses System.SysUtils, System.SyncObjs;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandomLCG32.CalcNextState;
+procedure TRandomLCG32.CalcNextSeed;
 const
      ///// Numerical Recipes
      A :Int32u = 1664525;
@@ -147,12 +147,12 @@ begin
      // % M =     |               |00111100010101011000110101010010 = 1012239698
      //           |               |               |               |
 
-     _State := A * _State + C;
+     _Seed := A * _Seed + C;
 end;
 
 function TRandomLCG32.CalcRand32 :Int32u;
 begin
-     Result := _State;
+     Result := _Seed;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -170,7 +170,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandomLCG48.CalcNextState;
+procedure TRandomLCG48.CalcNextSeed;
 const
      A  :Int64u = 25214903917;
      C  :Int64u = 11;
@@ -201,7 +201,7 @@ begin
      // % M =   |               |               |111111111111101000100001000100110001100110011110 = 281449761806750
      //         |               |               |               |               |               |
 
-     _State := ( A * _State + C ) and M1;
+     _Seed := ( A * _Seed + C ) and M1;
 end;
 
 function TRandomLCG48.CalcRand32 :Int32u;
@@ -211,12 +211,12 @@ end;
 
 function TRandomLCG48.CalcRand48 :Int64u;
 begin
-     Result := _State;
+     Result := _Seed;
 end;
 
 function TRandomLCG48.CalcRand64 :Int64u;
 begin
-     Result := CalcRand48 shr 16;  CalcNextState;
+     Result := CalcRand48 shr 16;  CalcNextSeed;
 
      Result := ( Result shl 32 ) or ( CalcRand48 shr 16 );
 end;
@@ -237,11 +237,11 @@ end;
 
 function TRandomLCG48.DrawRand48 :Int64u;
 begin
-     _StateCS.Enter;
+     _SeedCS.Enter;
 
-       Result := CalcRand48;  CalcNextState;
+       Result := CalcRand48;  CalcNextSeed;
 
-     _StateCS.Leave;
+     _SeedCS.Leave;
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG64
@@ -252,7 +252,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandomLCG64.CalcNextState;
+procedure TRandomLCG64.CalcNextSeed;
 const
      A :Int64u = 6364136223846793005;
      C :Int64u = 1442695040888963407;
@@ -282,7 +282,7 @@ begin
      // % M =               |               |               |               |1011101110110011100001110101000110101010110100100000001000100010 = 13525302890751722018
      //                     |               |               |               |               |               |               |               |
 
-     _State := A * _State + C;
+     _Seed := A * _Seed + C;
 end;
 
 function TRandomLCG64.CalcRand32 :Int32u;
@@ -292,7 +292,7 @@ end;
 
 function TRandomLCG64.CalcRand64 :Int64u;
 begin
-     Result := _State;
+     Result := _Seed;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
