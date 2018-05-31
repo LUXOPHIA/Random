@@ -34,16 +34,22 @@ object Form1: TForm1
         'xoroshiro 64**'
         'xoshiro128+'
         'xoshiro128**'
-        'xoshiro128+ 2^64-step'
-        'xoshiro128** 2^64-step'
+        'xoshiro128+ 2^64'
+        'xoshiro128** 2^64'
         'xoroshiro128+'
         'xoroshiro128**'
-        'xoroshiro128+ 2^64-step'
-        'xoroshiro128** 2^64-step'
+        'xoroshiro128+ 2^64'
+        'xoroshiro128** 2^64'
         'xoshiro256+'
         'xoshiro256**'
-        'xoshiro256+ 2^128-step'
-        'xoshiro256** 2^128-step')
+        'xoshiro256+ 2^128'
+        'xoshiro256** 2^128'
+        'WELL512a'
+        'WELL1024a'
+        'WELL19937a'
+        'WELL19937c'
+        'WELL44497a'
+        'WELL44497b')
       Position.X = 105.000000000000000000
       Position.Y = 10.000000000000000000
       Size.Width = 130.000000000000000000
@@ -66,16 +72,22 @@ object Form1: TForm1
         'xoroshiro 64**'
         'xoshiro128+'
         'xoshiro128**'
-        'xoshiro128+ 2^64-step'
-        'xoshiro128** 2^64-step'
+        'xoshiro128+ 2^64'
+        'xoshiro128** 2^64'
         'xoroshiro128+'
         'xoroshiro128**'
-        'xoroshiro128+ 2^64-step'
-        'xoroshiro128** 2^64-step'
+        'xoroshiro128+ 2^64'
+        'xoroshiro128** 2^64'
         'xoshiro256+'
         'xoshiro256**'
-        'xoshiro256+ 2^128-step'
-        'xoshiro256** 2^128-step')
+        'xoshiro256+ 2^128'
+        'xoshiro256** 2^128'
+        'WELL512a'
+        'WELL1024a'
+        'WELL19937a'
+        'WELL19937c'
+        'WELL44497a'
+        'WELL44497b')
       Position.X = 330.000000000000000000
       Position.Y = 10.000000000000000000
       Size.Width = 130.000000000000000000

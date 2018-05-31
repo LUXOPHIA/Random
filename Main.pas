@@ -49,7 +49,8 @@ implementation //###############################################################
 uses System.Math, System.Threading,
      LUX.Random.LCG,
      LUX.Random.Xorshift,
-     LUX.Random.Xoshiro;
+     LUX.Random.Xoshiro,
+     LUX.Random.WELL;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -101,16 +102,22 @@ begin
       09: Result := TRandom32XOS64ss     ;  // xoroshiro 64**
       10: Result := TRandom32XOS128p     ;  // xoshiro128+
       11: Result := TRandom32XOS128ss    ;  // xoshiro128**
-      12: Result := TRandom32XOS128x64p  ;  // xoshiro128+ 2^64-step
-      13: Result := TRandom32XOS128x64ss ;  // xoshiro128** 2^64-step
+      12: Result := TRandom32XOS128x64p  ;  // xoshiro128+ 2^64
+      13: Result := TRandom32XOS128x64ss ;  // xoshiro128** 2^64
       14: Result := TRandom64XOS128p     ;  // xoroshiro128+
       15: Result := TRandom64XOS128ss    ;  // xoroshiro128**
-      16: Result := TRandom64XOS128x64p  ;  // xoroshiro128+ 2^64-step
-      17: Result := TRandom64XOS128x64ss ;  // xoroshiro128** 2^64-step
+      16: Result := TRandom64XOS128x64p  ;  // xoroshiro128+ 2^64
+      17: Result := TRandom64XOS128x64ss ;  // xoroshiro128** 2^64
       18: Result := TRandom64XOS256p     ;  // xoshiro256+
       19: Result := TRandom64XOS256ss    ;  // xoshiro256**
-      20: Result := TRandom64XOS256x128p ;  // xoshiro256+ 2^128-step
-      21: Result := TRandom64XOS256x128ss;  // xoshiro256** 2^128-step
+      20: Result := TRandom64XOS256x128p ;  // xoshiro256+ 2^128
+      21: Result := TRandom64XOS256x128ss;  // xoshiro256** 2^128
+      22: Result := TRandomWEL512a       ;  //WELL512a
+      23: Result := TRandomWEL1024a      ;  //WELL1024a
+      24: Result := TRandomWEL19937a     ;  //WELL19937a
+      25: Result := TRandomWEL19937c     ;  //WELL19937c
+      26: Result := TRandomWEL44497a     ;  //WELL44497a
+      27: Result := TRandomWEL44497b     ;  //WELL44497b
      else Result := TRandomZero;
      end;
 end;
