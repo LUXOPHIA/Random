@@ -48,7 +48,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Zero :IRandomZero;
      private
      protected
-       _SeedCS :TCriticalSection;
+       _StateCS :TCriticalSection;
        ///// メソッド
        procedure CalcNextState; virtual; abstract;
        function CalcRand32 :Int32u; virtual;
@@ -190,12 +190,12 @@ constructor TRandom.Create;
 begin
      inherited;
 
-     _SeedCS := TCriticalSection.Create;
+     _StateCS := TCriticalSection.Create;
 end;
 
 destructor TRandom.Destroy;
 begin
-     _SeedCS.DisposeOf;
+     _StateCS.DisposeOf;
 
      inherited;
 end;
@@ -204,31 +204,31 @@ end;
 
 procedure TRandom.GoNextState;
 begin
-     _SeedCS.Enter;
+     _StateCS.Enter;
 
        CalcNextState;
 
-     _SeedCS.Leave;
+     _StateCS.Leave;
 end;
 
 //------------------------------------------------------------------------------
 
 procedure TRandom.GetRand( out Rand_:Int32u );
 begin
-     _SeedCS.Enter;
+     _StateCS.Enter;
 
        Rand_ := CalcRand32;  CalcNextState;
 
-     _SeedCS.Leave;
+     _StateCS.Leave;
 end;
 
 procedure TRandom.GetRand( out Rand_:Int64u );
 begin
-     _SeedCS.Enter;
+     _StateCS.Enter;
 
        Rand_ := CalcRand64;  CalcNextState;
 
-     _SeedCS.Leave;
+     _StateCS.Leave;
 end;
 
 procedure TRandom.GetRand( out Rand_:Flo32s );
@@ -311,11 +311,11 @@ end;
 
 procedure TRandom<_TState_>.GetSeed( out Rand_:_TState_ );
 begin
-     _SeedCS.Enter;
+     _StateCS.Enter;
 
        Rand_ := _State;  CalcNextState;
 
-     _SeedCS.Leave;
+     _StateCS.Leave;
 end;
 
 function TRandom<_TState_>.GetSeed :_TState_;

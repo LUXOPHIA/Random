@@ -237,11 +237,11 @@ end;
 
 function TRandomLCG48.GetRand48 :Int64u;
 begin
-     _SeedCS.Enter;
+     _StateCS.Enter;
 
        Result := CalcRand48;  CalcNextState;
 
-     _SeedCS.Leave;
+     _StateCS.Leave;
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG64
