@@ -56,7 +56,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
        class constructor Create;
        constructor Create; overload; virtual;
-       constructor Create( const Random_:IRandom ); overload; virtual; abstract;
+       constructor Create( const Random_:IRandom; const _:Byte = 0 ); overload; virtual; abstract;
+       constructor CreateFromRand( const Random_:IRandom ); overload; virtual; abstract;
        destructor Destroy; override;
        ///// メソッド
        procedure GoNextState;
@@ -97,6 +98,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetState( const State_:_TState_ );
      public
        constructor Create; overload; override;
+       constructor Create( const Random_:IRandom; const _:Byte = 0 ); overload; override;
        constructor CreateFromSeed( const Random_:IRandom<_TState_> );
        constructor Create( const State_:_TState_ ); overload; virtual;
        ///// プロパティ
@@ -127,7 +129,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function CalcRand64 :Int64u; override;
      public
        class constructor Create;
-       constructor Create( const Random_:IRandom ); overload; override;
+       constructor Create; overload; override;
+       constructor CreateFromRand( const Random_:IRandom ); overload; override;
        class destructor Destroy;
      end;
 
@@ -180,7 +183,7 @@ class constructor TRandom.Create;
 begin
      inherited;
 
-     _Zero := TRandomZero.Create( nil );
+     _Zero := TRandomZero.Create;
 end;
 
 constructor TRandom.Create;
@@ -285,6 +288,13 @@ begin
      Create( _Zero );
 end;
 
+{ [dcc64 警告] W1029 パラメータが同じ重複した constructor 'TRandom.CreateFromRand' は C++ からアクセスできません }
+constructor TRandom<_TState_>.Create( const Random_:IRandom; const _:Byte = 0 );
+begin
+     if Random_ is ClassType then CreateFromSeed( Random_ as IRandom<_TState_> )
+                             else CreateFromRand( Random_ );
+end;
+
 constructor TRandom<_TState_>.CreateFromSeed( const Random_:IRandom<_TState_> );
 begin
      Create( Random_.GetSeed );
@@ -342,13 +352,18 @@ begin
      _Time64 := GetTimeCount;
 end;
 
-constructor TRandomZero.Create( const Random_:IRandom );
+constructor TRandomZero.Create;
 begin
      _TimeCS.Enter;
 
        Create( _Time64 );  Inc( _Time64 );
 
      _TimeCS.Leave;
+end;
+
+constructor TRandomZero.CreateFromRand( const Random_:IRandom );
+begin
+     Create( Random_.GetRandInt64u );
 end;
 
 class destructor TRandomZero.Destroy;
