@@ -73,7 +73,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        ///// メソッド
        procedure CalcNextState; override;
      public
-       constructor Create( const Random_:IRandom ); overload; override;
+       constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS64s
@@ -105,7 +105,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure CalcNextState; override;
        procedure NextState64;
      public
-       constructor Create( const Random_:IRandom ); overload; override;
+       constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS128p
@@ -137,7 +137,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure CalcNextState; override;
        procedure NextState64;
      public
-       constructor Create( const Random_:IRandom ); overload; override;
+       constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS128p
@@ -169,7 +169,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure CalcNextState; override;
        procedure NextState128;
      public
-       constructor Create( const Random_:IRandom ); overload; override;
+       constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS256p
@@ -269,7 +269,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TRandom32XOS64.Create( const Random_:IRandom );
+constructor TRandom32XOS64.CreateFromRand( const Random_:IRandom );
 begin
      Create( TInt32u2D.Create( Random_.GetRandInt32u,
                                Random_.GetRandInt32u ) );
@@ -374,7 +374,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TRandom32XOS128.Create( const Random_:IRandom );
+constructor TRandom32XOS128.CreateFromRand( const Random_:IRandom );
 begin
      Create( TInt32u4D.Create( Random_.GetRandInt32u,
                                Random_.GetRandInt32u,
@@ -473,7 +473,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TRandom64XOS128.Create( const Random_:IRandom );
+constructor TRandom64XOS128.CreateFromRand( const Random_:IRandom );
 begin
      Create( TInt64u2D.Create( Random_.GetRandInt64u,
                                Random_.GetRandInt64u ) );
@@ -578,7 +578,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TRandom64XOS256.Create( const Random_:IRandom );
+constructor TRandom64XOS256.CreateFromRand( const Random_:IRandom );
 begin
      Create( TInt64u4D.Create( Random_.GetRandInt64u,
                                Random_.GetRandInt64u,

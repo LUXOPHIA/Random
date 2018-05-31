@@ -36,7 +36,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure CalcNextState; override;
        function CalcRand32 :Int32u; override;
      public
-       constructor Create( const Random_:IRandom ); overload; override;
+       constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG48
@@ -50,7 +50,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function CalcRand48 :Int64u;
        function CalcRand64 :Int64u; override;
      public
-       constructor Create( const Random_:IRandom ); overload; override;
+       constructor CreateFromRand( const Random_:IRandom ); overload; override;
        constructor Create( const Seed_:Int64u ); overload; override;
        ///// メソッド
        function GetRand48 :Int64u;
@@ -66,7 +66,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function CalcRand32 :Int32u; override;
        function CalcRand64 :Int64u; override;
      public
-       constructor Create( const Random_:IRandom ); overload; override;
+       constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -157,7 +157,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TRandomLCG32.Create( const Random_:IRandom );
+constructor TRandomLCG32.CreateFromRand( const Random_:IRandom );
 begin
      Create( Random_.GetRandInt32u );
 end;
@@ -223,7 +223,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TRandomLCG48.Create( const Random_:IRandom );
+constructor TRandomLCG48.CreateFromRand( const Random_:IRandom );
 begin
      Create( Random_.GetRandInt64u );
 end;
@@ -297,7 +297,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TRandomLCG64.Create( const Random_:IRandom );
+constructor TRandomLCG64.CreateFromRand( const Random_:IRandom );
 begin
      Create( Random_.GetRandInt64u );
 end;
