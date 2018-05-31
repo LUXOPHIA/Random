@@ -271,8 +271,8 @@ end;
 
 constructor TRandom32XOS64.CreateFromRand( const Random_:IRandom );
 begin
-     Create( TInt32u2D.Create( Random_.GetRandInt32u,
-                               Random_.GetRandInt32u ) );
+     Create( TInt32u2D.Create( Random_.DrawRandInt32u,
+                               Random_.DrawRandInt32u ) );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS64s
@@ -376,10 +376,10 @@ end;
 
 constructor TRandom32XOS128.CreateFromRand( const Random_:IRandom );
 begin
-     Create( TInt32u4D.Create( Random_.GetRandInt32u,
-                               Random_.GetRandInt32u,
-                               Random_.GetRandInt32u,
-                               Random_.GetRandInt32u ) );
+     Create( TInt32u4D.Create( Random_.DrawRandInt32u,
+                               Random_.DrawRandInt32u,
+                               Random_.DrawRandInt32u,
+                               Random_.DrawRandInt32u ) );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS128p
@@ -475,8 +475,8 @@ end;
 
 constructor TRandom64XOS128.CreateFromRand( const Random_:IRandom );
 begin
-     Create( TInt64u2D.Create( Random_.GetRandInt64u,
-                               Random_.GetRandInt64u ) );
+     Create( TInt64u2D.Create( Random_.DrawRandInt64u,
+                               Random_.DrawRandInt64u ) );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS128p
@@ -580,10 +580,10 @@ end;
 
 constructor TRandom64XOS256.CreateFromRand( const Random_:IRandom );
 begin
-     Create( TInt64u4D.Create( Random_.GetRandInt64u,
-                               Random_.GetRandInt64u,
-                               Random_.GetRandInt64u,
-                               Random_.GetRandInt64u ) );
+     Create( TInt64u4D.Create( Random_.DrawRandInt64u,
+                               Random_.DrawRandInt64u,
+                               Random_.DrawRandInt64u,
+                               Random_.DrawRandInt64u ) );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS256p

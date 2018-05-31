@@ -53,7 +53,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
        constructor Create( const Seed_:Int64u ); overload; override;
        ///// メソッド
-       function GetRand48 :Int64u;
+       function DrawRand48 :Int64u;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG64
@@ -159,7 +159,7 @@ end;
 
 constructor TRandomLCG32.CreateFromRand( const Random_:IRandom );
 begin
-     Create( Random_.GetRandInt32u );
+     Create( Random_.DrawRandInt32u );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomLCG48
@@ -225,7 +225,7 @@ end;
 
 constructor TRandomLCG48.CreateFromRand( const Random_:IRandom );
 begin
-     Create( Random_.GetRandInt64u );
+     Create( Random_.DrawRandInt64u );
 end;
 
 constructor TRandomLCG48.Create( const Seed_:Int64u );
@@ -235,7 +235,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomLCG48.GetRand48 :Int64u;
+function TRandomLCG48.DrawRand48 :Int64u;
 begin
      _StateCS.Enter;
 
@@ -287,7 +287,7 @@ end;
 
 function TRandomLCG64.CalcRand32 :Int32u;
 begin
-     Result := GetRandInt64u shr 32;
+     Result := DrawRandInt64u shr 32;
 end;
 
 function TRandomLCG64.CalcRand64 :Int64u;
@@ -299,7 +299,7 @@ end;
 
 constructor TRandomLCG64.CreateFromRand( const Random_:IRandom );
 begin
-     Create( Random_.GetRandInt64u );
+     Create( Random_.DrawRandInt64u );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】

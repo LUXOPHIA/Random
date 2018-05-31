@@ -31,14 +31,14 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      {public}
        ///// メソッド
        procedure GoNextState;
-       procedure GetRand( out Rand_:Int32u ); overload;
-       procedure GetRand( out Rand_:Int64u ); overload;
-       procedure GetRand( out Rand_:Flo32s ); overload;
-       procedure GetRand( out Rand_:Flo64s ); overload;
-       function GetRandInt32u :Int32u;
-       function GetRandInt64u :Int64u;
-       function GetRandFlo32s :Single;
-       function GetRandFlo64s :Double;
+       procedure DrawRand( out Rand_:Int32u ); overload;
+       procedure DrawRand( out Rand_:Int64u ); overload;
+       procedure DrawRand( out Rand_:Flo32s ); overload;
+       procedure DrawRand( out Rand_:Flo64s ); overload;
+       function DrawRandInt32u :Int32u;
+       function DrawRandInt64u :Int64u;
+       function DrawRandFlo32s :Single;
+       function DrawRandFlo64s :Double;
      end;
 
      //-------------------------------------------------------------------------
@@ -61,14 +61,14 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        destructor Destroy; override;
        ///// メソッド
        procedure GoNextState;
-       procedure GetRand( out Rand_:Int32u ); overload;  // 0 <= Value < 4,294,967,296              = $1,0000,0000           = 2^32
-       procedure GetRand( out Rand_:Int64u ); overload;  // 0 <= Value < 18,446,744,073,709,551,616 = $1,0000,0000,0000,0000 = 2^64
-       procedure GetRand( out Rand_:Flo32s ); overload;  // 0 <= Value < 1
-       procedure GetRand( out Rand_:Flo64s ); overload;  // 0 <= Value < 1
-       function GetRandInt32u :Int32u;                   // 0 <= Value < 4,294,967,296              = $1,0000,0000           = 2^32
-       function GetRandInt64u :Int64u;                   // 0 <= Value < 18,446,744,073,709,551,616 = $1,0000,0000,0000,0000 = 2^64
-       function GetRandFlo32s :Single;                   // 0 <= Value < 1
-       function GetRandFlo64s :Double;                   // 0 <= Value < 1
+       procedure DrawRand( out Rand_:Int32u ); overload;  // 0 <= Value < 4,294,967,296              = $1,0000,0000           = 2^32
+       procedure DrawRand( out Rand_:Int64u ); overload;  // 0 <= Value < 18,446,744,073,709,551,616 = $1,0000,0000,0000,0000 = 2^64
+       procedure DrawRand( out Rand_:Flo32s ); overload;  // 0 <= Value < 1
+       procedure DrawRand( out Rand_:Flo64s ); overload;  // 0 <= Value < 1
+       function DrawRandInt32u :Int32u;                   // 0 <= Value < 4,294,967,296              = $1,0000,0000           = 2^32
+       function DrawRandInt64u :Int64u;                   // 0 <= Value < 18,446,744,073,709,551,616 = $1,0000,0000,0000,0000 = 2^64
+       function DrawRandFlo32s :Single;                   // 0 <= Value < 1
+       function DrawRandFlo64s :Double;                   // 0 <= Value < 1
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom<_TState_>
@@ -83,8 +83,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        ///// プロパティ
        property State :_TState_ read GetState write SetState;
        ///// メソッド
-       procedure GetSeed( out Rand_:_TState_ ); overload;
-       function GetSeed :_TState_; overload;
+       procedure DrawSeed( out Rand_:_TState_ ); overload;
+       function DrawSeed :_TState_; overload;
      end;
 
      //-------------------------------------------------------------------------
@@ -104,8 +104,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        ///// プロパティ
        property State :_TState_ read GetState write SetState;
        ///// メソッド
-       procedure GetSeed( out Rand_:_TState_ ); overload;
-       function GetSeed :_TState_; overload;
+       procedure DrawSeed( out Rand_:_TState_ ); overload;
+       function DrawSeed :_TState_; overload;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomZero
@@ -172,7 +172,7 @@ end;
 
 function TRandom.CalcRand64 :Int64u;
 begin
-     Result := GetRandInt32u;  CalcNextState;
+     Result := CalcRand32;  CalcNextState;
 
      Result := ( Result shl 32 ) or CalcRand32;
 end;
@@ -213,7 +213,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TRandom.GetRand( out Rand_:Int32u );
+procedure TRandom.DrawRand( out Rand_:Int32u );
 begin
      _StateCS.Enter;
 
@@ -222,7 +222,7 @@ begin
      _StateCS.Leave;
 end;
 
-procedure TRandom.GetRand( out Rand_:Int64u );
+procedure TRandom.DrawRand( out Rand_:Int64u );
 begin
      _StateCS.Enter;
 
@@ -231,36 +231,36 @@ begin
      _StateCS.Leave;
 end;
 
-procedure TRandom.GetRand( out Rand_:Flo32s );
+procedure TRandom.DrawRand( out Rand_:Flo32s );
 begin
-     Rand_ := GetRandInt32u / 4294967296.0{= 2^32 };
+     Rand_ := DrawRandInt32u / 4294967296.0{= 2^32 };
 end;
 
-procedure TRandom.GetRand( out Rand_:Flo64s );
+procedure TRandom.DrawRand( out Rand_:Flo64s );
 begin
-     Rand_ := GetRandInt64u / 18446744073709551616.0{= 2^64 };
+     Rand_ := DrawRandInt64u / 18446744073709551616.0{= 2^64 };
 end;
 
 //------------------------------------------------------------------------------
 
-function TRandom.GetRandInt32u :Int32u;
+function TRandom.DrawRandInt32u :Int32u;
 begin
-     GetRand( Result );
+     DrawRand( Result );
 end;
 
-function TRandom.GetRandInt64u :Int64u;
+function TRandom.DrawRandInt64u :Int64u;
 begin
-     GetRand( Result );
+     DrawRand( Result );
 end;
 
-function TRandom.GetRandFlo32s :Single;
+function TRandom.DrawRandFlo32s :Single;
 begin
-     GetRand( Result );
+     DrawRand( Result );
 end;
 
-function TRandom.GetRandFlo64s :Double;
+function TRandom.DrawRandFlo64s :Double;
 begin
-     GetRand( Result );
+     DrawRand( Result );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom<_TState_>
@@ -297,7 +297,7 @@ end;
 
 constructor TRandom<_TState_>.CreateFromSeed( const Random_:IRandom<_TState_> );
 begin
-     Create( Random_.GetSeed );
+     Create( Random_.DrawSeed );
 end;
 
 constructor TRandom<_TState_>.Create( const State_:_TState_ );
@@ -309,7 +309,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandom<_TState_>.GetSeed( out Rand_:_TState_ );
+procedure TRandom<_TState_>.DrawSeed( out Rand_:_TState_ );
 begin
      _StateCS.Enter;
 
@@ -318,9 +318,9 @@ begin
      _StateCS.Leave;
 end;
 
-function TRandom<_TState_>.GetSeed :_TState_;
+function TRandom<_TState_>.DrawSeed :_TState_;
 begin
-     GetSeed( Result );
+     DrawSeed( Result );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomZero
@@ -363,7 +363,7 @@ end;
 
 constructor TRandomZero.CreateFromRand( const Random_:IRandom );
 begin
-     Create( Random_.GetRandInt64u );
+     Create( Random_.DrawRandInt64u );
 end;
 
 class destructor TRandomZero.Destroy;
