@@ -291,8 +291,8 @@ end;
 { [dcc64 警告] W1029 パラメータが同じ重複した constructor 'TRandom.CreateFromRand' は C++ からアクセスできません }
 constructor TRandom<_TSeed_>.Create( const Random_:IRandom; const _:Byte = 0 );
 begin
-     if Random_ is ClassType then CreateFromSeed( Random_ as IRandom<_TSeed_> )
-                             else CreateFromRand( Random_ );
+     if Random_ is TRandom<_TSeed_> then CreateFromSeed( Random_ as IRandom<_TSeed_> )
+                                    else CreateFromRand( Random_ );
 end;
 
 constructor TRandom<_TSeed_>.CreateFromSeed( const Random_:IRandom<_TSeed_> );
