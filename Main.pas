@@ -35,6 +35,8 @@ type
     _Rands  :TArray2<Double>;
     _ThresN :Integer;
     _SequsN :Integer;
+    ///// メソッド
+    function SelectMethod( const I_:Integer ) :CRandom;
   end;
 
 var
@@ -85,6 +87,34 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
+function TForm1.SelectMethod( const I_:Integer ) :CRandom;
+begin
+     case I_ of
+      01: Result := TRandomLCG32         ;  // LCG 32
+      02: Result := TRandomLCG48         ;  // LCG 48
+      03: Result := TRandomLCG64         ;  // LCG 64
+      04: Result := TRandomXOR32         ;  // Xorshift 32
+      05: Result := TRandomXOR64         ;  // Xorshift 64
+      06: Result := TRandomXOR96         ;  // Xorshift 96
+      07: Result := TRandomXOR128        ;  // Xorshift 128
+      08: Result := TRandom32XOS64s      ;  // xoroshiro 64*
+      09: Result := TRandom32XOS64ss     ;  // xoroshiro 64**
+      10: Result := TRandom32XOS128p     ;  // xoshiro128+
+      11: Result := TRandom32XOS128ss    ;  // xoshiro128**
+      12: Result := TRandom32XOS128x64p  ;  // xoshiro128+ 2^64-step
+      13: Result := TRandom32XOS128x64ss ;  // xoshiro128** 2^64-step
+      14: Result := TRandom64XOS128p     ;  // xoroshiro128+
+      15: Result := TRandom64XOS128ss    ;  // xoroshiro128**
+      16: Result := TRandom64XOS128x64p  ;  // xoroshiro128+ 2^64-step
+      17: Result := TRandom64XOS128x64ss ;  // xoroshiro128** 2^64-step
+      18: Result := TRandom64XOS256p     ;  // xoshiro256+
+      19: Result := TRandom64XOS256ss    ;  // xoshiro256**
+      20: Result := TRandom64XOS256x128p ;  // xoshiro256+ 2^128-step
+      21: Result := TRandom64XOS256x128ss;  // xoshiro256** 2^128-step
+     else Result := TRandomZero;
+     end;
+end;
+
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 procedure TForm1.FormCreate(Sender: TObject);
@@ -95,7 +125,7 @@ begin
      SetLength( _Rands, _ThresN, _SequsN );
 
      ComboBoxS.ItemIndex := 0;
-     ComboBoxR.ItemIndex := 0;
+     ComboBoxR.ItemIndex := 1;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -119,45 +149,12 @@ end;
 
 procedure TForm1.ComboBoxSChange(Sender: TObject);
 begin
-     case ComboBoxS.ItemIndex of
-      00: _SeedO := TRandomZero      .Create;
-      01: _SeedO := TRandomLCG32     .Create;  // LCG 32
-      02: _SeedO := TRandomLCG48     .Create;  // LCG 48
-      03: _SeedO := TRandomLCG64     .Create;  // LCG 64
-      04: _SeedO := TRandomXOR32     .Create;  // Xorshift 32
-      05: _SeedO := TRandomXOR64     .Create;  // Xorshift 64
-      06: _SeedO := TRandomXOR96     .Create;  // Xorshift 96
-      07: _SeedO := TRandomXOR128    .Create;  // Xorshift 128
-      08: _SeedO := TRandom32XOS64s  .Create;  // xoroshiro 64*
-      09: _SeedO := TRandom32XOS64ss .Create;  // xoroshiro 64**
-      10: _SeedO := TRandom32XOS128p .Create;  // xoshiro128+
-      11: _SeedO := TRandom32XOS128ss.Create;  // xoshiro128**
-      12: _SeedO := TRandom64XOS128p .Create;  // xoroshiro128+
-      13: _SeedO := TRandom64XOS128ss.Create;  // xoroshiro128**
-      14: _SeedO := TRandom64XOS256p .Create;  // xoshiro256+
-      15: _SeedO := TRandom64XOS256ss.Create;  // xoshiro256**
-     end;
+     _SeedO := SelectMethod( ComboBoxS.ItemIndex ).Create;
 end;
 
 procedure TForm1.ComboBoxRChange(Sender: TObject);
 begin
-     case ComboBoxR.ItemIndex of
-      00: _RandC := TRandomLCG32     ;  // LCG 32
-      01: _RandC := TRandomLCG48     ;  // LCG 48
-      02: _RandC := TRandomLCG64     ;  // LCG 64
-      03: _RandC := TRandomXOR32     ;  // Xorshift 32
-      04: _RandC := TRandomXOR64     ;  // Xorshift 64
-      05: _RandC := TRandomXOR96     ;  // Xorshift 96
-      06: _RandC := TRandomXOR128    ;  // Xorshift 128
-      07: _RandC := TRandom32XOS64s  ;  // xoroshiro 64*
-      08: _RandC := TRandom32XOS64ss ;  // xoroshiro 64**
-      09: _RandC := TRandom32XOS128p ;  // xoshiro128+
-      10: _RandC := TRandom32XOS128ss;  // xoshiro128**
-      11: _RandC := TRandom64XOS128p ;  // xoroshiro128+
-      12: _RandC := TRandom64XOS128ss;  // xoroshiro128**
-      13: _RandC := TRandom64XOS256p ;  // xoshiro256+
-      14: _RandC := TRandom64XOS256ss;  // xoshiro256**
-     end;
+     _RandC := SelectMethod( ComboBoxR.ItemIndex );
 end;
 
 end. //######################################################################### ■
