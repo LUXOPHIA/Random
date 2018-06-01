@@ -354,8 +354,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function CalcRandInt32u :Int32u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
-       ///// メソッド
-       function pcg32_random_r( var rng:T_pcg_state_setseq_64 ) :Int32u;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -511,7 +509,7 @@ end;
 
 function TRandomPCG_ALL.pcg_output_xsh_rs_16_8( state:Int16u ) :Int08u;
 begin
-     Result := Int08u ( ( ( state shr 07 ) xor state ) shr ( ( state shr 14 ) + 03 ) );
+     Result := Int08u( ( ( state shr 07 ) xor state ) shr ( ( state shr 14 ) + 03 ) );
 end;
 
 function TRandomPCG_ALL.pcg_output_xsh_rs_32_16( state:Int32u ) :Int16u;
@@ -521,7 +519,6 @@ end;
 
 function TRandomPCG_ALL.pcg_output_xsh_rs_64_32( state:Int64u ) :Int32u;
 begin
-
      Result := Int32u( ( ( state shr 22 ) xor state ) shr ( ( state shr 61 ) + 22 ) );
 end;
 
@@ -2070,12 +2067,12 @@ end;
 
 procedure TRandomPCG_ALL.CalcNextSeed;
 begin
-
+     pcg_setseq_64_step_r( _Seed );
 end;
 
 function TRandomPCG_ALL.CalcRandInt32u :Int32u;
 begin
-     Result := pcg_setseq_64_xsh_rr_32_random_r( _Seed );
+     Result := pcg_output_xsh_rr_64_32( _Seed.state );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -2087,13 +2084,6 @@ begin
      pcg_setseq_64_srandom_r( S, Random_.DrawRandInt64u, Random_.DrawRandInt64u );
 
      Create( S );
-end;
-
-/////////////////////////////////////////////////////////////////////// メソッド
-
-function TRandomPCG_ALL.pcg32_random_r( var rng:T_pcg_state_setseq_64 ) :Int32u;
-begin
-     Result := pcg_setseq_64_xsh_rr_32_random_r( rng );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
