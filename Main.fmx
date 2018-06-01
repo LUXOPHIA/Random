@@ -51,7 +51,8 @@ object Form1: TForm1
         'WELL19937a-new'
         'WELL44497a'
         'WELL44497b'
-        'WELL44497a-new')
+        'WELL44497a-new'
+        'PCG 32 (basic)')
       Position.X = 105.000000000000000000
       Position.Y = 10.000000000000000000
       Size.Width = 130.000000000000000000
@@ -91,7 +92,8 @@ object Form1: TForm1
         'WELL19937a-new'
         'WELL44497a'
         'WELL44497b'
-        'WELL44497a-new')
+        'WELL44497a-new'
+        'PCG 32 (basic)')
       Position.X = 330.000000000000000000
       Position.Y = 10.000000000000000000
       Size.Width = 130.000000000000000000

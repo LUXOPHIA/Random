@@ -50,7 +50,8 @@ uses System.Math, System.Threading,
      LUX.Random.LCG,
      LUX.Random.Xorshift,
      LUX.Random.Xoshiro,
-     LUX.Random.WELL;
+     LUX.Random.WELL,
+     LUX.Random.PCG;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -120,7 +121,8 @@ begin
       27: Result := TRandomWEL44497a     ;  // WELL44497a
       28: Result := TRandomWEL44497b     ;  // WELL44497b
       29: Result := TRandomWEL44497anew  ;  // WELL44497anew
-     else Result := TRandomZero;
+      30: Result := TRandomPCG32basic    ;  // PCG 32 (basic)
+     else Result := TRandomZero          ;
      end;
 end;
 
