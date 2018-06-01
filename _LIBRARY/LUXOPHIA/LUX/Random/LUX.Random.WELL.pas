@@ -145,10 +145,15 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetnewVRm1( const newVRm1_:Int32u );
        function GetnewVRm1Under :Int32u;
        procedure SetnewVRm1Under( const newVRm1Under_:Int32u );
+       { WELL19937a-new }
+       function GetnewVM2Over :Int32u;
+       procedure SetnewVM2Over( const newVM2Over_:Int32u );
+       function GetnewVM2 :Int32u;
+       procedure SetnewVM2( const newVM2_:Int32u );
      public
        state_i :Int32u;
        STATE   :array [ 0..R-1 ] of Int32u;
-       /////
+       ///// プロパティ
        property V0           :Int32u read GetV0           write SetV0          ;
        property VM1Over      :Int32u read GetVM1Over      write SetVM1Over     ;
        property VM1          :Int32u read GetVM1          write SetVM1         ;
@@ -165,6 +170,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property newV1        :Int32u read GetnewV1        write SetnewV1       ;
        property newVRm1      :Int32u read GetnewVRm1      write SetnewVRm1     ;
        property newVRm1Under :Int32u read GetnewVRm1Under write SetnewVRm1Under;
+       { WELL19937a-new }
+       property newVM2Over   :Int32u read GetnewVM2Over   write SetnewVM2Over  ;
+       property newVM2       :Int32u read GetnewVM2       write SetnewVM2      ;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TWELL44497a
@@ -213,6 +221,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetnewVRm1( const newVRm1_:Int32u );
        function GetnewVRm1Under :Int32u;
        procedure SetnewVRm1Under( const newVRm1Under_:Int32u );
+       { WELL44497a-new }
+       function GetnewVM2Over :Int32u;
+       procedure SetnewVM2Over( const newVM2Over_:Int32u );
+       function GetnewVM2 :Int32u;
+       procedure SetnewVM2( const newVM2_:Int32u );
      public
        state_i :Int32u;
        STATE   :array [ 0..R-1 ] of Int32u;
@@ -233,6 +246,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property newV1        :Int32u read GetnewV1        write SetnewV1       ;
        property newVRm1      :Int32u read GetnewVRm1      write SetnewVRm1     ;
        property newVRm1Under :Int32u read GetnewVRm1Under write SetnewVRm1Under;
+       { WELL44497a-new }
+       property newVM2Over   :Int32u read GetnewVM2Over   write SetnewVM2Over  ;
+       property newVM2       :Int32u read GetnewVM2       write SetnewVM2      ;
      end;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
@@ -333,6 +349,25 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
      end;
 
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL19937anew
+
+     TRandomWEL19937anew = class( TRandomWEL19937a )
+     private const
+       BITMASK = $41180000;
+     private
+     protected
+       y :Int32u;
+       ///// メソッド
+       procedure case_1; override;
+       procedure case_2; override;
+       procedure case_3; override;
+       procedure case_4; override;
+       procedure case_5; override;
+       procedure case_6; override;
+       function CalcRandInt32u :Int32u; override;
+     public
+     end;
+
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL44497a
 
      TRandomWEL44497a = class( TRandomWEL<TWELL44497a> )
@@ -370,6 +405,25 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private const
        TEMPERB = $93dd1400;
        TEMPERC = $fa118000;
+     private
+     protected
+       y :Int32u;
+       ///// メソッド
+       procedure case_1; override;
+       procedure case_2; override;
+       procedure case_3; override;
+       procedure case_4; override;
+       procedure case_5; override;
+       procedure case_6; override;
+       function CalcRandInt32u :Int32u; override;
+     public
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL44497anew
+
+     TRandomWEL44497anew = class( TRandomWEL44497a )
+     private const
+       BITMASK = $48000000;
      private
      protected
        y :Int32u;
@@ -738,6 +792,28 @@ begin
      STATE[ state_i-2+R ] := newVRm1Under_;
 end;
 
+{ WELL19937a-new }
+
+function TWELL19937a.GetnewVM2Over :Int32u;
+begin
+     Result := STATE[ state_i+M2-R+1 ];
+end;
+
+procedure TWELL19937a.SetnewVM2Over( const newVM2Over_:Int32u );
+begin
+     STATE[ state_i+M2-R+1 ] := newVM2Over_;
+end;
+
+function TWELL19937a.GetnewVM2 :Int32u;
+begin
+     Result := STATE[ state_i+M2+1 ];
+end;
+
+procedure TWELL19937a.SetnewVM2( const newVM2_:Int32u );
+begin
+     STATE[ state_i+M2+1 ] := newVM2_;
+end;
+
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TWELL44497a
@@ -904,6 +980,28 @@ end;
 procedure TWELL44497a.SetnewVRm1Under( const newVRm1Under_:Int32u );
 begin
      STATE[ state_i-2+R ] := newVRm1Under_;
+end;
+
+{ WELL19937a-new }
+
+function TWELL44497a.GetnewVM2Over :Int32u;
+begin
+     Result := STATE[ state_i+M2-R+1 ];
+end;
+
+procedure TWELL44497a.SetnewVM2Over( const newVM2Over_:Int32u );
+begin
+     STATE[ state_i+M2-R+1 ] := newVM2Over_;
+end;
+
+function TWELL44497a.GetnewVM2 :Int32u;
+begin
+     Result := STATE[ state_i+M2+1 ];
+end;
+
+procedure TWELL44497a.SetnewVM2( const newVM2_:Int32u );
+begin
+     STATE[ state_i+M2+1 ] := newVM2_;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -1375,6 +1473,85 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL19937anew
+
+{ http://www.ritsumei.ac.jp/~harase/WELL19937a_new.c }
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+/////////////////////////////////////////////////////////////////////// メソッド
+
+procedure TRandomWEL19937anew.case_1;
+begin
+     inherited;
+
+     with _Seed do
+     begin
+          y := STATE[ state_i ] xor ( newVM2Over and BITMASK );
+     end;
+end;
+
+procedure TRandomWEL19937anew.case_2;
+begin
+     inherited;
+
+     with _Seed do
+     begin
+          y := STATE[ state_i ] xor ( newVM2 and BITMASK );
+     end;
+end;
+
+procedure TRandomWEL19937anew.case_3;
+begin
+     inherited;
+
+     with _Seed do
+     begin
+          y := STATE[ state_i ] xor ( newVM2Over and BITMASK );
+     end;
+end;
+
+procedure TRandomWEL19937anew.case_4;
+begin
+     inherited;
+
+     with _Seed do
+     begin
+          y := STATE[ state_i ] xor ( newVM2 and BITMASK );
+     end;
+end;
+
+procedure TRandomWEL19937anew.case_5;
+begin
+     inherited;
+
+     with _Seed do
+     begin
+          y := STATE[ state_i ] xor ( newVM2Over and BITMASK );
+     end;
+end;
+
+procedure TRandomWEL19937anew.case_6;
+begin
+     inherited;
+
+     with _Seed do
+     begin
+          y := STATE[ state_i ] xor ( newVM2 and BITMASK );
+     end;
+end;
+
+//------------------------------------------------------------------------------
+
+function TRandomWEL19937anew.CalcRandInt32u :Int32u;
+begin
+     Result := y;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL44497a
 
 { http://www.iro.umontreal.ca/~panneton/well/WELL44497a.c }
@@ -1702,6 +1879,85 @@ end;
 //------------------------------------------------------------------------------
 
 function TRandomWEL44497b.CalcRandInt32u :Int32u;
+begin
+     Result := y;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL44497anew
+
+{ http://www.ritsumei.ac.jp/~harase/WELL44497a_new.c }
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+/////////////////////////////////////////////////////////////////////// メソッド
+
+procedure TRandomWEL44497anew.case_1;
+begin
+     inherited;
+
+     with _Seed do
+     begin
+          y := STATE[ state_i ] xor ( newVM2Over and BITMASK );
+     end;
+end;
+
+procedure TRandomWEL44497anew.case_2;
+begin
+     inherited;
+
+     with _Seed do
+     begin
+          y := STATE[ state_i ] xor ( newVM2 and BITMASK );
+     end;
+end;
+
+procedure TRandomWEL44497anew.case_3;
+begin
+     inherited;
+
+     with _Seed do
+     begin
+          y := STATE[ state_i ] xor ( newVM2Over and BITMASK );
+     end;
+end;
+
+procedure TRandomWEL44497anew.case_4;
+begin
+     inherited;
+
+     with _Seed do
+     begin
+          y := STATE[ state_i ] xor ( newVM2Over and BITMASK );
+     end;
+end;
+
+procedure TRandomWEL44497anew.case_5;
+begin
+     inherited;
+
+     with _Seed do
+     begin
+          y := STATE[ state_i ] xor ( newVM2Over and BITMASK );
+     end;
+end;
+
+procedure TRandomWEL44497anew.case_6;
+begin
+     inherited;
+
+     with _Seed do
+     begin
+          y := STATE[ state_i ] xor ( newVM2 and BITMASK );
+     end;
+end;
+
+//------------------------------------------------------------------------------
+
+function TRandomWEL44497anew.CalcRandInt32u :Int32u;
 begin
      Result := y;
 end;
