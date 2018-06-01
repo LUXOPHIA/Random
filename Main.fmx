@@ -48,8 +48,10 @@ object Form1: TForm1
         'WELL1024a'
         'WELL19937a'
         'WELL19937c'
+        'WELL19937a-new'
         'WELL44497a'
-        'WELL44497b')
+        'WELL44497b'
+        'WELL44497a-new')
       Position.X = 105.000000000000000000
       Position.Y = 10.000000000000000000
       Size.Width = 130.000000000000000000
@@ -86,8 +88,10 @@ object Form1: TForm1
         'WELL1024a'
         'WELL19937a'
         'WELL19937c'
+        'WELL19937a-new'
         'WELL44497a'
-        'WELL44497b')
+        'WELL44497b'
+        'WELL44497a-new')
       Position.X = 330.000000000000000000
       Position.Y = 10.000000000000000000
       Size.Width = 130.000000000000000000

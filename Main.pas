@@ -112,12 +112,14 @@ begin
       19: Result := TRandom64XOS256ss    ;  // xoshiro256**
       20: Result := TRandom64XOS256x128p ;  // xoshiro256+ 2^128
       21: Result := TRandom64XOS256x128ss;  // xoshiro256** 2^128
-      22: Result := TRandomWEL512a       ;  //WELL512a
-      23: Result := TRandomWEL1024a      ;  //WELL1024a
-      24: Result := TRandomWEL19937a     ;  //WELL19937a
-      25: Result := TRandomWEL19937c     ;  //WELL19937c
-      26: Result := TRandomWEL44497a     ;  //WELL44497a
-      27: Result := TRandomWEL44497b     ;  //WELL44497b
+      22: Result := TRandomWEL512a       ;  // WELL512a
+      23: Result := TRandomWEL1024a      ;  // WELL1024a
+      24: Result := TRandomWEL19937a     ;  // WELL19937a
+      25: Result := TRandomWEL19937c     ;  // WELL19937c
+      26: Result := TRandomWEL19937anew  ;  // WELL19937anew
+      27: Result := TRandomWEL44497a     ;  // WELL44497a
+      28: Result := TRandomWEL44497b     ;  // WELL44497b
+      29: Result := TRandomWEL44497anew  ;  // WELL44497anew
      else Result := TRandomZero;
      end;
 end;
