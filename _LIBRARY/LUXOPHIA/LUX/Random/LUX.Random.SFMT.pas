@@ -37,6 +37,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
        state :TArray<T_w128_t>;  // the 128-bit internal state array
        idx   :Int32s;            // index counter to the 32-bit internal state array
+       /////
+       constructor Create( const stateN_:Int32s ); overload;
+       constructor Create( const sfmt_:T_sfmt_t ); overload;
        ///// プロパティ
        property psfmt32[ const I_:Int32s ] :Int32u read Getpsfmt32 write Setpsfmt32;
        property psfmt64[ const I_:Int32s ] :Int64u read Getpsfmt64 write Setpsfmt64;
@@ -83,6 +86,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
        constructor Create( const Seed_:T_sfmt_t ); overload; override;
+       constructor Create( const Key_:Int32u ); overload;
+       constructor Create( const Keys_:TArray<Int32u> ); overload;
        ///// プロパティ
        property SFMT_MEXP    :Int32s read GetSFMT_MEXP   ;
        property SFMT_N       :Int32s read GetSFMT_N      ;
@@ -163,25 +168,39 @@ uses System.SysUtils, System.Math;
 
 function T_sfmt_t.Getpsfmt32( const I_:Int32s ) :Int32u;
 begin
-     Result := state[ I_ shr 2 ].u[ I_ and 3 ];
+     Result := TArray<Int32u>( state )[ I_ ];
 end;
 
 procedure T_sfmt_t.Setpsfmt32( const I_:Int32s; const sfmt32_:Int32u );
 begin
-     state[ I_ shr 2 ].u[ I_ and 3 ] := sfmt32_;
+     TArray<Int32u>( state )[ I_ ] := sfmt32_;
 end;
 
 function T_sfmt_t.Getpsfmt64( const I_:Int32s ) :Int64u;
 begin
-     Result := state[ I_ shr 1 ].u64[ I_ and 1 ];
+     Result := TArray<Int64u>( state )[ I_ ];
 end;
 
 procedure T_sfmt_t.Setpsfmt64( const I_:Int32s; const sfmt64_:Int64u );
 begin
-     state[ I_ shr 1 ].u64[ I_ and 1 ] := sfmt64_;
+     TArray<Int64u>( state )[ I_ ] := sfmt64_;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor T_sfmt_t.Create( const stateN_:Int32s );
+begin
+     SetLength( state, stateN_ );
+end;
+
+constructor T_sfmt_t.Create( const sfmt_:T_sfmt_t );
+begin
+     Create( Length( sfmt_.state ) );
+
+     Move( sfmt_.state[ 0 ], state[ 0 ], SizeOf( T_w128_t ) * Min( Length( sfmt_.state ), Length( state ) ) );
+
+     idx := sfmt_.idx;
+end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
@@ -240,20 +259,29 @@ end;
 
 constructor TRandomSFMT.Create( const Seed_:T_sfmt_t );
 begin
-     inherited;
+     inherited Create( T_sfmt_t.Create( Seed_ ) );
+end;
 
-     with _Seed do
-     begin
-          state := nil;
+constructor TRandomSFMT.Create( const Key_:Int32u );
+var
+   S :T_sfmt_t;
+begin
+     S := T_sfmt_t.Create( SFMT_N );
 
-          SetLength( state, SFMT_N );
+     sfmt_init_gen_rand( S, Key_ );
 
-          Assert( Length( Seed_.state ) = Length( state ), Length( Seed_.state ).ToString + ' = ' + Length( state ).ToString );
+     inherited Create( S );
+end;
 
-          Move( Seed_.state[ 0 ], state[ 0 ], SizeOf( P_w128_t ) * Min( Length( Seed_.state ), Length( state ) ) );
+constructor TRandomSFMT.Create( const Keys_:TArray<Int32u> );
+var
+   S :T_sfmt_t;
+begin
+     S := T_sfmt_t.Create( SFMT_N );
 
-          idx := Seed_.idx;
-     end;
+     sfmt_init_by_array( S, Keys_, Length( Keys_ ) );
+
+     inherited Create( S );
 end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
@@ -262,34 +290,34 @@ class procedure TRandomSFMT.rshift128( out out_:T_w128_t; const in_:T_w128_t; sh
 var
    th, tl, oh, ol :Int64u;
 begin
-     th := ( Int64u( in_.u[3] ) shl 32 ) or ( Int64u( in_.u[2] ) );
-     tl := ( Int64u( in_.u[1] ) shl 32 ) or ( Int64u( in_.u[0] ) );
+     th := ( Int64u( in_.u[ 3 ] ) shl 32 ) or ( Int64u( in_.u[ 2 ] ) );
+     tl := ( Int64u( in_.u[ 1 ] ) shl 32 ) or ( Int64u( in_.u[ 0 ] ) );
 
      oh :=       th shr (      shift * 8 );
      ol :=       tl shr (      shift * 8 );
      ol := ol or th shl ( 64 - shift * 8 );
 
-     out_.u[1] := Int32u( ol shr 32 );
-     out_.u[0] := Int32u( ol        );
-     out_.u[3] := Int32u( oh shr 32 );
-     out_.u[2] := Int32u( oh        );
+     out_.u[ 1 ] := Int32u( ol shr 32 );
+     out_.u[ 0 ] := Int32u( ol        );
+     out_.u[ 3 ] := Int32u( oh shr 32 );
+     out_.u[ 2 ] := Int32u( oh        );
 end;
 
 class procedure TRandomSFMT.lshift128( out out_:T_w128_t; const in_:T_w128_t; shift:Int32s );
 var
    th, tl, oh, ol :Int64u;
 begin
-     th := ( Int64u( in_.u[3] ) shl 32 ) or ( Int64u( in_.u[2] ) );
-     tl := ( Int64u( in_.u[1] ) shl 32 ) or ( Int64u( in_.u[0] ) );
+     th := ( Int64u( in_.u[ 3 ] ) shl 32 ) or ( Int64u( in_.u[ 2 ] ) );
+     tl := ( Int64u( in_.u[ 1 ] ) shl 32 ) or ( Int64u( in_.u[ 0 ] ) );
 
      oh :=       th shl (      shift * 8 );
      ol :=       tl shl (      shift * 8 );
      oh := oh or tl shr ( 64 - shift * 8 );
 
-     out_.u[1] := Int32u( ol shr 32 );
-     out_.u[0] := Int32u( ol        );
-     out_.u[3] := Int32u( oh shr 32 );
-     out_.u[2] := Int32u( oh        );
+     out_.u[ 1 ] := Int32u( ol shr 32 );
+     out_.u[ 0 ] := Int32u( ol        );
+     out_.u[ 3 ] := Int32u( oh shr 32 );
+     out_.u[ 2 ] := Int32u( oh        );
 end;
 
 procedure TRandomSFMT.do_recursion( out r:T_w128_t; const a,b,c,d:T_w128_t );
@@ -299,10 +327,10 @@ begin
      lshift128( x, a, SFMT_SL2 );
      rshift128( y, c, SFMT_SR2 );
 
-     r.u[0] := a.u[0] xor x.u[0] xor ( ( b.u[0] shr SFMT_SR1 ) and SFMT_MSK1 ) xor y.u[0] xor ( d.u[0] shl SFMT_SL1 );
-     r.u[1] := a.u[1] xor x.u[1] xor ( ( b.u[1] shr SFMT_SR1 ) and SFMT_MSK2 ) xor y.u[1] xor ( d.u[1] shl SFMT_SL1 );
-     r.u[2] := a.u[2] xor x.u[2] xor ( ( b.u[2] shr SFMT_SR1 ) and SFMT_MSK3 ) xor y.u[2] xor ( d.u[2] shl SFMT_SL1 );
-     r.u[3] := a.u[3] xor x.u[3] xor ( ( b.u[3] shr SFMT_SR1 ) and SFMT_MSK4 ) xor y.u[3] xor ( d.u[3] shl SFMT_SL1 );
+     r.u[ 0 ] := a.u[ 0 ] xor x.u[ 0 ] xor ( ( b.u[ 0 ] shr SFMT_SR1 ) and SFMT_MSK1 ) xor y.u[ 0 ] xor ( d.u[ 0 ] shl SFMT_SL1 );
+     r.u[ 1 ] := a.u[ 1 ] xor x.u[ 1 ] xor ( ( b.u[ 1 ] shr SFMT_SR1 ) and SFMT_MSK2 ) xor y.u[ 1 ] xor ( d.u[ 1 ] shl SFMT_SL1 );
+     r.u[ 2 ] := a.u[ 2 ] xor x.u[ 2 ] xor ( ( b.u[ 2 ] shr SFMT_SR1 ) and SFMT_MSK3 ) xor y.u[ 2 ] xor ( d.u[ 2 ] shl SFMT_SL1 );
+     r.u[ 3 ] := a.u[ 3 ] xor x.u[ 3 ] xor ( ( b.u[ 3 ] shr SFMT_SR1 ) and SFMT_MSK4 ) xor y.u[ 3 ] xor ( d.u[ 3 ] shl SFMT_SL1 );
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -314,8 +342,6 @@ end;
  * @return 32-bit pseudorandom number
  *)
 function TRandomSFMT.sfmt_genrand_uint32( var sfmt:T_sfmt_t ) :Int32u;
-var
-   r :Int32u;
 begin
      if sfmt.idx >= SFMT_N32 then
      begin
@@ -324,11 +350,9 @@ begin
           sfmt.idx := 0;
      end;
 
+     Result := sfmt.psfmt32[ sfmt.idx ];
+
      Inc( sfmt.idx );
-
-     r := sfmt.psfmt32[ sfmt.idx ];
-
-     Result := r;
 end;
 
 (**
@@ -340,8 +364,6 @@ end;
  * @return 64-bit pseudorandom number
  *)
 function TRandomSFMT.sfmt_genrand_uint64( var sfmt:T_sfmt_t ) :Int64u;
-var
-   r :Int64u;
 begin
      Assert( sfmt.idx mod 2 = 0 );
 
@@ -352,11 +374,9 @@ begin
           sfmt.idx := 0;
      end;
 
-     r := sfmt.psfmt64[ sfmt.idx div 2 ];
+     Result := sfmt.psfmt64[ sfmt.idx div 2 ];
 
      Inc( sfmt.idx, 2 );
-
-     Result := r;
 end;
 
 (**
@@ -788,7 +808,7 @@ begin
 
      mid := ( size - lag ) div 2;
 
-     FillChar( sfmt, SizeOf( sfmt ), $8b );
+     FillChar( sfmt.state[ 0 ], SizeOf( T_w128_t ) * Length( sfmt.state ), $8b );
 
      if key_length + 1 > SFMT_N32 then count := key_length + 1
                                   else count := SFMT_N32;
