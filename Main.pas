@@ -28,7 +28,7 @@ type
   private
     { private 宣言 }
     ///// メソッド
-    procedure ShowRandoms;
+    procedure ShowRands;
   public
     { public 宣言 }
     _SeedO  :IRandom;
@@ -51,7 +51,7 @@ uses System.Math, System.Threading;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TForm1.ShowRandoms;
+procedure TForm1.ShowRands;
 var
    B :TBitmapData;
 begin
@@ -124,7 +124,7 @@ begin
           for X := 0 to _SequsN-1 do _Rands[ Y, X ] := R.DrawRandFlo64s;
      end;
 
-     ShowRandoms;
+     ShowRands;
 end;
 
 end. //######################################################################### ■
