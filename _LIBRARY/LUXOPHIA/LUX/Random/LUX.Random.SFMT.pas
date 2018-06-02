@@ -103,29 +103,29 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property SFMT_PARITY4 :Int32u read GetSFMT_PARITY4;
        property SFMT_IDSTR   :String read GetSFMT_IDSTR  ;
        ///// メソッド
-       procedure rshift128( out out_:T_w128_t; const in_:T_w128_t; shift:Int32s ); inline;
-       procedure lshift128( out out_:T_w128_t; const in_:T_w128_t; shift:Int32s ); inline;
+       class procedure rshift128( out out_:T_w128_t; const in_:T_w128_t; shift:Int32s ); inline;
+       class procedure lshift128( out out_:T_w128_t; const in_:T_w128_t; shift:Int32s ); inline;
        procedure do_recursion( out r:T_w128_t; const a,b,c,d:T_w128_t ); inline;
        {--------}
        function sfmt_genrand_uint32( var sfmt:T_sfmt_t ) :Int32u; inline;
        function sfmt_genrand_uint64( var sfmt:T_sfmt_t ) :Int64u; inline;
        {--------}
-       function sfmt_to_real1( v:Int32u ) :Flo64s; inline;
+       class function sfmt_to_real1( v:Int32u ) :Flo64s; inline;
        function sfmt_genrand_real1( var sfmt:T_sfmt_t ) :Flo64s; inline;
-       function sfmt_to_real2( v:Int32u ) :Flo64s; inline;
+       class function sfmt_to_real2( v:Int32u ) :Flo64s; inline;
        function sfmt_genrand_real2( var sfmt:T_sfmt_t ) :Flo64s; inline;
-       function sfmt_to_real3( v:Int32u ) :Flo64s; inline;
+       class function sfmt_to_real3( v:Int32u ) :Flo64s; inline;
        function sfmt_genrand_real3( var sfmt:T_sfmt_t ) :Flo64s; inline;
-       function sfmt_to_res53( v:Int64u ) :Flo64s; inline;
+       class function sfmt_to_res53( v:Int64u ) :Flo64s; inline;
        function sfmt_genrand_res53( var sfmt:T_sfmt_t ) :Flo64s; inline;
-       function sfmt_to_res53_mix( x,y:Int32u ) :Flo64s; inline;
+       class function sfmt_to_res53_mix( x,y:Int32u ) :Flo64s; inline;
        function sfmt_genrand_res53_mix( var sfmt:T_sfmt_t ) :Flo64s; inline;
        {--------}
-       function idxof( i:Int32s ) :Int32s;
-       procedure gen_rand_array( var sfmt:T_sfmt_t; array_:TArray<T_w128_t>; size:Int32s );
-       function func1( x:Int32u ) :Int32u;
-       function func2( x:Int32u ) :Int32u;
-       procedure period_certification( var sfmt:T_sfmt_t );
+       class function idxof( i:Int32s ) :Int32s; inline;
+       procedure gen_rand_array( var sfmt:T_sfmt_t; array_:TArray<T_w128_t>; size:Int32s ); inline;
+       class function func1( x:Int32u ) :Int32u; inline;
+       class function func2( x:Int32u ) :Int32u; inline;
+       procedure period_certification( var sfmt:T_sfmt_t ); inline;
        {--------}
        function sfmt_get_idstring( var sfmt:T_sfmt_t ) :String;
        function sfmt_get_min_array_size32( var sfmt:T_sfmt_t ) :Int32s;
@@ -244,11 +244,13 @@ begin
 
      with _Seed do
      begin
+          state := nil;
+
           SetLength( state, SFMT_N );
 
-          Assert( SizeOf( Seed_.state ) = SizeOf( state ), SizeOf( Seed_.state ).ToString + ' = ' + SizeOf( state ).ToString );
+          Assert( Length( Seed_.state ) = Length( state ), Length( Seed_.state ).ToString + ' = ' + Length( state ).ToString );
 
-          Move( Seed_.state, state, Min( SizeOf( Seed_.state ), SizeOf( state ) ) );
+          Move( Seed_.state[ 0 ], state[ 0 ], SizeOf( P_w128_t ) * Min( Length( Seed_.state ), Length( state ) ) );
 
           idx := Seed_.idx;
      end;
@@ -256,7 +258,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandomSFMT.rshift128( out out_:T_w128_t; const in_:T_w128_t; shift:Int32s );
+class procedure TRandomSFMT.rshift128( out out_:T_w128_t; const in_:T_w128_t; shift:Int32s );
 var
    th, tl, oh, ol :Int64u;
 begin
@@ -273,7 +275,7 @@ begin
      out_.u[2] := Int32u( oh        );
 end;
 
-procedure TRandomSFMT.lshift128( out out_:T_w128_t; const in_:T_w128_t; shift:Int32s );
+class procedure TRandomSFMT.lshift128( out out_:T_w128_t; const in_:T_w128_t; shift:Int32s );
 var
    th, tl, oh, ol :Int64u;
 begin
@@ -362,7 +364,7 @@ end;
  * @param v 32-bit unsigned integer
  * @return double on [0,1]-real-interval
  *)
-function TRandomSFMT.sfmt_to_real1( v:Int32u ) :Flo64s;
+class function TRandomSFMT.sfmt_to_real1( v:Int32u ) :Flo64s;
 begin
      Result := v * ( 1.0 / 4294967295.0 ); // divided by 2^32-1
 end;
@@ -382,7 +384,7 @@ end;
  * @param v 32-bit unsigned integer
  * @return double on [0,1)-real-interval
  *)
-function TRandomSFMT.sfmt_to_real2( v:Int32u ) :Flo64s;
+class function TRandomSFMT.sfmt_to_real2( v:Int32u ) :Flo64s;
 begin
      Result := v * ( 1.0 / 4294967296.0 );  // divided by 2^32
 end;
@@ -402,7 +404,7 @@ end;
  * @param v 32-bit unsigned integer
  * @return double on (0,1)-real-interval
  *)
-function TRandomSFMT.sfmt_to_real3( v:Int32u ) :Flo64s;
+class function TRandomSFMT.sfmt_to_real3( v:Int32u ) :Flo64s;
 begin
      Result := ( Flo64s( v ) + 0.5 ) * ( 1.0 / 4294967296.0 );  // divided by 2^32
 end;
@@ -423,7 +425,7 @@ end;
  * @param v 32-bit unsigned integer
  * @return double on [0,1)-real-interval with 53-bit resolution.
  *)
-function TRandomSFMT.sfmt_to_res53( v:Int64u ) :Flo64s;
+class function TRandomSFMT.sfmt_to_res53( v:Int64u ) :Flo64s;
 begin
      Result := ( v shr 11 ) * ( 1.0 / 9007199254740992.0 );
 end;
@@ -442,7 +444,7 @@ end;
  * generates a random number on [0,1) with 53-bit resolution from two
  * 32 bit integers
  *)
-function TRandomSFMT.sfmt_to_res53_mix( x,y:Int32u ) :Flo64s;
+class function TRandomSFMT.sfmt_to_res53_mix( x,y:Int32u ) :Flo64s;
 begin
      Result := sfmt_to_res53( x or ( Int64u( y ) shl 32 ) );
 end;
@@ -469,7 +471,7 @@ end;
  * This function simulate a 64-bit index of LITTLE ENDIAN
  * in BIG ENDIAN machine.
  *)
-function TRandomSFMT.idxof( i:Int32s ) :Int32s;
+class function TRandomSFMT.idxof( i:Int32s ) :Int32s;
 begin
      Result := i;
 end;
@@ -535,7 +537,7 @@ end;
  * @param x 32-bit integer
  * @return 32-bit integer
  *)
-function TRandomSFMT.func1( x:Int32u ) :Int32u;
+class function TRandomSFMT.func1( x:Int32u ) :Int32u;
 begin
      Result := ( x xor ( x shr 27 ) ) * Int32u( 1664525 );
 end;
@@ -546,7 +548,7 @@ end;
  * @param x 32-bit integer
  * @return 32-bit integer
  *)
-function TRandomSFMT.func2( x:Int32u ) :Int32u;
+class function TRandomSFMT.func2( x:Int32u ) :Int32u;
 begin
      Result := ( x xor ( x shr 27 ) ) * Int32u( 1566083941 );
 end;
