@@ -275,7 +275,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function pcg_mcg_32_xsh_rs_16_boundedrand_r( var rng:T_pcg_state_32; bound:Int16u ) :Int16u;
        function pcg_mcg_64_xsh_rs_32_random_r( var rng:T_pcg_state_64 ) :Int32u;
        function pcg_mcg_64_xsh_rs_32_boundedrand_r( var rng:T_pcg_state_64; bound:Int32u ) :Int32u;
-       { Generation        functions for XSH RR }
+       { Generation functions for XSH RR }
        function pcg_oneseq_16_xsh_rr_8_random_r( var rng:T_pcg_state_16 ) :Int08u;
        function pcg_oneseq_16_xsh_rr_8_boundedrand_r( var rng:T_pcg_state_16; bound:Int08u ) :Int08u;
        function pcg_oneseq_32_xsh_rr_16_random_r( var rng:T_pcg_state_32 ) :Int16u;
@@ -303,7 +303,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function pcg_mcg_32_xsh_rr_16_boundedrand_r( var rng:T_pcg_state_32; bound:Int16u ) :Int16u;
        function pcg_mcg_64_xsh_rr_32_random_r( var rng:T_pcg_state_64 ) :Int32u;
        function pcg_mcg_64_xsh_rr_32_boundedrand_r( var rng:T_pcg_state_64; bound:Int32u ) :Int32u;
-       { Generation        functions for RXS M XS }
+       { Generation functions for RXS M XS }
        function pcg_oneseq_8_rxs_m_xs_8_random_r( var rng:T_pcg_state_8 ) :Int08u;
        function pcg_oneseq_8_rxs_m_xs_8_boundedrand_r( var rng:T_pcg_state_8; bound:Int08u ) :Int08u;
        function pcg_oneseq_16_rxs_m_xs_16_random_r( var rng:T_pcg_state_16 ) :Int16u;
@@ -328,7 +328,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function pcg_setseq_32_rxs_m_xs_32_boundedrand_r( var rng:T_pcg_state_setseq_32; bound:Int32u ) :Int32u;
        function pcg_setseq_64_rxs_m_xs_64_random_r( var rng:T_pcg_state_setseq_64 ) :Int64u;
        function pcg_setseq_64_rxs_m_xs_64_boundedrand_r( var rng:T_pcg_state_setseq_64; bound:Int64u ) :Int64u;
-       { Generation        functions for XSL RR }
+       { Generation functions for XSL RR }
        function pcg_oneseq_64_xsl_rr_32_random_r( var rng:T_pcg_state_64 ) :Int32u;
        function pcg_oneseq_64_xsl_rr_32_boundedrand_r( var rng:T_pcg_state_64; bound:Int32u ) :Int32u;
        function pcg_unique_64_xsl_rr_32_random_r( var rng:T_pcg_state_64 ) :Int32u;
@@ -337,7 +337,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function pcg_setseq_64_xsl_rr_32_boundedrand_r( var rng:T_pcg_state_setseq_64; bound:Int32u ) :Int32u;
        function pcg_mcg_64_xsl_rr_32_random_r( var rng:T_pcg_state_64 ) :Int32u;
        function pcg_mcg_64_xsl_rr_32_boundedrand_r( var rng:T_pcg_state_64; bound:Int32u ) :Int32u;
-       { Generation        functions for XSL RR RR }
+       { Generation functions for XSL RR RR }
        function pcg_oneseq_64_xsl_rr_rr_64_random_r( var rng:T_pcg_state_64 ) :Int64u;
        function pcg_oneseq_64_xsl_rr_rr_64_boundedrand_r( var rng:T_pcg_state_64; bound:Int64u ) :Int64u;
        function pcg_unique_64_xsl_rr_rr_64_random_r( var rng:T_pcg_state_64 ) :Int64u;
@@ -479,7 +479,9 @@ end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomPCG_ALL
 
-{ https://github.com/imneme/pcg-c-basic }
+{ https://github.com/imneme/pcg-c }
+
+{ https://github.com/imneme/pcg-c/blob/master/include/pcg_variants.h }
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -526,7 +528,7 @@ end;
 
 function TRandomPCG_ALL.pcg_output_xsh_rr_16_8( state:Int16u ) :Int08u;
 begin
-     Result := pcg_rotr_8 ( ( ( state shr 05 ) xor state ) shr 05, state shr 13 );
+     Result := pcg_rotr_8( ( ( state shr 05 ) xor state ) shr 05, state shr 13 );
 end;
 
 function TRandomPCG_ALL.pcg_output_xsh_rr_32_16( state:Int32u ) :Int16u;
@@ -1967,6 +1969,8 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
+{ https://github.com/imneme/pcg-c/blob/master/src/pcg-advance-8.c }
+
 function TRandomPCG_ALL.pcg_advance_lcg_8( state,delta,cur_mult,cur_plus:Int08u ) :Int08u;
 var
    acc_mult, acc_plus :Int08u;
@@ -1990,6 +1994,8 @@ begin
 
      Result := acc_mult * state + acc_plus;
 end;
+
+{ https://github.com/imneme/pcg-c/blob/master/src/pcg-advance-16.c }
 
 function TRandomPCG_ALL.pcg_advance_lcg_16( state,delta,cur_mult,cur_plus:Int16u ) :Int16u;
 var
@@ -2015,6 +2021,8 @@ begin
      Result := acc_mult * state + acc_plus;
 end;
 
+{ https://github.com/imneme/pcg-c/blob/master/src/pcg-advance-32.c }
+
 function TRandomPCG_ALL.pcg_advance_lcg_32( state,delta,cur_mult,cur_plus:Int32u ) :Int32u;
 var
    acc_mult, acc_plus :Int32u;
@@ -2038,6 +2046,8 @@ begin
 
      Result := acc_mult * state + acc_plus;
 end;
+
+{ https://github.com/imneme/pcg-c/blob/master/src/pcg-advance-64.c }
 
 function TRandomPCG_ALL.pcg_advance_lcg_64( state,delta,cur_mult,cur_plus:Int64u ) :Int64u;
 var
