@@ -91,18 +91,18 @@ begin
      AddRow( 'Xorshift'   ,    '128',   '0', '32', TRandom32XOR128       );
 
      AddRow( 'xoroshiro*' ,     '64',   '0', '32', TRandom32XOS64s       );
-     AddRow( 'xoroshiro**',     '64',   '0', '32', TRandom32XOS64ss      );
      AddRow( 'xoroshiro+' ,    '128',   '0', '64', TRandom64XOS128p      );
-     AddRow( 'xoroshiro**',    '128',   '0', '64', TRandom64XOS128ss     );
      AddRow( 'xoroshiro+' ,    '128',  '64', '64', TRandom64XOS128x64p   );
+     AddRow( 'xoroshiro**',     '64',   '0', '32', TRandom32XOS64ss      );
+     AddRow( 'xoroshiro**',    '128',   '0', '64', TRandom64XOS128ss     );
      AddRow( 'xoroshiro**',    '128',  '64', '64', TRandom64XOS128x64ss  );
      AddRow( 'xoshiro+'   ,    '128',   '0', '32', TRandom32XOS128p      );
-     AddRow( 'xoshiro**'  ,    '128',   '0', '32', TRandom32XOS128ss     );
      AddRow( 'xoshiro+'   ,    '128',  '64', '32', TRandom32XOS128x64p   );
-     AddRow( 'xoshiro**'  ,    '128',  '64', '32', TRandom32XOS128x64ss  );
      AddRow( 'xoshiro+'   ,    '256',   '0', '64', TRandom64XOS256p      );
-     AddRow( 'xoshiro**'  ,    '256',   '0', '64', TRandom64XOS256ss     );
      AddRow( 'xoshiro+'   ,    '256', '128', '64', TRandom64XOS256x128p  );
+     AddRow( 'xoshiro**'  ,    '128',   '0', '32', TRandom32XOS128ss     );
+     AddRow( 'xoshiro**'  ,    '128',  '64', '32', TRandom32XOS128x64ss  );
+     AddRow( 'xoshiro**'  ,    '256',   '0', '64', TRandom64XOS256ss     );
      AddRow( 'xoshiro**'  ,    '256', '128', '64', TRandom64XOS256x128ss );
 
      AddRow( 'WELLa'      ,    '512',   '0', '32', TRandomWEL512a        );
