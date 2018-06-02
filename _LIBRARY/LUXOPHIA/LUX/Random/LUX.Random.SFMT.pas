@@ -898,17 +898,17 @@ end;
 procedure TRandom32SFMT.CalcNextSeed;
 begin
      Inc( _Seed.idx );
-end;
 
-function TRandom32SFMT.CalcRandInt32u :Int32u;
-begin
      if _Seed.idx >= SFMT_N32 then
      begin
           sfmt_gen_rand_all( _Seed );
 
           _Seed.idx := 0;
      end;
+end;
 
+function TRandom32SFMT.CalcRandInt32u :Int32u;
+begin
      Result := _Seed.psfmt32[ _Seed.idx ];
 end;
 
@@ -923,17 +923,17 @@ end;
 procedure TRandom64SFMT.CalcNextSeed;
 begin
      Inc( _Seed.idx, 2 );
-end;
 
-function TRandom64SFMT.CalcRandInt64u :Int64u;
-begin
      if _Seed.idx >= SFMT_N32 then
      begin
           sfmt_gen_rand_all( _Seed );
 
           _Seed.idx := 0;
      end;
+end;
 
+function TRandom64SFMT.CalcRandInt64u :Int64u;
+begin
      Result := _Seed.psfmt64[ _Seed.idx div 2 ];
 end;
 
