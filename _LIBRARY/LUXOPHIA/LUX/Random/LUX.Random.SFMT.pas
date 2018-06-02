@@ -47,7 +47,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomSFMT<_TSeed_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomSFMT
 
      IRandomSFMT = interface( IRandom<T_sfmt_t> )
      ['{3780F689-4D47-4EA8-ABE8-6D5051C0CBEC}']
@@ -79,10 +79,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function GetSFMT_PARITY3 :Int32u; virtual; abstract;
        function GetSFMT_PARITY4 :Int32u; virtual; abstract;
        function GetSFMT_IDSTR :String; virtual; abstract;
-       ///// メソッド
-       procedure CalcNextSeed; override;
-       function CalcRandInt32u :Int32u; override;
-       function CalcRandInt64u :Int64u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
        constructor Create( const Seed_:T_sfmt_t ); overload; override;
@@ -140,6 +136,28 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure sfmt_fill_array64( var sfmt:T_sfmt_t; array_:TArray<T_w128_t>; size:Int32s );
        procedure sfmt_init_gen_rand( var sfmt:T_sfmt_t; seed:Int32u );
        procedure sfmt_init_by_array( var sfmt:T_sfmt_t; init_key:TArray<Int32u>; key_length:Int32s );
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32SFMT
+
+     TRandom32SFMT = class( TRandomSFMT )
+     private
+     protected
+       ///// メソッド
+       procedure CalcNextSeed; override;
+       function CalcRandInt32u :Int32u; override;
+     public
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64SFMT
+
+     TRandom64SFMT = class( TRandomSFMT )
+     private
+     protected
+       ///// メソッド
+       procedure CalcNextSeed; override;
+       function CalcRandInt64u :Int64u; override;
+     public
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -204,7 +222,7 @@ end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomSFMT<_TSeed_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomSFMT
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -225,23 +243,6 @@ end;
 function TRandomSFMT.GetSFMT_N64 :Int32s;
 begin
      Result := SFMT_N * 2;
-end;
-
-/////////////////////////////////////////////////////////////////////// メソッド
-
-procedure TRandomSFMT.CalcNextSeed;
-begin
-
-end;
-
-function TRandomSFMT.CalcRandInt32u :Int32u;
-begin
-     Result := sfmt_genrand_uint32( _Seed );
-end;
-
-function TRandomSFMT.CalcRandInt64u :Int64u;
-begin
-     Result := sfmt_genrand_uint64( _Seed );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -887,6 +888,56 @@ begin
 
      period_certification( sfmt );
 end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32SFMT
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+/////////////////////////////////////////////////////////////////////// メソッド
+
+procedure TRandom32SFMT.CalcNextSeed;
+begin
+     Inc( _Seed.idx );
+end;
+
+function TRandom32SFMT.CalcRandInt32u :Int32u;
+begin
+     if _Seed.idx >= SFMT_N32 then
+     begin
+          sfmt_gen_rand_all( _Seed );
+
+          _Seed.idx := 0;
+     end;
+
+     Result := _Seed.psfmt32[ _Seed.idx ];
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64SFMT
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+/////////////////////////////////////////////////////////////////////// メソッド
+
+procedure TRandom64SFMT.CalcNextSeed;
+begin
+     Inc( _Seed.idx, 2 );
+end;
+
+function TRandom64SFMT.CalcRandInt64u :Int64u;
+begin
+     if _Seed.idx >= SFMT_N32 then
+     begin
+          sfmt_gen_rand_all( _Seed );
+
+          _Seed.idx := 0;
+     end;
+
+     Result := _Seed.psfmt64[ _Seed.idx div 2 ];
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
 
