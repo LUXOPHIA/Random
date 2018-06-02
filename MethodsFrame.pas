@@ -63,10 +63,10 @@ begin
 
      with StringGridM do
      begin
-          Cells[ 0, I ] := A_;
-          Cells[ 1, I ] := P_;
-          Cells[ 2, I ] := S_;
-          Cells[ 3, I ] := B_;
+          Cells[ 0, I ] :=       A_        ;
+          Cells[ 1, I ] := '2^'+ P_        ;
+          Cells[ 2, I ] := '2^'+ S_        ;
+          Cells[ 3, I ] :=       B_ + 'bit';
      end;
 
      _Methods := _Methods + [ M_ ];
@@ -108,11 +108,11 @@ begin
      AddRow( 'WELLa'      ,    '512',   '0', '32', TRandomWEL512a        );
      AddRow( 'WELLa'      ,   '1024',   '0', '32', TRandomWEL1024a       );
      AddRow( 'WELLa'      ,  '19937',   '0', '32', TRandomWEL19937a      );
-     AddRow( 'WELLc'      ,  '19937',   '0', '32', TRandomWEL19937c      );
      AddRow( 'WELLa-new'  ,  '19937',   '0', '32', TRandomWEL19937anew   );
+     AddRow( 'WELLc'      ,  '19937',   '0', '32', TRandomWEL19937c      );
      AddRow( 'WELLa'      ,  '44497',   '0', '32', TRandomWEL44497a      );
-     AddRow( 'WELLb'      ,  '44497',   '0', '32', TRandomWEL44497b      );
      AddRow( 'WELLa-new'  ,  '44497',   '0', '32', TRandomWEL44497anew   );
+     AddRow( 'WELLb'      ,  '44497',   '0', '32', TRandomWEL44497b      );
 
      AddRow( 'PCG'        ,     '64',   '0', '32', TRandomPCG32basic     );
 

@@ -1,19 +1,19 @@
 object FrameM: TFrameM
-  Size.Width = 218.000000000000000000
+  Size.Width = 243.000000000000000000
   Size.Height = 500.000000000000000000
   Size.PlatformDefault = False
   object StringGridM: TStringGrid
     Align = Client
     CanFocus = True
     ClipChildren = True
-    Size.Width = 218.000000000000000000
+    Size.Width = 243.000000000000000000
     Size.Height = 500.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
     RowCount = 52
     Options = [ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, Tabs, Header, HeaderClick, AutoDisplacement]
     OnSelectCell = StringGridMSelectCell
-    Viewport.Width = 218.000000000000000000
+    Viewport.Width = 243.000000000000000000
     Viewport.Height = 500.000000000000000000
     object StringColumnA: TStringColumn
       Header = 'Algorithm'
@@ -21,15 +21,15 @@ object FrameM: TFrameM
     end
     object StringColumnP: TStringColumn
       Header = 'Period'
-      Size.Width = 55.000000000000000000
+      Size.Width = 65.000000000000000000
     end
     object StringColumnS: TStringColumn
       Header = 'Step'
-      Size.Width = 35.000000000000000000
+      Size.Width = 45.000000000000000000
     end
     object StringColumnB: TStringColumn
       Header = 'Bit'
-      Size.Width = 35.000000000000000000
+      Size.Width = 40.000000000000000000
     end
   end
 end
