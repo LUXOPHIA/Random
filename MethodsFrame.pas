@@ -19,10 +19,10 @@ type
     procedure StringGridMSelectCell(Sender: TObject; const ACol, ARow: Integer; var CanSelect: Boolean);
   private
     _Methods :TArray<CRandom>;
+    _Method  :CRandom;
     ///// メソッド
     procedure AddRow( const A_,P_,S_,B_:String; const M_:CRandom );
   public
-    _Method :CRandom;
     { public 宣言 }
     constructor Create( Owner_:TComponent ); override;
     destructor Destroy; override;
@@ -52,6 +52,8 @@ uses LUX.Random.LCG,
      LUX.Random.SFMT.M216091;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+/////////////////////////////////////////////////////////////////////// メソッド
 
 procedure TFrameM.AddRow( const A_,P_,S_,B_:String; const M_:CRandom );
 var
