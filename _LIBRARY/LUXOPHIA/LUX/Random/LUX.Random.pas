@@ -31,10 +31,14 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      {public}
        ///// メソッド
        procedure GoNextSeed;
+       procedure DrawRand( out Rand_:Int08u ); overload;
+       procedure DrawRand( out Rand_:Int16u ); overload;
        procedure DrawRand( out Rand_:Int32u ); overload;
        procedure DrawRand( out Rand_:Int64u ); overload;
        procedure DrawRand( out Rand_:Flo32s ); overload;
        procedure DrawRand( out Rand_:Flo64s ); overload;
+       function DrawRandInt08u :Int08u;
+       function DrawRandInt16u :Int16u;
        function DrawRandInt32u :Int32u;
        function DrawRandInt64u :Int64u;
        function DrawRandFlo32s :Single;
@@ -51,6 +55,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _SeedCS :TCriticalSection;
        ///// メソッド
        procedure CalcNextSeed; virtual; abstract;
+       function CalcRandInt08u :Int08u; virtual;
+       function CalcRandInt16u :Int16u; virtual;
        function CalcRandInt32u :Int32u; virtual;
        function CalcRandInt64u :Int64u; virtual;
      public
@@ -61,10 +67,14 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        destructor Destroy; override;
        ///// メソッド
        procedure GoNextSeed;
+       procedure DrawRand( out Rand_:Int08u ); overload;  // 0 <= Value < 256                        = $100                   = 2^08
+       procedure DrawRand( out Rand_:Int16u ); overload;  // 0 <= Value < 65,536                     = $1,0000                = 2^16
        procedure DrawRand( out Rand_:Int32u ); overload;  // 0 <= Value < 4,294,967,296              = $1,0000,0000           = 2^32
        procedure DrawRand( out Rand_:Int64u ); overload;  // 0 <= Value < 18,446,744,073,709,551,616 = $1,0000,0000,0000,0000 = 2^64
        procedure DrawRand( out Rand_:Flo32s ); overload;  // 0 <= Value < 1
        procedure DrawRand( out Rand_:Flo64s ); overload;  // 0 <= Value < 1
+       function DrawRandInt08u :Int08u;                   // 0 <= Value < 256                        = $100                   = 2^08
+       function DrawRandInt16u :Int16u;                   // 0 <= Value < 65,536                     = $1,0000                = 2^16
        function DrawRandInt32u :Int32u;                   // 0 <= Value < 4,294,967,296              = $1,0000,0000           = 2^32
        function DrawRandInt64u :Int64u;                   // 0 <= Value < 18,446,744,073,709,551,616 = $1,0000,0000,0000,0000 = 2^64
        function DrawRandFlo32s :Single;                   // 0 <= Value < 1
@@ -165,6 +175,16 @@ uses System.SysUtils
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
+function TRandom.CalcRandInt08u :Int08u;
+begin
+     Result := CalcRandInt16u and $FF{= 2^8-1 };
+end;
+
+function TRandom.CalcRandInt16u :Int16u;
+begin
+     Result := CalcRandInt32u and $FFFF{= 2^16-1 };
+end;
+
 function TRandom.CalcRandInt32u :Int32u;
 begin
      Result := CalcRandInt64u and $FFFFFFFF{= 2^32-1 };
@@ -213,6 +233,24 @@ end;
 
 //------------------------------------------------------------------------------
 
+procedure TRandom.DrawRand( out Rand_:Int08u );
+begin
+     _SeedCS.Enter;
+
+       Rand_ := CalcRandInt08u;  CalcNextSeed;
+
+     _SeedCS.Leave;
+end;
+
+procedure TRandom.DrawRand( out Rand_:Int16u );
+begin
+     _SeedCS.Enter;
+
+       Rand_ := CalcRandInt16u;  CalcNextSeed;
+
+     _SeedCS.Leave;
+end;
+
 procedure TRandom.DrawRand( out Rand_:Int32u );
 begin
      _SeedCS.Enter;
@@ -242,6 +280,16 @@ begin
 end;
 
 //------------------------------------------------------------------------------
+
+function TRandom.DrawRandInt08u :Int08u;
+begin
+     DrawRand( Result );
+end;
+
+function TRandom.DrawRandInt16u :Int16u;
+begin
+     DrawRand( Result );
+end;
 
 function TRandom.DrawRandInt32u :Int32u;
 begin
