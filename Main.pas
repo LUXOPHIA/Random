@@ -51,7 +51,18 @@ uses System.Math, System.Threading,
      LUX.Random.Xorshift,
      LUX.Random.Xoshiro,
      LUX.Random.WELL,
-     LUX.Random.PCG;
+     LUX.Random.PCG,
+     LUX.Random.SFMT,
+     LUX.Random.SFMT.M607,
+     LUX.Random.SFMT.M1279,
+     LUX.Random.SFMT.M2281,
+     LUX.Random.SFMT.M4253,
+     LUX.Random.SFMT.M11213,
+     LUX.Random.SFMT.M19937,
+     LUX.Random.SFMT.M44497,
+     LUX.Random.SFMT.M86243,
+     LUX.Random.SFMT.M132049,
+     LUX.Random.SFMT.M216091;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -122,6 +133,16 @@ begin
       28: Result := TRandomWEL44497b     ;  // WELL44497b
       29: Result := TRandomWEL44497anew  ;  // WELL44497anew
       30: Result := TRandomPCG32basic    ;  // PCG 32 (basic)
+      31: Result := TRandomSFMT607       ;  // SFMT 607
+      32: Result := TRandomSFMT1279      ;  // SFMT 1279
+      33: Result := TRandomSFMT2281      ;  // SFMT 2281
+      34: Result := TRandomSFMT4253      ;  // SFMT 4253
+      35: Result := TRandomSFMT11213     ;  // SFMT 11213
+      36: Result := TRandomSFMT19937     ;  // SFMT 19937
+      37: Result := TRandomSFMT44497     ;  // SFMT 44497
+      38: Result := TRandomSFMT86243     ;  // SFMT 86243
+      39: Result := TRandomSFMT132049    ;  // SFMT 132049
+      40: Result := TRandomSFMT216091    ;  // SFMT 216091
      else Result := TRandomZero          ;
      end;
 end;

@@ -25,7 +25,18 @@ uses
   LUX.Random.Xorshift in '_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.Xorshift.pas',
   LUX.Random.Xoshiro in '_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.Xoshiro.pas',
   LUX.Random.WELL in '_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.WELL.pas',
-  LUX.Random.PCG in '_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.PCG.pas';
+  LUX.Random.PCG in '_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.PCG.pas',
+  LUX.Random.SFMT in '_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.SFMT.pas',
+  LUX.Random.SFMT.M607 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M607.pas',
+  LUX.Random.SFMT.M1279 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M1279.pas',
+  LUX.Random.SFMT.M4253 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M4253.pas',
+  LUX.Random.SFMT.M11213 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M11213.pas',
+  LUX.Random.SFMT.M19937 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M19937.pas',
+  LUX.Random.SFMT.M44497 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M44497.pas',
+  LUX.Random.SFMT.M86243 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M86243.pas',
+  LUX.Random.SFMT.M132049 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M132049.pas',
+  LUX.Random.SFMT.M216091 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M216091.pas',
+  LUX.Random.SFMT.M2281 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M2281.pas';
 
 {$R *.res}
 

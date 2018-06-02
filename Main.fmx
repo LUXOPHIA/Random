@@ -52,7 +52,17 @@ object Form1: TForm1
         'WELL44497a'
         'WELL44497b'
         'WELL44497a-new'
-        'PCG 32 (basic)')
+        'PCG 32 (basic)'
+        'SFMT 607'
+        'SFMT 1279'
+        'SFMT 2281'
+        'SFMT 4253'
+        'SFMT 11213'
+        'SFMT 19937'
+        'SFMT 44497'
+        'SFMT 86243'
+        'SFMT 132049'
+        'SFMT 216091')
       Position.X = 105.000000000000000000
       Position.Y = 10.000000000000000000
       Size.Width = 130.000000000000000000
@@ -93,7 +103,17 @@ object Form1: TForm1
         'WELL44497a'
         'WELL44497b'
         'WELL44497a-new'
-        'PCG 32 (basic)')
+        'PCG 32 (basic)'
+        'SFMT 607'
+        'SFMT 1279'
+        'SFMT 2281'
+        'SFMT 4253'
+        'SFMT 11213'
+        'SFMT 19937'
+        'SFMT 44497'
+        'SFMT 86243'
+        'SFMT 132049'
+        'SFMT 216091')
       Position.X = 330.000000000000000000
       Position.Y = 10.000000000000000000
       Size.Width = 130.000000000000000000
