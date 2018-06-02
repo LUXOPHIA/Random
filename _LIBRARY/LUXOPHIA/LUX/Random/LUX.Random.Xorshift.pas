@@ -7,6 +7,13 @@ uses LUX, LUX.D3, LUX.D4,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
+     TRandomXOR<_TSeed_:record> = class;
+       TRandomXOR32             = class;
+       TRandomXOR64             = class;
+       TRandomXOR96             = class;
+       TRandomXOR128            = class;
+       TRandom64XOR64           = class;
+
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
@@ -71,6 +78,18 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        ///// メソッド
        procedure CalcNextSeed; override;
        function CalcRandInt32u :Int32u; override;
+     public
+       constructor CreateFromRand( const Random_:IRandom ); overload; override;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOR64
+
+     TRandom64XOR64 = class( TRandomXOR<Int64u> )
+     private
+     protected
+       ///// メソッド
+       procedure CalcNextSeed; override;
+       function CalcRandInt64u :Int64u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
      end;
@@ -223,6 +242,32 @@ begin
                                Random_.DrawRandInt32u,
                                Random_.DrawRandInt32u,
                                Random_.DrawRandInt32u ) );
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOR64
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+/////////////////////////////////////////////////////////////////////// メソッド
+
+procedure TRandom64XOR64.CalcNextSeed;
+begin
+     _Seed := _Seed xor ( _Seed shl 7 );
+     _Seed := _Seed xor ( _Seed shr 9 );
+end;
+
+function TRandom64XOR64.CalcRandInt64u :Int64u;
+begin
+     Result := _Seed;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TRandom64XOR64.CreateFromRand( const Random_:IRandom );
+begin
+     Create( Random_.DrawRandInt64u );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
