@@ -36,7 +36,8 @@ uses
   LUX.Random.SFMT.M86243 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M86243.pas',
   LUX.Random.SFMT.M132049 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M132049.pas',
   LUX.Random.SFMT.M216091 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M216091.pas',
-  LUX.Random.SFMT.M2281 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M2281.pas';
+  LUX.Random.SFMT.M2281 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M2281.pas',
+  MethodsFrame in 'MethodsFrame.pas' {FrameM: TFrame};
 
 {$R *.res}
 

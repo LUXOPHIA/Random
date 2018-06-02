@@ -5,7 +5,8 @@ interface //####################################################################
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
-  FMX.ListBox, FMX.Objects, FMX.StdCtrls, FMX.Controls.Presentation,
+  FMX.TabControl, FMX.Objects, FMX.Controls.Presentation, FMX.StdCtrls,
+  MethodsFrame,
   LUX, LUX.D3, LUX.D4,
   LUX.Random;
 
@@ -15,15 +16,15 @@ type
     LabelY: TLabel;
     Image1: TImage;
     Timer1: TTimer;
-    Panel1: TPanel;
-      LabelS: TLabel;
-      ComboBoxS: TComboBox;
-      LabelR: TLabel;
-      ComboBoxR: TComboBox;
+    TabControl1: TTabControl;
+      TabItemS: TTabItem;
+        FrameMS: TFrameM;
+      TabItemR: TTabItem;
+        FrameMR: TFrameM;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
-    procedure ComboBoxSChange(Sender: TObject);
-    procedure ComboBoxRChange(Sender: TObject);
+    procedure FrameMSStringGridMSelectCell(Sender: TObject; const ACol, ARow: Integer; var CanSelect: Boolean);
+    procedure FrameMRStringGridMSelectCell(Sender: TObject; const ACol, ARow: Integer; var CanSelect: Boolean);
   private
     { private 宣言 }
     ///// メソッド
@@ -35,8 +36,6 @@ type
     _Rands  :TArray2<Double>;
     _ThresN :Integer;
     _SequsN :Integer;
-    ///// メソッド
-    function SelectMethod( const I_:Integer ) :CRandom;
   end;
 
 var
@@ -46,23 +45,7 @@ implementation //###############################################################
 
 {$R *.fmx}
 
-uses System.Math, System.Threading,
-     LUX.Random.LCG,
-     LUX.Random.Xorshift,
-     LUX.Random.Xoshiro,
-     LUX.Random.WELL,
-     LUX.Random.PCG,
-     LUX.Random.SFMT,
-     LUX.Random.SFMT.M607,
-     LUX.Random.SFMT.M1279,
-     LUX.Random.SFMT.M2281,
-     LUX.Random.SFMT.M4253,
-     LUX.Random.SFMT.M11213,
-     LUX.Random.SFMT.M19937,
-     LUX.Random.SFMT.M44497,
-     LUX.Random.SFMT.M86243,
-     LUX.Random.SFMT.M132049,
-     LUX.Random.SFMT.M216091;
+uses System.Math, System.Threading;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -100,51 +83,18 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-function TForm1.SelectMethod( const I_:Integer ) :CRandom;
+procedure TForm1.FrameMSStringGridMSelectCell(Sender: TObject; const ACol, ARow: Integer; var CanSelect: Boolean);
 begin
-     case I_ of
-      01: Result := TRandomLCG32         ;  // LCG 32
-      02: Result := TRandomLCG48         ;  // LCG 48
-      03: Result := TRandomLCG64         ;  // LCG 64
-      04: Result := TRandomXOR32         ;  // Xorshift 32
-      05: Result := TRandomXOR64         ;  // Xorshift 64
-      06: Result := TRandomXOR96         ;  // Xorshift 96
-      07: Result := TRandomXOR128        ;  // Xorshift 128
-      08: Result := TRandom32XOS64s      ;  // xoroshiro 64*
-      09: Result := TRandom32XOS64ss     ;  // xoroshiro 64**
-      10: Result := TRandom32XOS128p     ;  // xoshiro128+
-      11: Result := TRandom32XOS128ss    ;  // xoshiro128**
-      12: Result := TRandom32XOS128x64p  ;  // xoshiro128+ 2^64
-      13: Result := TRandom32XOS128x64ss ;  // xoshiro128** 2^64
-      14: Result := TRandom64XOS128p     ;  // xoroshiro128+
-      15: Result := TRandom64XOS128ss    ;  // xoroshiro128**
-      16: Result := TRandom64XOS128x64p  ;  // xoroshiro128+ 2^64
-      17: Result := TRandom64XOS128x64ss ;  // xoroshiro128** 2^64
-      18: Result := TRandom64XOS256p     ;  // xoshiro256+
-      19: Result := TRandom64XOS256ss    ;  // xoshiro256**
-      20: Result := TRandom64XOS256x128p ;  // xoshiro256+ 2^128
-      21: Result := TRandom64XOS256x128ss;  // xoshiro256** 2^128
-      22: Result := TRandomWEL512a       ;  // WELL512a
-      23: Result := TRandomWEL1024a      ;  // WELL1024a
-      24: Result := TRandomWEL19937a     ;  // WELL19937a
-      25: Result := TRandomWEL19937c     ;  // WELL19937c
-      26: Result := TRandomWEL19937anew  ;  // WELL19937anew
-      27: Result := TRandomWEL44497a     ;  // WELL44497a
-      28: Result := TRandomWEL44497b     ;  // WELL44497b
-      29: Result := TRandomWEL44497anew  ;  // WELL44497anew
-      30: Result := TRandomPCG32basic    ;  // PCG 32 (basic)
-      31: Result := TRandomSFMT607       ;  // SFMT 607
-      32: Result := TRandomSFMT1279      ;  // SFMT 1279
-      33: Result := TRandomSFMT2281      ;  // SFMT 2281
-      34: Result := TRandomSFMT4253      ;  // SFMT 4253
-      35: Result := TRandomSFMT11213     ;  // SFMT 11213
-      36: Result := TRandomSFMT19937     ;  // SFMT 19937
-      37: Result := TRandomSFMT44497     ;  // SFMT 44497
-      38: Result := TRandomSFMT86243     ;  // SFMT 86243
-      39: Result := TRandomSFMT132049    ;  // SFMT 132049
-      40: Result := TRandomSFMT216091    ;  // SFMT 216091
-     else Result := TRandomZero          ;
-     end;
+     FrameMS.StringGridMSelectCell(Sender, ACol, ARow, CanSelect);
+
+     _SeedO := FrameMS.Method.Create;
+end;
+
+procedure TForm1.FrameMRStringGridMSelectCell(Sender: TObject; const ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+     FrameMR.StringGridMSelectCell(Sender, ACol, ARow, CanSelect);
+
+     _RandC := FrameMR.Method;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -156,8 +106,8 @@ begin
 
      SetLength( _Rands, _ThresN, _SequsN );
 
-     ComboBoxS.ItemIndex := 0;
-     ComboBoxR.ItemIndex := 1;
+     FrameMS.StringGridM.SelectRow( 0 );
+     FrameMR.StringGridM.SelectRow( 1 );
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -175,18 +125,6 @@ begin
      end;
 
      ShowRandoms;
-end;
-
-//------------------------------------------------------------------------------
-
-procedure TForm1.ComboBoxSChange(Sender: TObject);
-begin
-     _SeedO := SelectMethod( ComboBoxS.ItemIndex ).Create;
-end;
-
-procedure TForm1.ComboBoxRChange(Sender: TObject);
-begin
-     _RandC := SelectMethod( ComboBoxR.ItemIndex );
 end;
 
 end. //######################################################################### ■

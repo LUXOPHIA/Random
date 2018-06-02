@@ -352,6 +352,11 @@
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M132049.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M216091.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M2281.pas"/>
+        <DCCReference Include="MethodsFrame.pas">
+            <Form>FrameM</Form>
+            <FormType>fmx</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

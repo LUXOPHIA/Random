@@ -2,147 +2,14 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Random'
-  ClientHeight = 597
-  ClientWidth = 552
+  ClientHeight = 552
+  ClientWidth = 800
   Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
   DesignerMasterStyle = 0
-  object Panel1: TPanel
-    Align = Bottom
-    Margins.Left = -10.000000000000000000
-    Position.X = -10.000000000000000000
-    Position.Y = 552.000000000000000000
-    Size.Width = 562.000000000000000000
-    Size.Height = 45.000000000000000000
-    Size.PlatformDefault = False
-    StyleLookup = 'pushpanel'
-    TabOrder = 0
-    object ComboBoxS: TComboBox
-      Items.Strings = (
-        ''
-        'LCG 32'
-        'LCG 48'
-        'LCG 64'
-        'Xorshift 32'
-        'Xorshift 64'
-        'Xorshift 96'
-        'Xorshift 128'
-        'xoroshiro 64*'
-        'xoroshiro 64**'
-        'xoshiro128+'
-        'xoshiro128**'
-        'xoshiro128+ 2^64'
-        'xoshiro128** 2^64'
-        'xoroshiro128+'
-        'xoroshiro128**'
-        'xoroshiro128+ 2^64'
-        'xoroshiro128** 2^64'
-        'xoshiro256+'
-        'xoshiro256**'
-        'xoshiro256+ 2^128'
-        'xoshiro256** 2^128'
-        'WELL512a'
-        'WELL1024a'
-        'WELL19937a'
-        'WELL19937c'
-        'WELL19937a-new'
-        'WELL44497a'
-        'WELL44497b'
-        'WELL44497a-new'
-        'PCG 32 (basic)'
-        'SFMT 607'
-        'SFMT 1279'
-        'SFMT 2281'
-        'SFMT 4253'
-        'SFMT 11213'
-        'SFMT 19937'
-        'SFMT 44497'
-        'SFMT 86243'
-        'SFMT 132049'
-        'SFMT 216091')
-      Position.X = 105.000000000000000000
-      Position.Y = 10.000000000000000000
-      Size.Width = 130.000000000000000000
-      Size.Height = 25.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 1
-      OnChange = ComboBoxSChange
-    end
-    object ComboBoxR: TComboBox
-      Items.Strings = (
-        ''
-        'LCG 32'
-        'LCG 48'
-        'LCG 64'
-        'Xorshift 32'
-        'Xorshift 64'
-        'Xorshift 96'
-        'Xorshift 128'
-        'xoroshiro 64*'
-        'xoroshiro 64**'
-        'xoshiro128+'
-        'xoshiro128**'
-        'xoshiro128+ 2^64'
-        'xoshiro128** 2^64'
-        'xoroshiro128+'
-        'xoroshiro128**'
-        'xoroshiro128+ 2^64'
-        'xoroshiro128** 2^64'
-        'xoshiro256+'
-        'xoshiro256**'
-        'xoshiro256+ 2^128'
-        'xoshiro256** 2^128'
-        'WELL512a'
-        'WELL1024a'
-        'WELL19937a'
-        'WELL19937c'
-        'WELL19937a-new'
-        'WELL44497a'
-        'WELL44497b'
-        'WELL44497a-new'
-        'PCG 32 (basic)'
-        'SFMT 607'
-        'SFMT 1279'
-        'SFMT 2281'
-        'SFMT 4253'
-        'SFMT 11213'
-        'SFMT 19937'
-        'SFMT 44497'
-        'SFMT 86243'
-        'SFMT 132049'
-        'SFMT 216091')
-      Position.X = 330.000000000000000000
-      Position.Y = 10.000000000000000000
-      Size.Width = 130.000000000000000000
-      Size.Height = 25.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 0
-      OnChange = ComboBoxRChange
-    end
-    object LabelS: TLabel
-      Position.X = 15.000000000000000000
-      Position.Y = 10.000000000000000000
-      Size.Width = 86.000000000000000000
-      Size.Height = 25.000000000000000000
-      Size.PlatformDefault = False
-      TextSettings.HorzAlign = Trailing
-      Text = 'Seed Method :'
-      TabOrder = 3
-    end
-    object LabelR: TLabel
-      Position.X = 240.000000000000000000
-      Position.Y = 10.000000000000000000
-      Size.Width = 85.000000000000000000
-      Size.Height = 25.000000000000000000
-      Size.PlatformDefault = False
-      TextSettings.HorzAlign = Trailing
-      Text = 'Rand Method :'
-      TabOrder = 2
-    end
-  end
   object LabelY: TLabel
     Position.X = 5.000000000000000000
     Position.Y = 85.000000000000000000
@@ -154,7 +21,7 @@ object Form1: TForm1
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Trailing
     Text = #8592' Thread'
-    TabOrder = 1
+    TabOrder = 0
   end
   object LabelX: TLabel
     Position.X = 30.000000000000000000
@@ -163,7 +30,7 @@ object Form1: TForm1
     Size.Height = 20.000000000000000000
     Size.PlatformDefault = False
     Text = 'Sequence '#8594
-    TabOrder = 2
+    TabOrder = 1
   end
   object Image1: TImage
     MultiResBitmap = <
@@ -173,7 +40,6 @@ object Form1: TForm1
     DisableInterpolation = True
     Margins.Left = 30.000000000000000000
     Margins.Top = 30.000000000000000000
-    Margins.Right = 10.000000000000000000
     Margins.Bottom = 10.000000000000000000
     Size.Width = 512.000000000000000000
     Size.Height = 512.000000000000000000
@@ -185,5 +51,109 @@ object Form1: TForm1
     OnTimer = Timer1Timer
     Left = 45
     Top = 45
+  end
+  object TabControl1: TTabControl
+    Align = Right
+    Margins.Left = 10.000000000000000000
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Margins.Bottom = 10.000000000000000000
+    Position.X = 552.000000000000000000
+    Position.Y = 10.000000000000000000
+    Size.Width = 238.000000000000000000
+    Size.Height = 532.000000000000000000
+    Size.PlatformDefault = False
+    TabIndex = 1
+    TabOrder = 3
+    TabPosition = PlatformDefault
+    Sizes = (
+      238s
+      506s
+      238s
+      506s)
+    object TabItemS: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 46.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'Seed'
+      ExplicitSize.cx = 46.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      inline FrameMS: TFrameM
+        Align = Client
+        Margins.Left = 10.000000000000000000
+        Margins.Top = 10.000000000000000000
+        Margins.Right = 10.000000000000000000
+        Margins.Bottom = 10.000000000000000000
+        Size.Width = 218.000000000000000000
+        Size.Height = 486.000000000000000000
+        Size.PlatformDefault = False
+        inherited StringGridM: TStringGrid
+          Size.Height = 486.000000000000000000
+          OnSelectCell = FrameMSStringGridMSelectCell
+          Viewport.Width = 218.000000000000000000
+          Viewport.Height = 486.000000000000000000
+          inherited StringColumnA: TStringColumn
+            Size.Width = 70.000000000000000000
+          end
+          inherited StringColumnP: TStringColumn
+            Size.Width = 55.000000000000000000
+          end
+          inherited StringColumnS: TStringColumn
+            Size.Width = 35.000000000000000000
+          end
+          inherited StringColumnB: TStringColumn
+            Size.Width = 35.000000000000000000
+          end
+        end
+      end
+    end
+    object TabItemR: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = True
+      Size.Width = 48.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'Rand'
+      ExplicitSize.cx = 48.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      inline FrameMR: TFrameM
+        Align = Client
+        Margins.Left = 10.000000000000000000
+        Margins.Top = 10.000000000000000000
+        Margins.Right = 10.000000000000000000
+        Margins.Bottom = 10.000000000000000000
+        Size.Width = 218.000000000000000000
+        Size.Height = 486.000000000000000000
+        Size.PlatformDefault = False
+        inherited StringGridM: TStringGrid
+          Size.Height = 486.000000000000000000
+          OnSelectCell = FrameMRStringGridMSelectCell
+          Viewport.Width = 218.000000000000000000
+          Viewport.Height = 486.000000000000000000
+          inherited StringColumnA: TStringColumn
+            Size.Width = 70.000000000000000000
+          end
+          inherited StringColumnP: TStringColumn
+            Size.Width = 55.000000000000000000
+          end
+          inherited StringColumnS: TStringColumn
+            Size.Width = 35.000000000000000000
+          end
+          inherited StringColumnB: TStringColumn
+            Size.Width = 35.000000000000000000
+          end
+        end
+      end
+    end
   end
 end
