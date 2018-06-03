@@ -9,6 +9,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
+     (* Representations for the oneseq, mcg, and unique variants *)
+
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% T_pcg_state_8
 
      T_pcg_state_8 = record
@@ -52,6 +54,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      T_pcg32f_random_t  = T_pcg_state_64;
 
      T_pcg64si_random_t = T_pcg_state_64;
+
+     (* Representations setseq variants *)
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% T_pcg_state_setseq_8
 
@@ -149,7 +153,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        PCG_DEFAULT_INCREMENT_16  :Int16u = 47989;
        PCG_DEFAULT_INCREMENT_32  :Int32u = 2891336453;
        PCG_DEFAULT_INCREMENT_64  :Int64u = 1442695040888963407;
-       { Static initialization constants }
+       (*
+        * Static initialization constants (if you can't call srandom for some
+        * bizarre reason).
+        *)
        PCG_STATE_ONESEQ_8_INITIALIZER  :T_pcg_state_8  = ( state:$d7               );
        PCG_STATE_ONESEQ_16_INITIALIZER :T_pcg_state_16 = ( state:$20df             );
        PCG_STATE_ONESEQ_32_INITIALIZER :T_pcg_state_32 = ( state:$46b56677         );
@@ -181,23 +188,29 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      //PCG64I_INITIALIZER  = PCG_STATE_SETSEQ_64_INITIALIZER;
      private
        ///// メソッド
+       // Rotate helper functions.
        function pcg_rotr_8( value:Int08u; rot:Int32u ) :Int08u;
        function pcg_rotr_16( value:Int16u; rot:Int32u ) :Int16u;
        function pcg_rotr_32( value:Int32u; rot:Int32u ) :Int32u;
        function pcg_rotr_64( value:Int64u; rot:Int32u ) :Int64u;
+       // XSH RS
        function pcg_output_xsh_rs_16_8( state:Int16u ) :Int08u;
        function pcg_output_xsh_rs_32_16( state:Int32u ) :Int16u;
        function pcg_output_xsh_rs_64_32( state:Int64u ) :Int32u;
+       // XSH RR
        function pcg_output_xsh_rr_16_8( state:Int16u ) :Int08u;
        function pcg_output_xsh_rr_32_16( state:Int32u ) :Int16u;
        function pcg_output_xsh_rr_64_32( state:Int64u ) :Int32u;
+       // RXS M XS
        function pcg_output_rxs_m_xs_8_8( state:Int08u ) :Int08u;
        function pcg_output_rxs_m_xs_16_16( state:Int16u ) :Int16u;
        function pcg_output_rxs_m_xs_32_32( state:Int32u ) :Int32u;
        function pcg_output_rxs_m_xs_64_64( state:Int64u ) :Int64u;
+       // XSL RR
        function pcg_output_xsl_rr_64_32( state:Int64u ) :Int32u;
+       // XSL RR RR
        function pcg_output_xsl_rr_rr_64_64( state:Int64u ) :Int64u;
-       { Functions to advance the underlying LCG }
+       // Functions to advance the underlying LCG
        procedure pcg_oneseq_8_step_r( var rng:T_pcg_state_8 );
        procedure pcg_oneseq_8_advance_r( var rng:T_pcg_state_8; delta:Int08u );
        procedure pcg_mcg_8_step_r( var rng:T_pcg_state_8 );
@@ -346,6 +359,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function pcg_setseq_64_xsl_rr_rr_64_boundedrand_r( var rng:T_pcg_state_setseq_64; bound:Int64u ) :Int64u;
      protected
        ///// メソッド
+       (* Multi-step advance functions (jump-ahead, jump-back) *)
        function pcg_advance_lcg_8( state,delta,cur_mult,cur_plus:Int08u ) :Int08u;
        function pcg_advance_lcg_16( state,delta,cur_mult,cur_plus:Int16u ) :Int16u;
        function pcg_advance_lcg_32( state,delta,cur_mult,cur_plus:Int32u ) :Int32u;
@@ -487,8 +501,17 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
+(*
+ * Rotate helper functions.
+ *)
+
 function TRandomPCG_ALL.pcg_rotr_8( value:Int08u; rot:Int32u ) :Int08u;
 begin
+     (* Unfortunately, clang is kinda pathetic when it comes to properly
+      * recognizing idiomatic rotate code, so for clang we actually provide
+      * assembler directives (enabled with PCG_USE_INLINE_ASM).  Boo, hiss.
+      *)
+
      Result := ( value shr rot ) or ( value shl ( -rot and 07 ) );
 end;
 
@@ -507,7 +530,11 @@ begin
      Result := ( value shr rot ) or ( value shl ( -rot and 63 ) );
 end;
 
-//----------------------------------------------------------------------- XSH RS
+(*
+ * Output functions.  These are the core of the PCG generation scheme.
+ *)
+
+// XSH RS
 
 function TRandomPCG_ALL.pcg_output_xsh_rs_16_8( state:Int16u ) :Int08u;
 begin
@@ -524,7 +551,7 @@ begin
      Result := Int32u( ( ( state shr 22 ) xor state ) shr ( ( state shr 61 ) + 22 ) );
 end;
 
-//----------------------------------------------------------------------- XSH RR
+// XSH RR
 
 function TRandomPCG_ALL.pcg_output_xsh_rr_16_8( state:Int16u ) :Int08u;
 begin
@@ -541,7 +568,7 @@ begin
      Result := pcg_rotr_32( ( ( state shr 18 ) xor state ) shr 27, state shr 59 );
 end;
 
-//--------------------------------------------------------------------- RXS M XS
+// RXS M XS
 
 function TRandomPCG_ALL.pcg_output_rxs_m_xs_8_8( state:Int08u ) :Int08u;
 var
@@ -579,14 +606,14 @@ begin
      Result := ( word shr 43 ) xor word;
 end;
 
-//----------------------------------------------------------------------- XSL RR
+// XSL RR (only defined for >= 64 bits)
 
 function TRandomPCG_ALL.pcg_output_xsl_rr_64_32( state:Int64u ) :Int32u;
 begin
      Result := pcg_rotr_32( ( Int32u( state shr 32 ) ) xor Int32u( state ), state shr 59 );
 end;
 
-//-------------------------------------------------------------------- XSL RR RR
+// XSL RR RR (only defined for >= 64 bits)
 
 function TRandomPCG_ALL.pcg_output_xsl_rr_rr_64_64( state:Int64u ) :Int64u;
 var
@@ -594,7 +621,8 @@ var
 begin
      rot1    := Int32u( state shr 59 );
      high    := Int32u( state shr 32 );
-     low     := Int32u( state );
+     low     := Int32u( state        );
+
      xored   := high xor low;
      newlow  := pcg_rotr_32( xored, rot1 );
      newhigh := pcg_rotr_32( high, newlow and 31 );
@@ -602,7 +630,10 @@ begin
      Result := ( Int64u( newhigh ) shl 32 ) or newlow;
 end;
 
-//-------------------------------------- Functions to advance the underlying LCG
+(* Functions to advance the underlying LCG, one version for each size and
+ * each style.  These functions are considered semi-private.  There is rarely
+ * a good reason to call them directly.
+ *)
 
 procedure TRandomPCG_ALL.pcg_oneseq_8_step_r( var rng:T_pcg_state_8 );
 begin
@@ -764,7 +795,10 @@ begin
      rng.state := pcg_advance_lcg_64( rng.state, delta, PCG_DEFAULT_MULTIPLIER_64, rng.inc );
 end;
 
-//---------------------------------------------- Functions to seed the RNG state
+(* Functions to seed the RNG state, one version for each size and each
+ * style.  Unlike the step functions, regular users can and should call
+ * these functions.
+ *)
 
 procedure TRandomPCG_ALL.pcg_oneseq_8_srandom_r( var rng:T_pcg_state_8; initstate:Int08u );
 begin
@@ -886,7 +920,7 @@ begin
      pcg_setseq_64_step_r( rng );
 end;
 
-//---------------------------------------------- Generation functions for XSH RS
+(* Generation functions for XSH RS *)
 
 function TRandomPCG_ALL.pcg_oneseq_16_xsh_rs_8_random_r( var rng:T_pcg_state_16 ) :Int08u;
 var
@@ -901,17 +935,14 @@ function TRandomPCG_ALL.pcg_oneseq_16_xsh_rs_8_boundedrand_r( var rng:T_pcg_stat
 var
    threshold, r :Int08u;
 begin
-     threshold := ( Int08u( -bound ) ) mod bound;
+     threshold := Int08u( -bound ) mod bound;
 
-     while True do
-     begin
-          r := pcg_oneseq_16_xsh_rs_8_random_r( rng );
+     repeat
+           r := pcg_oneseq_16_xsh_rs_8_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_oneseq_32_xsh_rs_16_random_r( var rng:T_pcg_state_32 ) :Int16u;
@@ -927,17 +958,14 @@ function TRandomPCG_ALL.pcg_oneseq_32_xsh_rs_16_boundedrand_r( var rng:T_pcg_sta
 var
    threshold, r :Int16u;
 begin
-     threshold := ( Int16u( -bound ) ) mod bound;
+     threshold := Int16u( -bound ) mod bound;
 
-     while True do
-     begin
-          r := pcg_oneseq_32_xsh_rs_16_random_r( rng );
+     repeat
+           r := pcg_oneseq_32_xsh_rs_16_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_oneseq_64_xsh_rs_32_random_r( var rng:T_pcg_state_64 ) :Int32u;
@@ -955,15 +983,12 @@ var
 begin
      threshold := -bound mod bound;
 
-     while True do
-     begin
-          r := pcg_oneseq_64_xsh_rs_32_random_r( rng );
+     repeat
+           r := pcg_oneseq_64_xsh_rs_32_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 //------------------------------------------------------------------------------
@@ -981,16 +1006,14 @@ function TRandomPCG_ALL.pcg_unique_16_xsh_rs_8_boundedrand_r( var rng:T_pcg_stat
 var
    threshold, r :Int08u;
 begin
-     threshold := ( Int08u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_unique_16_xsh_rs_8_random_r( rng );
+     threshold := Int08u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_unique_16_xsh_rs_8_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_unique_32_xsh_rs_16_random_r( var rng:T_pcg_state_32 ) :Int16u;
@@ -1006,16 +1029,14 @@ function TRandomPCG_ALL.pcg_unique_32_xsh_rs_16_boundedrand_r( var rng:T_pcg_sta
 var
    threshold, r :Int16u;
 begin
-     threshold := ( Int16u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_unique_32_xsh_rs_16_random_r( rng );
+     threshold := Int16u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_unique_32_xsh_rs_16_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_unique_64_xsh_rs_32_random_r( var rng:T_pcg_state_64 ) :Int32u;
@@ -1032,15 +1053,13 @@ var
    threshold, r :Int32u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_unique_64_xsh_rs_32_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_unique_64_xsh_rs_32_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 //------------------------------------------------------------------------------
@@ -1058,16 +1077,14 @@ function TRandomPCG_ALL.pcg_setseq_16_xsh_rs_8_boundedrand_r( var rng:T_pcg_stat
 var
    threshold, r :Int08u;
 begin
-     threshold := ( Int08u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_setseq_16_xsh_rs_8_random_r( rng );
+     threshold := Int08u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_setseq_16_xsh_rs_8_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_setseq_32_xsh_rs_16_random_r( var rng:T_pcg_state_setseq_32 ) :Int16u;
@@ -1083,16 +1100,14 @@ function TRandomPCG_ALL.pcg_setseq_32_xsh_rs_16_boundedrand_r( var rng:T_pcg_sta
 var
    threshold, r :Int16u;
 begin
-     threshold := ( Int16u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_setseq_32_xsh_rs_16_random_r( rng );
+     threshold := Int16u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_setseq_32_xsh_rs_16_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_setseq_64_xsh_rs_32_random_r( var rng:T_pcg_state_setseq_64 ) :Int32u;
@@ -1109,15 +1124,13 @@ var
    threshold, r :Int32u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_setseq_64_xsh_rs_32_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_setseq_64_xsh_rs_32_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 //------------------------------------------------------------------------------
@@ -1135,16 +1148,14 @@ function TRandomPCG_ALL.pcg_mcg_16_xsh_rs_8_boundedrand_r( var rng:T_pcg_state_1
 var
    threshold, r :Int08u;
 begin
-     threshold := ( Int08u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_mcg_16_xsh_rs_8_random_r( rng );
+     threshold := Int08u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_mcg_16_xsh_rs_8_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_mcg_32_xsh_rs_16_random_r( var rng:T_pcg_state_32 ) :Int16u;
@@ -1160,16 +1171,14 @@ function TRandomPCG_ALL.pcg_mcg_32_xsh_rs_16_boundedrand_r( var rng:T_pcg_state_
 var
    threshold, r :Int16u;
 begin
-     threshold := ( Int16u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_mcg_32_xsh_rs_16_random_r( rng );
+     threshold := Int16u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_mcg_32_xsh_rs_16_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_mcg_64_xsh_rs_32_random_r( var rng:T_pcg_state_64 ) :Int32u;
@@ -1186,15 +1195,13 @@ var
    threshold, r :Int32u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_mcg_64_xsh_rs_32_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_mcg_64_xsh_rs_32_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 //---------------------------------------------- Generation functions for XSH RR
@@ -1212,16 +1219,14 @@ function TRandomPCG_ALL.pcg_oneseq_16_xsh_rr_8_boundedrand_r( var rng:T_pcg_stat
 var
    threshold, r :Int08u;
 begin
-     threshold := ( Int08u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_oneseq_16_xsh_rr_8_random_r( rng );
+     threshold := Int08u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_oneseq_16_xsh_rr_8_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_oneseq_32_xsh_rr_16_random_r( var rng:T_pcg_state_32 ) :Int16u;
@@ -1237,16 +1242,14 @@ function TRandomPCG_ALL.pcg_oneseq_32_xsh_rr_16_boundedrand_r( var rng:T_pcg_sta
 var
    threshold, r :Int16u;
 begin
-     threshold := ( Int16u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_oneseq_32_xsh_rr_16_random_r( rng );
+     threshold := Int16u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_oneseq_32_xsh_rr_16_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_oneseq_64_xsh_rr_32_random_r( var rng:T_pcg_state_64 ) :Int32u;
@@ -1263,15 +1266,13 @@ var
    threshold, r :Int32u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_oneseq_64_xsh_rr_32_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_oneseq_64_xsh_rr_32_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 //------------------------------------------------------------------------------
@@ -1289,16 +1290,14 @@ function TRandomPCG_ALL.pcg_unique_16_xsh_rr_8_boundedrand_r( var rng:T_pcg_stat
 var
    threshold, r :Int08u;
 begin
-     threshold := ( Int08u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_unique_16_xsh_rr_8_random_r( rng );
+     threshold := Int08u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_unique_16_xsh_rr_8_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_unique_32_xsh_rr_16_random_r( var rng:T_pcg_state_32 ) :Int16u;
@@ -1314,16 +1313,14 @@ function TRandomPCG_ALL.pcg_unique_32_xsh_rr_16_boundedrand_r( var rng:T_pcg_sta
 var
    threshold, r :Int16u;
 begin
-     threshold := ( Int16u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_unique_32_xsh_rr_16_random_r( rng );
+     threshold := Int16u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_unique_32_xsh_rr_16_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_unique_64_xsh_rr_32_random_r( var rng:T_pcg_state_64 ) :Int32u;
@@ -1340,15 +1337,13 @@ var
    threshold, r :Int32u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_unique_64_xsh_rr_32_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_unique_64_xsh_rr_32_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 //------------------------------------------------------------------------------
@@ -1366,16 +1361,14 @@ function TRandomPCG_ALL.pcg_setseq_16_xsh_rr_8_boundedrand_r( var rng:T_pcg_stat
 var
    threshold, r :Int08u;
 begin
-     threshold := ( Int08u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_setseq_16_xsh_rr_8_random_r( rng );
+     threshold := Int08u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_setseq_16_xsh_rr_8_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_setseq_32_xsh_rr_16_random_r( var rng:T_pcg_state_setseq_32 ) :Int16u;
@@ -1391,16 +1384,14 @@ function TRandomPCG_ALL.pcg_setseq_32_xsh_rr_16_boundedrand_r( var rng:T_pcg_sta
 var
    threshold, r :Int16u;
 begin
-     threshold := ( Int16u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_setseq_32_xsh_rr_16_random_r( rng );
+     threshold := Int16u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_setseq_32_xsh_rr_16_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_setseq_64_xsh_rr_32_random_r( var rng:T_pcg_state_setseq_64 ) :Int32u;
@@ -1417,15 +1408,13 @@ var
    threshold, r :Int32u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_setseq_64_xsh_rr_32_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_setseq_64_xsh_rr_32_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 //------------------------------------------------------------------------------
@@ -1443,16 +1432,14 @@ function TRandomPCG_ALL.pcg_mcg_16_xsh_rr_8_boundedrand_r( var rng:T_pcg_state_1
 var
    threshold, r :Int08u;
 begin
-     threshold := ( Int08u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_mcg_16_xsh_rr_8_random_r( rng );
+     threshold := Int08u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_mcg_16_xsh_rr_8_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_mcg_32_xsh_rr_16_random_r( var rng:T_pcg_state_32 ) :Int16u;
@@ -1468,16 +1455,14 @@ function TRandomPCG_ALL.pcg_mcg_32_xsh_rr_16_boundedrand_r( var rng:T_pcg_state_
 var
    threshold, r :Int16u;
 begin
-     threshold := ( Int16u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_mcg_32_xsh_rr_16_random_r( rng );
+     threshold := Int16u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_mcg_32_xsh_rr_16_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_mcg_64_xsh_rr_32_random_r( var rng:T_pcg_state_64 ) :Int32u;
@@ -1494,15 +1479,13 @@ var
    threshold, r :Int32u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_mcg_64_xsh_rr_32_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_mcg_64_xsh_rr_32_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 //-------------------------------------------- Generation functions for RXS M XS
@@ -1520,16 +1503,14 @@ function TRandomPCG_ALL.pcg_oneseq_8_rxs_m_xs_8_boundedrand_r( var rng:T_pcg_sta
 var
    threshold, r :Int08u;
 begin
-     threshold := ( Int08u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_oneseq_8_rxs_m_xs_8_random_r( rng );
+     threshold := Int08u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_oneseq_8_rxs_m_xs_8_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_oneseq_16_rxs_m_xs_16_random_r( var rng:T_pcg_state_16 ) :Int16u;
@@ -1545,16 +1526,14 @@ function TRandomPCG_ALL.pcg_oneseq_16_rxs_m_xs_16_boundedrand_r( var rng:T_pcg_s
 var
    threshold, r :Int16u;
 begin
-     threshold := ( Int16u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_oneseq_16_rxs_m_xs_16_random_r( rng );
+     threshold := Int16u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_oneseq_16_rxs_m_xs_16_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_oneseq_32_rxs_m_xs_32_random_r( var rng:T_pcg_state_32 ) :Int32u;
@@ -1571,15 +1550,13 @@ var
    threshold, r :Int32u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_oneseq_32_rxs_m_xs_32_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_oneseq_32_rxs_m_xs_32_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_oneseq_64_rxs_m_xs_64_random_r( var rng:T_pcg_state_64 ) :Int64u;
@@ -1596,15 +1573,13 @@ var
    threshold, r :Int64u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_oneseq_64_rxs_m_xs_64_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_oneseq_64_rxs_m_xs_64_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 //------------------------------------------------------------------------------
@@ -1622,16 +1597,14 @@ function TRandomPCG_ALL.pcg_unique_16_rxs_m_xs_16_boundedrand_r( var rng:T_pcg_s
 var
    threshold, r :Int16u;
 begin
-     threshold := ( Int16u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_unique_16_rxs_m_xs_16_random_r( rng );
+     threshold := Int16u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_unique_16_rxs_m_xs_16_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_unique_32_rxs_m_xs_32_random_r( var rng:T_pcg_state_32 ) :Int32u;
@@ -1648,15 +1621,13 @@ var
    threshold, r :Int32u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_unique_32_rxs_m_xs_32_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_unique_32_rxs_m_xs_32_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_unique_64_rxs_m_xs_64_random_r( var rng:T_pcg_state_64 ) :Int64u;
@@ -1673,15 +1644,13 @@ var
    threshold, r :Int64u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_unique_64_rxs_m_xs_64_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_unique_64_rxs_m_xs_64_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 //------------------------------------------------------------------------------
@@ -1699,16 +1668,14 @@ function TRandomPCG_ALL.pcg_setseq_8_rxs_m_xs_8_boundedrand_r( var rng:T_pcg_sta
 var
    threshold, r :Int08u;
 begin
-     threshold := ( Int08u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_setseq_8_rxs_m_xs_8_random_r( rng );
+     threshold := Int08u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_setseq_8_rxs_m_xs_8_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_setseq_16_rxs_m_xs_16_random_r( var rng:T_pcg_state_setseq_16 ) :Int16u;
@@ -1724,16 +1691,14 @@ function TRandomPCG_ALL.pcg_setseq_16_rxs_m_xs_16_boundedrand_r( var rng:T_pcg_s
 var
    threshold, r :Int16u;
 begin
-     threshold := ( Int16u( -bound ) ) mod bound;
-     while True do
-     begin
-          r := pcg_setseq_16_rxs_m_xs_16_random_r( rng );
+     threshold := Int16u( -bound ) mod bound;
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_setseq_16_rxs_m_xs_16_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_setseq_32_rxs_m_xs_32_random_r( var rng:T_pcg_state_setseq_32 ) :Int32u;
@@ -1750,15 +1715,13 @@ var
    threshold, r :Int32u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_setseq_32_rxs_m_xs_32_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_setseq_32_rxs_m_xs_32_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_setseq_64_rxs_m_xs_64_random_r( var rng:T_pcg_state_setseq_64 ) :Int64u;
@@ -1775,15 +1738,13 @@ var
    threshold, r :Int64u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_setseq_64_rxs_m_xs_64_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_setseq_64_rxs_m_xs_64_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 //---------------------------------------------- Generation functions for XSL RR
@@ -1802,15 +1763,13 @@ var
    threshold, r :Int32u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_oneseq_64_xsl_rr_32_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_oneseq_64_xsl_rr_32_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_unique_64_xsl_rr_32_random_r( var rng:T_pcg_state_64 ) :Int32u;
@@ -1827,15 +1786,13 @@ var
    threshold, r :Int32u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_unique_64_xsl_rr_32_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_unique_64_xsl_rr_32_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_setseq_64_xsl_rr_32_random_r( var rng:T_pcg_state_setseq_64 ) :Int32u;
@@ -1852,15 +1809,13 @@ var
    threshold, r :Int32u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_setseq_64_xsl_rr_32_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_setseq_64_xsl_rr_32_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_mcg_64_xsl_rr_32_random_r( var rng:T_pcg_state_64 ) :Int32u;
@@ -1877,15 +1832,13 @@ var
    threshold, r :Int32u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_mcg_64_xsl_rr_32_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_mcg_64_xsl_rr_32_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 //------------------------------------------- Generation functions for XSL RR RR
@@ -1904,15 +1857,13 @@ var
    threshold, r :Int64u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_oneseq_64_xsl_rr_rr_64_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_oneseq_64_xsl_rr_rr_64_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_unique_64_xsl_rr_rr_64_random_r( var rng:T_pcg_state_64 ) :Int64u;
@@ -1929,15 +1880,13 @@ var
    threshold, r :Int64u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_unique_64_xsl_rr_rr_64_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_unique_64_xsl_rr_rr_64_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 function TRandomPCG_ALL.pcg_setseq_64_xsl_rr_rr_64_random_r( var rng:T_pcg_state_setseq_64 ) :Int64u;
@@ -1954,20 +1903,20 @@ var
    threshold, r :Int64u;
 begin
      threshold := -bound mod bound;
-     while True do
-     begin
-          r := pcg_setseq_64_xsl_rr_rr_64_random_r( rng );
 
-          if r >= threshold then
-          begin
-               Result := r mod bound;  Exit;
-          end;
-     end;
+     repeat
+           r := pcg_setseq_64_xsl_rr_rr_64_random_r( rng );
+
+     until r >= threshold;
+
+     Result := r mod bound;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 /////////////////////////////////////////////////////////////////////// メソッド
+
+(* Multi-step advance functions (jump-ahead, jump-back) *)
 
 { https://github.com/imneme/pcg-c/blob/master/src/pcg-advance-8.c }
 
