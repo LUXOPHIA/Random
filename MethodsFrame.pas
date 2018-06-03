@@ -82,7 +82,7 @@ constructor TFrameM.Create( Owner_:TComponent );
 begin
      inherited;
 
-     AddRow( ''           ,     '64',   '0', '64', TRandomZero           );
+     AddRow( '-----'      ,     '64',   '0', '64', TRandomZero           );
 
      AddRow( 'LCG'        ,     '32',   '0', '32', TRandom32LCG32        );
      AddRow( 'LCG'        ,     '48',   '0', '48', TRandom48LCG48        );
