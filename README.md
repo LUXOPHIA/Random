@@ -21,14 +21,18 @@
         * [Xorshift](https://ja.wikipedia.org/wiki/Xorshift)
     * [Dipartimento di Informatica 'Giovanni Degli Antoni' - DI | Università degli Studi di Milano](http://www.di.unimi.it/ecm/home)
         * [Sebastiano Vigna](http://vigna.di.unimi.it)
-            * [Further scramblings of Marsaglia’s xorshift generators](http://vigna.di.unimi.it/ftp/papers/xorshiftplus.pdf)
-            * [An experimental exploration of Marsaglia’s xorshift generators, scrambled](http://vigna.di.unimi.it/ftp/papers/xorshift.pdf)
+            * [Further scramblings of Marsaglia’s xorshift generators](http://vigna.di.unimi.it/ftp/papers/xorshiftplus.pdf).pdf
+            * [An experimental exploration of Marsaglia’s xorshift generators, scrambled](http://vigna.di.unimi.it/ftp/papers/xorshift.pdf).pdf
     * [和田維作のホームページ](http://www001.upp.so-net.ne.jp/isaku/)
         * [良い乱数・悪い乱数](http://www001.upp.so-net.ne.jp/isaku/rand.html)
         * [乱数ライブラリ](http://www001.upp.so-net.ne.jp/isaku/rand2.html)
             * [jump.c : Xorshift で戻ったり一瞬で相対ジャンプできるプログラム](http://www001.upp.so-net.ne.jp/isaku/jump.c.html)
 * **xoshiro / xoroshiro**
     * [xoshiro/xoroshiro generators and the PRNG shootout](http://xoshiro.di.unimi.it)
+    * [Dipartimento di Informatica 'Giovanni Degli Antoni' - DI | Università degli Studi di Milano](http://www.di.unimi.it/ecm/home)
+        * [Sebastiano Vigna](http://vigna.di.unimi.it)
+            * [Sebastiano Vigna/Papers](http://vigna.di.unimi.it/papers.php)
+                * [Scrambled Linear Pseudorandom Number Generators](http://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf).pdf
 * **PCG**
   * [PCG, A Family of Better Random Number Generators | PCG, A Better Random Number Generator](http://www.pcg-random.org)
       * [Download the PCG Library | PCG, A Better Random Number Generator](http://www.pcg-random.org/download.html)
