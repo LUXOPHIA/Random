@@ -335,12 +335,12 @@ end;
 
 class procedure TRandom32PCG<_TSeed_>.pcg_unique_32_step_r( var rng:T_pcg_state_32 );
 begin
-     rng.state := rng.state * PCG_DEFAULT_MULTIPLIER_32 + Int32u( rng.state or 1 );
+     rng.state := rng.state * PCG_DEFAULT_MULTIPLIER_32 + Int32u( IntPtr( @rng ) or 1 );
 end;
 
 class procedure TRandom32PCG<_TSeed_>.pcg_unique_32_advance_r( var rng:T_pcg_state_32; delta:Int32u );
 begin
-     rng.state := pcg_advance_lcg_32( rng.state, delta, PCG_DEFAULT_MULTIPLIER_32, Int32u( rng.state or 1 ) );
+     rng.state := pcg_advance_lcg_32( rng.state, delta, PCG_DEFAULT_MULTIPLIER_32, Int32u( IntPtr( @rng ) or 1 ) );
 end;
 
 class procedure TRandom32PCG<_TSeed_>.pcg_setseq_32_step_r( var rng:T_pcg_state_setseq_32 );

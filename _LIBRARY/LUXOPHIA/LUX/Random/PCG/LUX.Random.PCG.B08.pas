@@ -292,12 +292,12 @@ end;
 
 class procedure TRandom08PCG<_TSeed_>.pcg_unique_8_step_r( var rng:T_pcg_state_8 );
 begin
-     rng.state := rng.state * PCG_DEFAULT_MULTIPLIER_8 + Int08u( rng.state or 1 );
+     rng.state := rng.state * PCG_DEFAULT_MULTIPLIER_8 + Int08u( IntPtr( @rng ) or 1 );
 end;
 
 class procedure TRandom08PCG<_TSeed_>.pcg_unique_8_advance_r( var rng:T_pcg_state_8; delta:Int08u );
 begin
-     rng.state := pcg_advance_lcg_8( rng.state, delta, PCG_DEFAULT_MULTIPLIER_8, Int08u( rng.state or 1 ) );
+     rng.state := pcg_advance_lcg_8( rng.state, delta, PCG_DEFAULT_MULTIPLIER_8, Int08u( IntPtr( @rng ) or 1 ) );
 end;
 
 class procedure TRandom08PCG<_TSeed_>.pcg_setseq_8_step_r( var rng:T_pcg_state_setseq_8 );

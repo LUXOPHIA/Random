@@ -366,12 +366,12 @@ end;
 
 class procedure TRandom64PCG<_TSeed_>.pcg_unique_64_step_r( var rng:T_pcg_state_64 );
 begin
-     rng.state := rng.state * PCG_DEFAULT_MULTIPLIER_64 + Int64u( rng.state or 1 );
+     rng.state := rng.state * PCG_DEFAULT_MULTIPLIER_64 + Int64u( IntPtr( @rng ) or 1 );
 end;
 
 class procedure TRandom64PCG<_TSeed_>.pcg_unique_64_advance_r( var rng:T_pcg_state_64; delta:Int64u );
 begin
-     rng.state := pcg_advance_lcg_64( rng.state, delta, PCG_DEFAULT_MULTIPLIER_64, Int64u( rng.state or 1 ) );
+     rng.state := pcg_advance_lcg_64( rng.state, delta, PCG_DEFAULT_MULTIPLIER_64, Int64u( IntPtr( @rng ) or 1 ) );
 end;
 
 class procedure TRandom64PCG<_TSeed_>.pcg_setseq_64_step_r( var rng:T_pcg_state_setseq_64 );

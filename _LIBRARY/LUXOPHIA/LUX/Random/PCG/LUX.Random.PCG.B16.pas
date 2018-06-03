@@ -330,12 +330,12 @@ end;
 
 class procedure TRandom16PCG<_TSeed_>.pcg_unique_16_step_r( var rng:T_pcg_state_16 );
 begin
-     rng.state := rng.state * PCG_DEFAULT_MULTIPLIER_16 + Int16u( rng.state or 1 );
+     rng.state := rng.state * PCG_DEFAULT_MULTIPLIER_16 + Int16u( IntPtr( @rng ) or 1 );
 end;
 
 class procedure TRandom16PCG<_TSeed_>.pcg_unique_16_advance_r( var rng:T_pcg_state_16; delta:Int16u );
 begin
-     rng.state := pcg_advance_lcg_16( rng.state, delta, PCG_DEFAULT_MULTIPLIER_16, Int16u( rng.state or 1 ) );
+     rng.state := pcg_advance_lcg_16( rng.state, delta, PCG_DEFAULT_MULTIPLIER_16, Int16u( IntPtr( @rng ) or 1 ) );
 end;
 
 class procedure TRandom16PCG<_TSeed_>.pcg_setseq_16_step_r( var rng:T_pcg_state_setseq_16 );
