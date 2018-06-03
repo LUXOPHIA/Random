@@ -373,17 +373,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TRandomWEL44497a = class( TRandomWEL<TWELL44497a> )
      private
        WELLRNG44497a :TProc;
-       ///// メソッド
-       function MAT0POS( const t:Int32u; const v:Int32u ) :Int32u; inline;
-       function MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u; inline;
-       function MAT1( const v:Int32u ) :Int32u; inline;
-     //function MAT2( const a:Int32u; const v:Int32u ) :Int32u; inline;
-     //function MAT3POS( const t:Int32u; const v:Int32u ) :Int32u; inline;
-       function MAT3NEG( const t:Int32s; const v:Int32u ) :Int32u; inline;
-     //function MAT4POS( const t:Int32u; const b,v:Int32u ) :Int32u; inline;
-     //function MAT4NEG( const t:Int32s; const b,v:Int32u ) :Int32u; inline;
-       function MAT5( const r:Int32s; const a,ds,dt,v:Int32u ) :Int32u; inline;
-     //function MAT7( const v:Int32u ) :Int32u; inline;
      protected
        ///// メソッド
        procedure case_1; virtual;
@@ -397,6 +386,17 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
        constructor Create( const Seed_:TWELL44497a ); overload; override;
+       ///// メソッド
+       function MAT0POS( const t:Int32u; const v:Int32u ) :Int32u; inline;
+       function MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u; inline;
+       function MAT1( const v:Int32u ) :Int32u; inline;
+       function MAT2( const a:Int32u; const v:Int32u ) :Int32u; inline;
+       function MAT3POS( const t:Int32u; const v:Int32u ) :Int32u; inline;
+       function MAT3NEG( const t:Int32s; const v:Int32u ) :Int32u; inline;
+       function MAT4POS( const t:Int32u; const b,v:Int32u ) :Int32u; inline;
+       function MAT4NEG( const t:Int32s; const b,v:Int32u ) :Int32u; inline;
+       function MAT5( const r:Int32s; const a,ds,dt,v:Int32u ) :Int32u; inline;
+       function MAT7( const v:Int32u ) :Int32u; inline;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL44497b
@@ -1558,60 +1558,6 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
-/////////////////////////////////////////////////////////////////////// メソッド
-
-function TRandomWEL44497a.MAT0POS( const t:Int32u; const v:Int32u ) :Int32u;
-begin
-     Result := v xor ( v shr +t );
-end;
-
-function TRandomWEL44497a.MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u;
-begin
-     Result := v xor ( v shl -t );
-end;
-
-function TRandomWEL44497a.MAT1( const v:Int32u ) :Int32u;
-begin
-     Result := v;
-end;
-
-//function TRandomWEL44497a.MAT2( const a:Int32u; const v:Int32u ) :Int32u;
-//begin
-//     if v and 1 <> 0 then Result := ( v shr 1 ) xor a
-//                     else Result :=   v shr 1;
-//end;
-
-//function TRandomWEL44497a.MAT3POS( const t:Int32u; const v:Int32u ) :Int32u;
-//begin
-//     Result := v shr +t;
-//end;
-
-function TRandomWEL44497a.MAT3NEG( const t:Int32s; const v:Int32u ) :Int32u;
-begin
-     Result := v shl -t;
-end;
-
-//function TRandomWEL44497a.MAT4POS( const t:Int32u; const b,v:Int32u ) :Int32u;
-//begin
-//     Result := v xor ( ( v shr +t ) and b );
-//end;
-
-//function TRandomWEL44497a.MAT4NEG( const t:Int32s; const b,v:Int32u ) :Int32u;
-//begin
-//     Result := v xor ( ( v shl -t ) and b );
-//end;
-
-function TRandomWEL44497a.MAT5( const r:Int32s; const a,ds,dt,v:Int32u ) :Int32u;
-begin
-     if v and dt <> 0 then Result := ( ( ( v shl r ) xor ( v shr ( _Seed.W - r ) ) ) and ds ) xor a
-                      else Result :=   ( ( v shl r ) xor ( v shr ( _Seed.W - r ) ) ) and ds;
-end;
-
-//function TRandomWEL44497a.MAT7( const v:Int32u ) :Int32u;
-//begin
-//     Result := 0;
-//end;
-
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 /////////////////////////////////////////////////////////////////////// メソッド
@@ -1800,6 +1746,60 @@ begin
      _Seed.state_i := 0;
 
      WELLRNG44497a := case_1;
+end;
+
+/////////////////////////////////////////////////////////////////////// メソッド
+
+function TRandomWEL44497a.MAT0POS( const t:Int32u; const v:Int32u ) :Int32u;
+begin
+     Result := v xor ( v shr +t );
+end;
+
+function TRandomWEL44497a.MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u;
+begin
+     Result := v xor ( v shl -t );
+end;
+
+function TRandomWEL44497a.MAT1( const v:Int32u ) :Int32u;
+begin
+     Result := v;
+end;
+
+function TRandomWEL44497a.MAT2( const a:Int32u; const v:Int32u ) :Int32u;
+begin
+     if v and 1 <> 0 then Result := ( v shr 1 ) xor a
+                     else Result :=   v shr 1;
+end;
+
+function TRandomWEL44497a.MAT3POS( const t:Int32u; const v:Int32u ) :Int32u;
+begin
+     Result := v shr +t;
+end;
+
+function TRandomWEL44497a.MAT3NEG( const t:Int32s; const v:Int32u ) :Int32u;
+begin
+     Result := v shl -t;
+end;
+
+function TRandomWEL44497a.MAT4POS( const t:Int32u; const b,v:Int32u ) :Int32u;
+begin
+     Result := v xor ( ( v shr +t ) and b );
+end;
+
+function TRandomWEL44497a.MAT4NEG( const t:Int32s; const b,v:Int32u ) :Int32u;
+begin
+     Result := v xor ( ( v shl -t ) and b );
+end;
+
+function TRandomWEL44497a.MAT5( const r:Int32s; const a,ds,dt,v:Int32u ) :Int32u;
+begin
+     if v and dt <> 0 then Result := ( ( ( v shl r ) xor ( v shr ( _Seed.W - r ) ) ) and ds ) xor a
+                      else Result :=   ( ( v shl r ) xor ( v shr ( _Seed.W - r ) ) ) and ds;
+end;
+
+function TRandomWEL44497a.MAT7( const v:Int32u ) :Int32u;
+begin
+     Result := 0;
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL44497b
