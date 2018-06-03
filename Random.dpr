@@ -37,7 +37,11 @@ uses
   LUX.Random.SFMT.M132049 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M132049.pas',
   LUX.Random.SFMT.M216091 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M216091.pas',
   LUX.Random.SFMT.M2281 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M2281.pas',
-  MethodsFrame in 'MethodsFrame.pas' {FrameM: TFrame};
+  MethodsFrame in 'MethodsFrame.pas' {FrameM: TFrame},
+  LUX.Random.PCG.B32 in '_LIBRARY\LUXOPHIA\LUX\Random\PCG\LUX.Random.PCG.B32.pas',
+  LUX.Random.PCG.B64 in '_LIBRARY\LUXOPHIA\LUX\Random\PCG\LUX.Random.PCG.B64.pas',
+  LUX.Random.PCG.B08 in '_LIBRARY\LUXOPHIA\LUX\Random\PCG\LUX.Random.PCG.B08.pas',
+  LUX.Random.PCG.B16 in '_LIBRARY\LUXOPHIA\LUX\Random\PCG\LUX.Random.PCG.B16.pas';
 
 {$R *.res}
 

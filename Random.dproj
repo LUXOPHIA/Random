@@ -357,6 +357,10 @@
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\PCG\LUX.Random.PCG.B32.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\PCG\LUX.Random.PCG.B64.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\PCG\LUX.Random.PCG.B08.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\PCG\LUX.Random.PCG.B16.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

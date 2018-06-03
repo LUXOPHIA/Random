@@ -39,6 +39,10 @@ uses LUX.Random.LCG,
      LUX.Random.Xoshiro,
      LUX.Random.WELL,
      LUX.Random.PCG,
+     LUX.Random.PCG.B08,
+     LUX.Random.PCG.B16,
+     LUX.Random.PCG.B32,
+     LUX.Random.PCG.B64,
      LUX.Random.SFMT,
      LUX.Random.SFMT.M607,
      LUX.Random.SFMT.M1279,
@@ -114,7 +118,10 @@ begin
      AddRow( 'WELLa-new'  ,  '44497',   '0', '32', TRandomWEL44497anew   );
      AddRow( 'WELLb'      ,  '44497',   '0', '32', TRandomWEL44497b      );
 
-     AddRow( 'PCG'        ,     '64',   '0', '32', TRandomPCG32basic     );
+     AddRow( 'PCG'        ,      '8',   '0',  '8', TRandom08PCG08        );
+     AddRow( 'PCG'        ,     '16',   '0', '16', TRandom16PCG16        );
+     AddRow( 'PCG'        ,     '32',   '0', '32', TRandom32PCG32        );
+     AddRow( 'PCG'        ,     '64',   '0', '64', TRandom64PCG64        );
 
      AddRow( 'SFMT'       ,    '607',   '0', '32', TRandom32SFMT607      );
      AddRow( 'SFMT'       ,    '607',   '0', '64', TRandom64SFMT607      );
