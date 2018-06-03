@@ -43,6 +43,7 @@ uses LUX.Random.LCG,
      LUX.Random.Xoshiro.B64,
      LUX.Random.Xoshiro.B64.P128,
      LUX.Random.Xoshiro.B64.P256,
+     LUX.Random.Xoshiro.B64.P512,
      LUX.Random.WELL,
      LUX.Random.WELL.P512,
      LUX.Random.WELL.P1024,
@@ -119,6 +120,8 @@ begin
      AddRow( 'xoshiro+'   ,    '256', '128', '64', TRandom64XOS256x128p  );
      AddRow( 'xoshiro**'  ,    '256',   '0', '64', TRandom64XOS256ss     );
      AddRow( 'xoshiro**'  ,    '256', '128', '64', TRandom64XOS256x128ss );
+     AddRow( 'xoshiro+'   ,    '512',   '0', '64', TRandom64XOS512p      );
+     AddRow( 'xoshiro**'  ,    '512',   '0', '64', TRandom64XOS512ss     );
 
      AddRow( 'WELLa'      ,    '512',   '0', '32', TRandomWEL512a        );
      AddRow( 'WELLa'      ,   '1024',   '0', '32', TRandomWEL1024a       );
