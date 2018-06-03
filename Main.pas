@@ -45,7 +45,8 @@ implementation //###############################################################
 
 {$R *.fmx}
 
-uses System.Math, System.Threading;
+uses System.Math, System.Threading,
+     FMX.Grid;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 

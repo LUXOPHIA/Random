@@ -96,19 +96,19 @@ object Form1: TForm1
         inherited StringGridM: TStringGrid
           Size.Height = 486.000000000000000000
           OnSelectCell = FrameMSStringGridMSelectCell
-          Viewport.Width = 223.000000000000000000
-          Viewport.Height = 461.000000000000000000
+          Viewport.Width = 243.000000000000000000
+          Viewport.Height = 486.000000000000000000
           inherited StringColumnA: TStringColumn
             Size.Width = 70.000000000000000000
           end
           inherited StringColumnP: TStringColumn
             Size.Width = 65.000000000000000000
           end
-          inherited StringColumnS: TStringColumn
-            Size.Width = 45.000000000000000000
-          end
           inherited StringColumnB: TStringColumn
             Size.Width = 40.000000000000000000
+          end
+          inherited StringColumnS: TStringColumn
+            Size.Width = 45.000000000000000000
           end
         end
       end
@@ -146,11 +146,11 @@ object Form1: TForm1
           inherited StringColumnP: TStringColumn
             Size.Width = 65.000000000000000000
           end
-          inherited StringColumnS: TStringColumn
-            Size.Width = 45.000000000000000000
-          end
           inherited StringColumnB: TStringColumn
             Size.Width = 40.000000000000000000
+          end
+          inherited StringColumnS: TStringColumn
+            Size.Width = 45.000000000000000000
           end
         end
       end

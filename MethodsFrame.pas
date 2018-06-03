@@ -80,8 +80,8 @@ begin
      begin
           Cells[ 0, I ] :=       A_        ;
           Cells[ 1, I ] := '2^'+ P_        ;
-          Cells[ 2, I ] := '2^'+ S_        ;
-          Cells[ 3, I ] :=       B_ + 'bit';
+          Cells[ 2, I ] :=       B_ + 'bit';
+          Cells[ 3, I ] := '2^'+ S_        ;
      end;
 
      _Methods := _Methods + [ M_ ];

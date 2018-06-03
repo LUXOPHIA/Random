@@ -13,8 +13,8 @@ object FrameM: TFrameM
     RowCount = 58
     Options = [ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, Tabs, Header, HeaderClick, AutoDisplacement]
     OnSelectCell = StringGridMSelectCell
-    Viewport.Width = 223.000000000000000000
-    Viewport.Height = 475.000000000000000000
+    Viewport.Width = 243.000000000000000000
+    Viewport.Height = 500.000000000000000000
     object StringColumnA: TStringColumn
       Header = 'Algorithm'
       Size.Width = 70.000000000000000000
@@ -23,13 +23,13 @@ object FrameM: TFrameM
       Header = 'Period'
       Size.Width = 65.000000000000000000
     end
-    object StringColumnS: TStringColumn
-      Header = 'Step'
-      Size.Width = 45.000000000000000000
-    end
     object StringColumnB: TStringColumn
       Header = 'Bit'
       Size.Width = 40.000000000000000000
+    end
+    object StringColumnS: TStringColumn
+      Header = 'Step'
+      Size.Width = 45.000000000000000000
     end
   end
 end
