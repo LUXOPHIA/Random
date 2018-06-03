@@ -9,11 +9,12 @@ uses LUX, LUX.D2, LUX.D4,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
-     TRandom64ROS128p         = class;
-     TRandom64ROS128ss        = class;
-     TRandom64ROS128x64       = class;
-       TRandom64ROS128x64p    = class;
-       TRandom64ROS128x64ss   = class;
+     TRandom64ROS128p       = class;
+     TRandom64ROS128s       = class;
+     TRandom64ROS128ss      = class;
+     TRandom64ROS128x64     = class;
+       TRandom64ROS128x64p  = class;
+       TRandom64ROS128x64ss = class;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
@@ -22,6 +23,16 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64ROS128p
 
      TRandom64ROS128p = class( TRandom64ROS128 )
+     private
+     protected
+       ///// メソッド
+       function CalcRandInt64u :Int64u; override;
+     public
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64ROS128s
+
+     TRandom64ROS128s = class( TRandom64ROS128 )
      private
      protected
        ///// メソッド
@@ -96,6 +107,23 @@ uses System.SysUtils;
 function TRandom64ROS128p.CalcRandInt64u :Int64u;
 begin
 	   with _Seed do Result := X + Y;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64ROS128s
+
+{ http://xoshiro.di.unimi.it/xoroshiro128starstar.c }
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+/////////////////////////////////////////////////////////////////////// メソッド
+
+function TRandom64ROS128s.CalcRandInt64u :Int64u;
+begin
+	   Result := _Seed.X * $9e3779b97f4a7c13;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public

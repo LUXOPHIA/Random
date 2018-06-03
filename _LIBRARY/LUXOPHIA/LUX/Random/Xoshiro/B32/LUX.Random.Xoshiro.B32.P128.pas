@@ -9,11 +9,11 @@ uses LUX, LUX.D4,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
-     TRandom32XOS128p         = class;
-     TRandom32XOS128ss        = class;
-     TRandom32XOS128x64       = class;
-       TRandom32XOS128x64p    = class;
-       TRandom32XOS128x64ss   = class;
+     TRandom32XOS128p       = class;
+     TRandom32XOS128ss      = class;
+     TRandom32XOS128x64     = class;
+       TRandom32XOS128x64p  = class;
+       TRandom32XOS128x64ss = class;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 

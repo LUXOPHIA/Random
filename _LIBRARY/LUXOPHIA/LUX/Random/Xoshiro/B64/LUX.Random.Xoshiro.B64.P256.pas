@@ -9,11 +9,11 @@ uses LUX, LUX.D2, LUX.D4,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
-     TRandom64XOS256p         = class;
-     TRandom64XOS256ss        = class;
-     TRandom64XOS256x128      = class;
-       TRandom64XOS256x128p   = class;
-       TRandom64XOS256x128ss  = class;
+     TRandom64XOS256p        = class;
+     TRandom64XOS256ss       = class;
+     TRandom64XOS256x128     = class;
+       TRandom64XOS256x128p  = class;
+       TRandom64XOS256x128ss = class;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
