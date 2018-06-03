@@ -45,7 +45,13 @@ uses
   LUX.Random.WELL.P19937 in '_LIBRARY\LUXOPHIA\LUX\Random\WELL\LUX.Random.WELL.P19937.pas',
   LUX.Random.WELL.P44497 in '_LIBRARY\LUXOPHIA\LUX\Random\WELL\LUX.Random.WELL.P44497.pas',
   LUX.Random.WELL.P512 in '_LIBRARY\LUXOPHIA\LUX\Random\WELL\LUX.Random.WELL.P512.pas',
-  LUX.Random.WELL.P1024 in '_LIBRARY\LUXOPHIA\LUX\Random\WELL\LUX.Random.WELL.P1024.pas';
+  LUX.Random.WELL.P1024 in '_LIBRARY\LUXOPHIA\LUX\Random\WELL\LUX.Random.WELL.P1024.pas',
+  LUX.Random.Xoshiro.B64 in '_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\LUX.Random.Xoshiro.B64.pas',
+  LUX.Random.Xoshiro.B32 in '_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\LUX.Random.Xoshiro.B32.pas',
+  LUX.Random.Xoshiro.B32.P64 in '_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B32\LUX.Random.Xoshiro.B32.P64.pas',
+  LUX.Random.Xoshiro.B32.P128 in '_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B32\LUX.Random.Xoshiro.B32.P128.pas',
+  LUX.Random.Xoshiro.B64.P128 in '_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B64\LUX.Random.Xoshiro.B64.P128.pas',
+  LUX.Random.Xoshiro.B64.P256 in '_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B64\LUX.Random.Xoshiro.B64.P256.pas';
 
 {$R *.res}
 

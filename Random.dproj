@@ -365,6 +365,12 @@
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\WELL\LUX.Random.WELL.P44497.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\WELL\LUX.Random.WELL.P512.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\WELL\LUX.Random.WELL.P1024.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\LUX.Random.Xoshiro.B64.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\LUX.Random.Xoshiro.B32.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B32\LUX.Random.Xoshiro.B32.P64.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B32\LUX.Random.Xoshiro.B32.P128.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B64\LUX.Random.Xoshiro.B64.P128.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B64\LUX.Random.Xoshiro.B64.P256.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -10,11 +10,11 @@ object FrameM: TFrameM
     Size.Height = 500.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
-    RowCount = 55
+    RowCount = 56
     Options = [ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, Tabs, Header, HeaderClick, AutoDisplacement]
     OnSelectCell = StringGridMSelectCell
-    Viewport.Width = 243.000000000000000000
-    Viewport.Height = 500.000000000000000000
+    Viewport.Width = 223.000000000000000000
+    Viewport.Height = 475.000000000000000000
     object StringColumnA: TStringColumn
       Header = 'Algorithm'
       Size.Width = 70.000000000000000000

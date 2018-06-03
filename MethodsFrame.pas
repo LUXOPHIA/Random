@@ -37,6 +37,12 @@ implementation //###############################################################
 uses LUX.Random.LCG,
      LUX.Random.Xorshift,
      LUX.Random.Xoshiro,
+     LUX.Random.Xoshiro.B32,
+     LUX.Random.Xoshiro.B32.P64,
+     LUX.Random.Xoshiro.B32.P128,
+     LUX.Random.Xoshiro.B64,
+     LUX.Random.Xoshiro.B64.P128,
+     LUX.Random.Xoshiro.B64.P256,
      LUX.Random.WELL,
      LUX.Random.WELL.P512,
      LUX.Random.WELL.P1024,
@@ -98,18 +104,19 @@ begin
      AddRow( 'Xorshift'   ,     '96',   '0', '32', TRandom32XOR96        );
      AddRow( 'Xorshift'   ,    '128',   '0', '32', TRandom32XOR128       );
 
-     AddRow( 'xoroshiro*' ,     '64',   '0', '32', TRandom32XOS64s       );
-     AddRow( 'xoroshiro+' ,    '128',   '0', '64', TRandom64XOS128p      );
-     AddRow( 'xoroshiro+' ,    '128',  '64', '64', TRandom64XOS128x64p   );
-     AddRow( 'xoroshiro**',     '64',   '0', '32', TRandom32XOS64ss      );
-     AddRow( 'xoroshiro**',    '128',   '0', '64', TRandom64XOS128ss     );
-     AddRow( 'xoroshiro**',    '128',  '64', '64', TRandom64XOS128x64ss  );
+     AddRow( 'xoroshiro*' ,     '64',   '0', '32', TRandom32ROS64s       );
+     AddRow( 'xoroshiro**',     '64',   '0', '32', TRandom32ROS64ss      );
      AddRow( 'xoshiro+'   ,    '128',   '0', '32', TRandom32XOS128p      );
      AddRow( 'xoshiro+'   ,    '128',  '64', '32', TRandom32XOS128x64p   );
-     AddRow( 'xoshiro+'   ,    '256',   '0', '64', TRandom64XOS256p      );
-     AddRow( 'xoshiro+'   ,    '256', '128', '64', TRandom64XOS256x128p  );
      AddRow( 'xoshiro**'  ,    '128',   '0', '32', TRandom32XOS128ss     );
      AddRow( 'xoshiro**'  ,    '128',  '64', '32', TRandom32XOS128x64ss  );
+     AddRow( 'xoroshiro+' ,    '128',   '0', '64', TRandom64ROS128p      );
+     AddRow( 'xoroshiro+' ,    '128',  '64', '64', TRandom64ROS128x64p   );
+     AddRow( 'xoroshiro*' ,    '128',   '0', '64', TRandom64ROS128s      );
+     AddRow( 'xoroshiro**',    '128',   '0', '64', TRandom64ROS128ss     );
+     AddRow( 'xoroshiro**',    '128',  '64', '64', TRandom64ROS128x64ss  );
+     AddRow( 'xoshiro+'   ,    '256',   '0', '64', TRandom64XOS256p      );
+     AddRow( 'xoshiro+'   ,    '256', '128', '64', TRandom64XOS256x128p  );
      AddRow( 'xoshiro**'  ,    '256',   '0', '64', TRandom64XOS256ss     );
      AddRow( 'xoshiro**'  ,    '256', '128', '64', TRandom64XOS256x128ss );
 
