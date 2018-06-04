@@ -13,69 +13,69 @@ In all algorithms, the seed value (state vector) is initialized by consecutive n
 > * **\*s**：Step size
 
 * [**LCG**](https://github.com/LUXOPHIA/Random/tree/master/--------/_OUTPUT/LCG)
-    * [LCG 32p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/LCG/LCG%2032p%2032b.txt)
-    * [LCG 48p 48b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/LCG/LCG%2048p%2048b.txt)
-    * [LCG 64p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/LCG/LCG%2064p%2064b.txt)
+    * [LCG 32p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/LCG/LCG%2032p%2032b.txt).txt
+    * [LCG 48p 48b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/LCG/LCG%2048p%2048b.txt).txt
+    * [LCG 64p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/LCG/LCG%2064p%2064b.txt).txt
 * [**PCG**](https://github.com/LUXOPHIA/Random/tree/master/--------/_OUTPUT/PCG)
-    * [PCG 08p 08b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/PCG/PCG%2008p%2008b.txt)
-    * [PCG 16p 16b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/PCG/PCG%2016p%2016b.txt)
-    * [PCG 32p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/PCG/PCG%2032p%2032b.txt)
-    * [PCG 64p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/PCG/PCG%2064p%2064b.txt)
+    * [PCG 08p 08b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/PCG/PCG%2008p%2008b.txt).txt
+    * [PCG 16p 16b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/PCG/PCG%2016p%2016b.txt).txt
+    * [PCG 32p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/PCG/PCG%2032p%2032b.txt).txt
+    * [PCG 64p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/PCG/PCG%2064p%2064b.txt).txt
 * [**SFMT***](https://github.com/LUXOPHIA/Random/tree/master/--------/_OUTPUT/SFMT)
-    * [SFMT 000607p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20000607p%2032b.txt)
-    * [SFMT 000607p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20000607p%2064b.txt)
-    * [SFMT 001279p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20001279p%2032b.txt)
-    * [SFMT 001279p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20001279p%2064b.txt)
-    * [SFMT 002281p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20002281p%2032b.txt)
-    * [SFMT 002281p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20002281p%2064b.txt)
-    * [SFMT 004253p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20004253p%2032b.txt)
-    * [SFMT 004253p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20004253p%2064b.txt)
-    * [SFMT 011213p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20011213p%2032b.txt)
-    * [SFMT 011213p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20011213p%2064b.txt)
-    * [SFMT 019937p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20019937p%2032b.txt)
-    * [SFMT 019937p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20019937p%2064b.txt)
-    * [SFMT 044497p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20044497p%2032b.txt)
-    * [SFMT 044497p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20044497p%2064b.txt)
-    * [SFMT 086243p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20086243p%2032b.txt)
-    * [SFMT 086243p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20086243p%2064b.txt)
-    * [SFMT 132049p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20132049p%2032b.txt)
-    * [SFMT 132049p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20132049p%2064b.txt)
-    * [SFMT 216091p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20216091p%2032b.txt)
-    * [SFMT 216091p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20216091p%2064b.txt)
+    * [SFMT 000607p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20000607p%2032b.txt).txt
+    * [SFMT 000607p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20000607p%2064b.txt).txt
+    * [SFMT 001279p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20001279p%2032b.txt).txt
+    * [SFMT 001279p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20001279p%2064b.txt).txt
+    * [SFMT 002281p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20002281p%2032b.txt).txt
+    * [SFMT 002281p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20002281p%2064b.txt).txt
+    * [SFMT 004253p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20004253p%2032b.txt).txt
+    * [SFMT 004253p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20004253p%2064b.txt).txt
+    * [SFMT 011213p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20011213p%2032b.txt).txt
+    * [SFMT 011213p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20011213p%2064b.txt).txt
+    * [SFMT 019937p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20019937p%2032b.txt).txt
+    * [SFMT 019937p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20019937p%2064b.txt).txt
+    * [SFMT 044497p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20044497p%2032b.txt).txt
+    * [SFMT 044497p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20044497p%2064b.txt).txt
+    * [SFMT 086243p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20086243p%2032b.txt).txt
+    * [SFMT 086243p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20086243p%2064b.txt).txt
+    * [SFMT 132049p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20132049p%2032b.txt).txt
+    * [SFMT 132049p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20132049p%2064b.txt).txt
+    * [SFMT 216091p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20216091p%2032b.txt).txt
+    * [SFMT 216091p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20216091p%2064b.txt).txt
 * [**WELL**](https://github.com/LUXOPHIA/Random/tree/master/--------/_OUTPUT/WELL)
-    * [WELL-a 00512p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-a%2000512p%2032b.txt)
-    * [WELL-a 01024p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-a%2001024p%2032b.txt)
-    * [WELL-a 19937p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-a%2019937p%2032b.txt)
-    * [WELL-a 44497p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-a%2044497p%2032b.txt)
-    * [WELL-a_new 19937p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-a_new%2019937p%2032b.txt)
-    * [WELL-a_new 44497p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-a_new%2044497p%2032b.txt)
-    * [WELL-b 44497p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-b%2044497p%2032b.txt)
-    * [WELL-c 19937p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-c%2019937p%2032b.txt)
+    * [WELL-a 00512p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-a%2000512p%2032b.txt).txt
+    * [WELL-a 01024p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-a%2001024p%2032b.txt).txt
+    * [WELL-a 19937p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-a%2019937p%2032b.txt).txt
+    * [WELL-a 44497p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-a%2044497p%2032b.txt).txt
+    * [WELL-a_new 19937p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-a_new%2019937p%2032b.txt).txt
+    * [WELL-a_new 44497p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-a_new%2044497p%2032b.txt).txt
+    * [WELL-b 44497p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-b%2044497p%2032b.txt).txt
+    * [WELL-c 19937p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/WELL/WELL-c%2019937p%2032b.txt).txt
 * [**Xorshift**](https://github.com/LUXOPHIA/Random/tree/master/--------/_OUTPUT/Xorshift)
-    * [Xorshift 032p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/Xorshift/Xorshift%20032p%2032b.txt)
-    * [Xorshift 064p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/Xorshift/Xorshift%20064p%2032b.txt)
-    * [Xorshift 064p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/Xorshift/Xorshift%20064p%2064b.txt)
-    * [Xorshift 096p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/Xorshift/Xorshift%20096p%2032b.txt)
-    * [Xorshift 128p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/Xorshift/Xorshift%20128p%2032b.txt)
+    * [Xorshift 032p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/Xorshift/Xorshift%20032p%2032b.txt).txt
+    * [Xorshift 064p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/Xorshift/Xorshift%20064p%2032b.txt).txt
+    * [Xorshift 064p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/Xorshift/Xorshift%20064p%2064b.txt).txt
+    * [Xorshift 096p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/Xorshift/Xorshift%20096p%2032b.txt).txt
+    * [Xorshift 128p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/Xorshift/Xorshift%20128p%2032b.txt).txt
 * [**xoshiro**](https://github.com/LUXOPHIA/Random/tree/master/--------/_OUTPUT/xoshiro)
-    * [xoshiro-p 128p 32b s64s.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20128p%2032b%20s64s.txt)
-    * [xoshiro-p 128p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20128p%2032b.txt)
-    * [xoshiro-p 256p 64b s128s.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20256p%2064b%20s128s.txt)
-    * [xoshiro-p 256p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20256p%2064b.txt)
-    * [xoshiro-p 512p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20512p%2064b.txt)
-    * [xoshiro-ss 128p 32b s64s.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20128p%2032b%20s64s.txt)
-    * [xoshiro-ss 128p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20128p%2032b.txt)
-    * [xoshiro-ss 256p 64b s128s.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20256p%2064b%20s128s.txt)
-    * [xoshiro-ss 256p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20256p%2064b.txt)
-    * [xoshiro-ss 512p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20512p%2064b.txt)
+    * [xoshiro-p 128p 32b s64s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20128p%2032b%20s64s.txt).txt
+    * [xoshiro-p 128p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20128p%2032b.txt).txt
+    * [xoshiro-p 256p 64b s128s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20256p%2064b%20s128s.txt).txt
+    * [xoshiro-p 256p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20256p%2064b.txt).txt
+    * [xoshiro-p 512p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20512p%2064b.txt).txt
+    * [xoshiro-ss 128p 32b s64s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20128p%2032b%20s64s.txt).txt
+    * [xoshiro-ss 128p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20128p%2032b.txt).txt
+    * [xoshiro-ss 256p 64b s128s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20256p%2064b%20s128s.txt).txt
+    * [xoshiro-ss 256p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20256p%2064b.txt).txt
+    * [xoshiro-ss 512p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20512p%2064b.txt).txt
     * [**xoroshiro**](https://github.com/LUXOPHIA/Random/tree/master/--------/_OUTPUT/xoshiro/xoroshiro)
-        * [xoroshiro-p 128p 64b s64s.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-p%20128p%2064b%20s64s.txt)
-        * [xoroshiro-p 128p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-p%20128p%2064b.txt)
-        * [xoroshiro-s 064p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-s%20064p%2032b.txt)
-        * [xoroshiro-s 128p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-s%20128p%2064b.txt)
-        * [xoroshiro-ss 064p 32b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-ss%20064p%2032b.txt)
-        * [xoroshiro-ss 128p 64b s64s.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-ss%20128p%2064b%20s64s.txt)
-        * [xoroshiro-ss 128p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-ss%20128p%2064b.txt)
+        * [xoroshiro-p 128p 64b s64s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-p%20128p%2064b%20s64s.txt).txt
+        * [xoroshiro-p 128p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-p%20128p%2064b.txt).txt
+        * [xoroshiro-s 064p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-s%20064p%2032b.txt).txt
+        * [xoroshiro-s 128p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-s%20128p%2064b.txt).txt
+        * [xoroshiro-ss 064p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-ss%20064p%2032b.txt).txt
+        * [xoroshiro-ss 128p 64b s64s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-ss%20128p%2064b%20s64s.txt).txt
+        * [xoroshiro-ss 128p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-ss%20128p%2064b.txt).txt
 
 ----
 ## Reference
