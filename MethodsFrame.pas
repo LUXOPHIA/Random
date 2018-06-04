@@ -21,7 +21,7 @@ type
     _Methods :TArray<CRandom>;
     _Method  :CRandom;
     ///// メソッド
-    procedure AddRow( const A_,P_,S_,B_:String; const M_:CRandom );
+    procedure AddRow( const A_:String; const P_,B_,S_:Uint32; const M_:CRandom );
   public
     { public 宣言 }
     constructor Create( Owner_:TComponent ); override;
@@ -70,7 +70,7 @@ uses LUX.Random.LCG,
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TFrameM.AddRow( const A_,P_,S_,B_:String; const M_:CRandom );
+procedure TFrameM.AddRow( const A_:String; const P_,B_,S_:Uint32; const M_:CRandom );
 var
    I :Integer;
 begin
@@ -79,9 +79,9 @@ begin
      with StringGridM do
      begin
           Cells[ 0, I ] := A_;
-          Cells[ 1, I ] := P_;
-          Cells[ 2, I ] := B_;
-          Cells[ 3, I ] := S_;
+          Cells[ 1, I ] := P_.ToString;
+          Cells[ 2, I ] := B_.ToString;
+          Cells[ 3, I ] := S_.ToString;
      end;
 
      _Methods := _Methods + [ M_ ];
@@ -93,70 +93,70 @@ constructor TFrameM.Create( Owner_:TComponent );
 begin
      inherited;
 
-     AddRow( '-----'      ,     '64',   '0', '64', TRandomZero           );
+     AddRow( '-----'      ,     64, 64,   0, TRandomZero           );
 
-     AddRow( 'LCG'        ,     '32',   '0', '32', TRandom32LCG32        );
-     AddRow( 'LCG'        ,     '48',   '0', '48', TRandom48LCG48        );
-     AddRow( 'LCG'        ,     '64',   '0', '64', TRandom64LCG64        );
+     AddRow( 'LCG'        ,     32, 32,   0, TRandom32LCG32        );
+     AddRow( 'LCG'        ,     48, 48,   0, TRandom48LCG48        );
+     AddRow( 'LCG'        ,     64, 64,   0, TRandom64LCG64        );
 
-     AddRow( 'Xorshift'   ,     '32',   '0', '32', TRandom32XOR32        );
-     AddRow( 'Xorshift'   ,     '64',   '0', '32', TRandom32XOR64        );
-     AddRow( 'Xorshift'   ,     '64',   '0', '64', TRandom64XOR64        );
-     AddRow( 'Xorshift'   ,     '96',   '0', '32', TRandom32XOR96        );
-     AddRow( 'Xorshift'   ,    '128',   '0', '32', TRandom32XOR128       );
+     AddRow( 'Xorshift'   ,     32, 32,   0, TRandom32XOR32        );
+     AddRow( 'Xorshift'   ,     64, 32,   0, TRandom32XOR64        );
+     AddRow( 'Xorshift'   ,     64, 64,   0, TRandom64XOR64        );
+     AddRow( 'Xorshift'   ,     96, 32,   0, TRandom32XOR96        );
+     AddRow( 'Xorshift'   ,    128, 32,   0, TRandom32XOR128       );
 
-     AddRow( 'xoroshiro*' ,     '64',   '0', '32', TRandom32ROS64s       );
-     AddRow( 'xoroshiro**',     '64',   '0', '32', TRandom32ROS64ss      );
-     AddRow( 'xoshiro+'   ,    '128',   '0', '32', TRandom32XOS128p      );
-     AddRow( 'xoshiro+'   ,    '128',  '64', '32', TRandom32XOS128x64p   );
-     AddRow( 'xoshiro**'  ,    '128',   '0', '32', TRandom32XOS128ss     );
-     AddRow( 'xoshiro**'  ,    '128',  '64', '32', TRandom32XOS128x64ss  );
-     AddRow( 'xoroshiro+' ,    '128',   '0', '64', TRandom64ROS128p      );
-     AddRow( 'xoroshiro+' ,    '128',  '64', '64', TRandom64ROS128x64p   );
-     AddRow( 'xoroshiro*' ,    '128',   '0', '64', TRandom64ROS128s      );
-     AddRow( 'xoroshiro**',    '128',   '0', '64', TRandom64ROS128ss     );
-     AddRow( 'xoroshiro**',    '128',  '64', '64', TRandom64ROS128x64ss  );
-     AddRow( 'xoshiro+'   ,    '256',   '0', '64', TRandom64XOS256p      );
-     AddRow( 'xoshiro+'   ,    '256', '128', '64', TRandom64XOS256x128p  );
-     AddRow( 'xoshiro**'  ,    '256',   '0', '64', TRandom64XOS256ss     );
-     AddRow( 'xoshiro**'  ,    '256', '128', '64', TRandom64XOS256x128ss );
-     AddRow( 'xoshiro+'   ,    '512',   '0', '64', TRandom64XOS512p      );
-     AddRow( 'xoshiro**'  ,    '512',   '0', '64', TRandom64XOS512ss     );
+     AddRow( 'xoroshiro*' ,     64, 32,   0, TRandom32ROS64s       );
+     AddRow( 'xoroshiro**',     64, 32,   0, TRandom32ROS64ss      );
+     AddRow( 'xoshiro+'   ,    128, 32,   0, TRandom32XOS128p      );
+     AddRow( 'xoshiro+'   ,    128, 32,  64, TRandom32XOS128x64p   );
+     AddRow( 'xoshiro**'  ,    128, 32,   0, TRandom32XOS128ss     );
+     AddRow( 'xoshiro**'  ,    128, 32,  64, TRandom32XOS128x64ss  );
+     AddRow( 'xoroshiro+' ,    128, 64,   0, TRandom64ROS128p      );
+     AddRow( 'xoroshiro+' ,    128, 64,  64, TRandom64ROS128x64p   );
+     AddRow( 'xoroshiro*' ,    128, 64,   0, TRandom64ROS128s      );
+     AddRow( 'xoroshiro**',    128, 64,   0, TRandom64ROS128ss     );
+     AddRow( 'xoroshiro**',    128, 64,  64, TRandom64ROS128x64ss  );
+     AddRow( 'xoshiro+'   ,    256, 64,   0, TRandom64XOS256p      );
+     AddRow( 'xoshiro+'   ,    256, 64, 128, TRandom64XOS256x128p  );
+     AddRow( 'xoshiro**'  ,    256, 64,   0, TRandom64XOS256ss     );
+     AddRow( 'xoshiro**'  ,    256, 64, 128, TRandom64XOS256x128ss );
+     AddRow( 'xoshiro+'   ,    512, 64,   0, TRandom64XOS512p      );
+     AddRow( 'xoshiro**'  ,    512, 64,   0, TRandom64XOS512ss     );
 
-     AddRow( 'WELLa'      ,    '512',   '0', '32', TRandomWEL512a        );
-     AddRow( 'WELLa'      ,   '1024',   '0', '32', TRandomWEL1024a       );
-     AddRow( 'WELLa'      ,  '19937',   '0', '32', TRandomWEL19937a      );
-     AddRow( 'WELLa-new'  ,  '19937',   '0', '32', TRandomWEL19937anew   );
-     AddRow( 'WELLc'      ,  '19937',   '0', '32', TRandomWEL19937c      );
-     AddRow( 'WELLa'      ,  '44497',   '0', '32', TRandomWEL44497a      );
-     AddRow( 'WELLa-new'  ,  '44497',   '0', '32', TRandomWEL44497anew   );
-     AddRow( 'WELLb'      ,  '44497',   '0', '32', TRandomWEL44497b      );
+     AddRow( 'WELL a'     ,    512, 32,   0, TRandomWEL512a        );
+     AddRow( 'WELL a'     ,   1024, 32,   0, TRandomWEL1024a       );
+     AddRow( 'WELL a'     ,  19937, 32,   0, TRandomWEL19937a      );
+     AddRow( 'WELL a_new' ,  19937, 32,   0, TRandomWEL19937anew   );
+     AddRow( 'WELL c'     ,  19937, 32,   0, TRandomWEL19937c      );
+     AddRow( 'WELL a'     ,  44497, 32,   0, TRandomWEL44497a      );
+     AddRow( 'WELL a_new' ,  44497, 32,   0, TRandomWEL44497anew   );
+     AddRow( 'WELL b'     ,  44497, 32,   0, TRandomWEL44497b      );
 
-     AddRow( 'PCG'        ,      '8',   '0',  '8', TRandom08PCG08        );
-     AddRow( 'PCG'        ,     '16',   '0', '16', TRandom16PCG16        );
-     AddRow( 'PCG'        ,     '32',   '0', '32', TRandom32PCG32        );
-     AddRow( 'PCG'        ,     '64',   '0', '64', TRandom64PCG64        );
+     AddRow( 'PCG'        ,      8,  8,   0, TRandom08PCG08        );
+     AddRow( 'PCG'        ,     16, 16,   0, TRandom16PCG16        );
+     AddRow( 'PCG'        ,     32, 32,   0, TRandom32PCG32        );
+     AddRow( 'PCG'        ,     64, 64,   0, TRandom64PCG64        );
 
-     AddRow( 'SFMT'       ,    '607',   '0', '32', TRandom32SFMT607      );
-     AddRow( 'SFMT'       ,    '607',   '0', '64', TRandom64SFMT607      );
-     AddRow( 'SFMT'       ,   '1279',   '0', '32', TRandom32SFMT1279     );
-     AddRow( 'SFMT'       ,   '1279',   '0', '64', TRandom64SFMT1279     );
-     AddRow( 'SFMT'       ,   '2281',   '0', '32', TRandom32SFMT2281     );
-     AddRow( 'SFMT'       ,   '2281',   '0', '64', TRandom64SFMT2281     );
-     AddRow( 'SFMT'       ,   '4253',   '0', '32', TRandom32SFMT4253     );
-     AddRow( 'SFMT'       ,   '4253',   '0', '64', TRandom64SFMT4253     );
-     AddRow( 'SFMT'       ,  '11213',   '0', '32', TRandom32SFMT11213    );
-     AddRow( 'SFMT'       ,  '11213',   '0', '64', TRandom64SFMT11213    );
-     AddRow( 'SFMT'       ,  '19937',   '0', '32', TRandom32SFMT19937    );
-     AddRow( 'SFMT'       ,  '19937',   '0', '64', TRandom64SFMT19937    );
-     AddRow( 'SFMT'       ,  '44497',   '0', '32', TRandom32SFMT44497    );
-     AddRow( 'SFMT'       ,  '44497',   '0', '64', TRandom64SFMT44497    );
-     AddRow( 'SFMT'       ,  '86243',   '0', '32', TRandom32SFMT86243    );
-     AddRow( 'SFMT'       ,  '86243',   '0', '64', TRandom64SFMT86243    );
-     AddRow( 'SFMT'       , '132049',   '0', '32', TRandom32SFMT132049   );
-     AddRow( 'SFMT'       , '132049',   '0', '64', TRandom64SFMT132049   );
-     AddRow( 'SFMT'       , '216091',   '0', '32', TRandom32SFMT216091   );
-     AddRow( 'SFMT'       , '216091',   '0', '64', TRandom64SFMT216091   );
+     AddRow( 'SFMT'       ,    607, 32,   0, TRandom32SFMT607      );
+     AddRow( 'SFMT'       ,    607, 64,   0, TRandom64SFMT607      );
+     AddRow( 'SFMT'       ,   1279, 32,   0, TRandom32SFMT1279     );
+     AddRow( 'SFMT'       ,   1279, 64,   0, TRandom64SFMT1279     );
+     AddRow( 'SFMT'       ,   2281, 32,   0, TRandom32SFMT2281     );
+     AddRow( 'SFMT'       ,   2281, 64,   0, TRandom64SFMT2281     );
+     AddRow( 'SFMT'       ,   4253, 32,   0, TRandom32SFMT4253     );
+     AddRow( 'SFMT'       ,   4253, 64,   0, TRandom64SFMT4253     );
+     AddRow( 'SFMT'       ,  11213, 32,   0, TRandom32SFMT11213    );
+     AddRow( 'SFMT'       ,  11213, 64,   0, TRandom64SFMT11213    );
+     AddRow( 'SFMT'       ,  19937, 32,   0, TRandom32SFMT19937    );
+     AddRow( 'SFMT'       ,  19937, 64,   0, TRandom64SFMT19937    );
+     AddRow( 'SFMT'       ,  44497, 32,   0, TRandom32SFMT44497    );
+     AddRow( 'SFMT'       ,  44497, 64,   0, TRandom64SFMT44497    );
+     AddRow( 'SFMT'       ,  86243, 32,   0, TRandom32SFMT86243    );
+     AddRow( 'SFMT'       ,  86243, 64,   0, TRandom64SFMT86243    );
+     AddRow( 'SFMT'       , 132049, 32,   0, TRandom32SFMT132049   );
+     AddRow( 'SFMT'       , 132049, 64,   0, TRandom64SFMT132049   );
+     AddRow( 'SFMT'       , 216091, 32,   0, TRandom32SFMT216091   );
+     AddRow( 'SFMT'       , 216091, 64,   0, TRandom64SFMT216091   );
 end;
 
 destructor TFrameM.Destroy;
