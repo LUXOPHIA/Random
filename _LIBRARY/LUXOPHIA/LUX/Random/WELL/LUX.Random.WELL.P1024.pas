@@ -14,9 +14,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TWELL1024a
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSeedWEL1024a
 
-     TWELL1024a = record
+     TSeedWEL1024a = record
      private const
        R  = 32;
        M1 =  3;
@@ -55,7 +55,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL1024a
 
-     TRandomWEL1024a = class( TRandomWEL<TWELL1024a> )
+     TRandomWEL1024a = class( TRandomWEL<TSeedWEL1024a> )
      private
      protected
        ///// メソッド
@@ -81,78 +81,78 @@ uses System.SysUtils;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TWELL1024a
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSeedWEL1024a
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TWELL1024a.GetV0 :Int32u;
+function TSeedWEL1024a.GetV0 :Int32u;
 begin
      Result := STATE[ state_i ];
 end;
 
-procedure TWELL1024a.SetV0( const V0_:Int32u );
+procedure TSeedWEL1024a.SetV0( const V0_:Int32u );
 begin
      STATE[ state_i ] := V0_;
 end;
 
-function TWELL1024a.GetVM1 :Int32u;
+function TSeedWEL1024a.GetVM1 :Int32u;
 begin
      Result := STATE[ ( state_i + M1 ) and $0000001f ];
 end;
 
-procedure TWELL1024a.SetVM1( const VM1_:Int32u );
+procedure TSeedWEL1024a.SetVM1( const VM1_:Int32u );
 begin
      STATE[ ( state_i + M1 ) and $0000001f ] := VM1_;
 end;
 
-function TWELL1024a.GetVM2 :Int32u;
+function TSeedWEL1024a.GetVM2 :Int32u;
 begin
      Result := STATE[ ( state_i + M2 ) and $0000001f ];
 end;
 
-procedure TWELL1024a.SetVM2( const VM2_:Int32u );
+procedure TSeedWEL1024a.SetVM2( const VM2_:Int32u );
 begin
      STATE[ ( state_i + M2 ) and $0000001f ] := VM2_;
 end;
 
-function TWELL1024a.GetVM3 :Int32u;
+function TSeedWEL1024a.GetVM3 :Int32u;
 begin
      Result := STATE[ ( state_i + M3 ) and $0000001f ];
 end;
 
-procedure TWELL1024a.SetVM3( const VM3_:Int32u );
+procedure TSeedWEL1024a.SetVM3( const VM3_:Int32u );
 begin
      STATE[ ( state_i + M3 ) and $0000001f ] := VM3_;
 end;
 
-function TWELL1024a.GetVRm1 :Int32u;
+function TSeedWEL1024a.GetVRm1 :Int32u;
 begin
      Result := STATE[ ( state_i + 31 ) and $0000001f ];
 end;
 
-procedure TWELL1024a.SetVRm1( const VRm1_:Int32u );
+procedure TSeedWEL1024a.SetVRm1( const VRm1_:Int32u );
 begin
      STATE[ ( state_i + 31 ) and $0000001f ] := VRm1_;
 end;
 
-function TWELL1024a.GetnewV0 :Int32u;
+function TSeedWEL1024a.GetnewV0 :Int32u;
 begin
      Result := STATE[ ( state_i + 31 ) and $0000001f ];
 end;
 
-procedure TWELL1024a.SetnewV0( const newV0_:Int32u );
+procedure TSeedWEL1024a.SetnewV0( const newV0_:Int32u );
 begin
      STATE[ ( state_i + 31 ) and $0000001f ] := newV0_;
 end;
 
-function TWELL1024a.GetnewV1 :Int32u;
+function TSeedWEL1024a.GetnewV1 :Int32u;
 begin
      Result := STATE[ state_i ];
 end;
 
-procedure TWELL1024a.SetnewV1( const newV1_:Int32u );
+procedure TSeedWEL1024a.SetnewV1( const newV1_:Int32u );
 begin
      STATE[ state_i ] := newV1_;
 end;
@@ -201,7 +201,7 @@ end;
 
 constructor TRandomWEL1024a.CreateFromRand( const Random_:IRandom );
 var
-   S :TWELL1024a;
+   S :TSeedWEL1024a;
    I :Integer;
 begin
      with S do
