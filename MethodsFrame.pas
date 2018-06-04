@@ -123,14 +123,14 @@ begin
      AddRow( 'xoshiro+'   ,    512, 64,   0, TRandom64XOS512p      );
      AddRow( 'xoshiro**'  ,    512, 64,   0, TRandom64XOS512ss     );
 
-     AddRow( 'WELL a'     ,    512, 32,   0, TRandomWEL512a        );
-     AddRow( 'WELL a'     ,   1024, 32,   0, TRandomWEL1024a       );
-     AddRow( 'WELL a'     ,  19937, 32,   0, TRandomWEL19937a      );
-     AddRow( 'WELL a_new' ,  19937, 32,   0, TRandomWEL19937anew   );
-     AddRow( 'WELL c'     ,  19937, 32,   0, TRandomWEL19937c      );
-     AddRow( 'WELL a'     ,  44497, 32,   0, TRandomWEL44497a      );
-     AddRow( 'WELL a_new' ,  44497, 32,   0, TRandomWEL44497anew   );
-     AddRow( 'WELL b'     ,  44497, 32,   0, TRandomWEL44497b      );
+     AddRow( 'WELL a'     ,    512, 32,   0, TRandom32WEL512a      );
+     AddRow( 'WELL a'     ,   1024, 32,   0, TRandom32WEL1024a     );
+     AddRow( 'WELL a'     ,  19937, 32,   0, TRandom32WEL19937a    );
+     AddRow( 'WELL a_new' ,  19937, 32,   0, TRandom32WEL19937anew );
+     AddRow( 'WELL c'     ,  19937, 32,   0, TRandom32WEL19937c    );
+     AddRow( 'WELL a'     ,  44497, 32,   0, TRandom32WEL44497a    );
+     AddRow( 'WELL a_new' ,  44497, 32,   0, TRandom32WEL44497anew );
+     AddRow( 'WELL b'     ,  44497, 32,   0, TRandom32WEL44497b    );
 
      AddRow( 'PCG'        ,      8,  8,   0, TRandom08PCG08        );
      AddRow( 'PCG'        ,     16, 16,   0, TRandom16PCG16        );
