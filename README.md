@@ -6,6 +6,7 @@
 
 ----
 ## Output Test
+In all algorithms, the seed value (state vector) is initialized by consecutive natural numbers starting from 1.
 
 > * **\*p**：Period size
 > * **\*b**：Output bit
@@ -77,6 +78,8 @@
         * [xoroshiro-ss 128p 64b.txt](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-ss%20128p%2064b.txt)
 
 ----
+## Reference
+
 * **LCG: Linear congruential generator**
     * [Wikipedia, the free encyclopedia](https://en.wikipedia.org)
         * [Linear congruential generator](https://en.wikipedia.org/wiki/Linear_congruential_generator)
