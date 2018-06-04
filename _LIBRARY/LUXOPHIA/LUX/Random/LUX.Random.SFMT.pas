@@ -251,7 +251,7 @@ constructor TRandomSMT.CreateFromRand( const Random_:IRandom );
 var
    S :T_sfmt_t;
 begin
-     SetLength( S.state, SFMT_N );
+     S := T_sfmt_t.Create( SFMT_N );
 
      sfmt_init_gen_rand( S, Random_.DrawRandInt32u );
 
