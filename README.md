@@ -21,7 +21,7 @@ In all algorithms, the seed value (state vector) is initialized by consecutive n
     * [PCG 16p 16b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/PCG/PCG%2016p%2016b.txt).txt
     * [PCG 32p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/PCG/PCG%2032p%2032b.txt).txt
     * [PCG 64p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/PCG/PCG%2064p%2064b.txt).txt
-* [**SFMT***](https://github.com/LUXOPHIA/Random/tree/master/--------/_OUTPUT/SFMT)
+* [**SFMT**](https://github.com/LUXOPHIA/Random/tree/master/--------/_OUTPUT/SFMT)
     * [SFMT 000607p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20000607p%2032b.txt).txt
     * [SFMT 000607p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20000607p%2064b.txt).txt
     * [SFMT 001279p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/SFMT/SFMT%20001279p%2032b.txt).txt
