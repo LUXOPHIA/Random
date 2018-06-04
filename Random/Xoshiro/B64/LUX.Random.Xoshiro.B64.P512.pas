@@ -1,55 +1,38 @@
-﻿unit LUX.Random.Xoshiro;
+﻿unit LUX.Random.Xoshiro.B64.P512;
 
 interface //#################################################################### ■
 
-uses LUX, LUX.D2, LUX.D3, LUX.D4,
-     LUX.Random;
+uses LUX, LUX.D2, LUX.D4,
+     LUX.Random,
+     LUX.Random.Xoshiro,
+     LUX.Random.Xoshiro.B64;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
-     IRandomSHI<_TSeed_:record>     = interface;
-
-     TRandomSHI<_TSeed_:record>     = class;
-       TRandom32SHI<_TSeed_:record> = class;
-       TRandom64SHI<_TSeed_:record> = class;
+     TRandom64XOS512p  = class;
+     TRandom64XOS512ss = class;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomSHI<_TSeed_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS512p
 
-     IRandomSHI<_TSeed_:record> = interface( IRandom<_TSeed_> )
-     ['{DCD720B8-D569-4949-8BD0-1BF7A436BB62}']
-     {protected}
-     {public}
-     end;
-
-     //-------------------------------------------------------------------------
-
-     TRandomSHI<_TSeed_:record> = class( TRandom<_TSeed_>, IRandomSHI<_TSeed_> )
-     private
-     protected
-     public
-     end;
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32SHI<_TSeed_>
-
-     TRandom32SHI<_TSeed_:record> = class( TRandomSHI<_TSeed_> )
+     TRandom64XOS512p = class( TRandom64XOS512 )
      private
      protected
        ///// メソッド
-       function rotl( const X_:Int32u; const K_:Int32s ) :Int32u; overload; inline;
+       function CalcRandInt64u :Int64u; override;
      public
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64SHI<_TSeed_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS512ss
 
-     TRandom64SHI<_TSeed_:record> = class( TRandomSHI<_TSeed_> )
+     TRandom64XOS512ss = class( TRandom64XOS512 )
      private
      protected
        ///// メソッド
-       function rotl( const X_:Int64u; const K_:Int64s ) :Int64u; overload; inline;
+       function CalcRandInt64u :Int64u; override;
      public
      end;
 
@@ -67,15 +50,9 @@ uses System.SysUtils;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomSHI<_TSeed_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS512p
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32SHI<_TSeed_>
+{ http://xoshiro.di.unimi.it/xoshiro256plus.c }
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -83,14 +60,16 @@ uses System.SysUtils;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandom32SHI<_TSeed_>.rotl( const X_:Int32u; const K_:Int32s ) :Int32u;
+function TRandom64XOS512p.CalcRandInt64u :Int64u;
 begin
-     Result := ( X_ shl K_ ) or ( X_ shr ( 32 - K_ ) );
+     with _Seed do Result := s[ 0 ] + s[ 2 ];
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64SHI<_TSeed_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64XOS512ss
+
+{ http://xoshiro.di.unimi.it/xoshiro256starstar.c }
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -98,9 +77,9 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandom64SHI<_TSeed_>.rotl( const X_:Int64u; const K_:Int64s ) :Int64u;
+function TRandom64XOS512ss.CalcRandInt64u :Int64u;
 begin
-     Result := ( X_ shl K_ ) or ( X_ shr ( 64 - K_ ) );
+     Result := rotl( _Seed.s[ 1 ] * 5, 7 ) * 9;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
