@@ -27,16 +27,6 @@ uses
   LUX.Random.WELL in '_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.WELL.pas',
   LUX.Random.PCG in '_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.PCG.pas',
   LUX.Random.SFMT in '_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.SFMT.pas',
-  LUX.Random.SFMT.M607 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M607.pas',
-  LUX.Random.SFMT.M1279 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M1279.pas',
-  LUX.Random.SFMT.M4253 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M4253.pas',
-  LUX.Random.SFMT.M11213 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M11213.pas',
-  LUX.Random.SFMT.M19937 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M19937.pas',
-  LUX.Random.SFMT.M44497 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M44497.pas',
-  LUX.Random.SFMT.M86243 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M86243.pas',
-  LUX.Random.SFMT.M132049 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M132049.pas',
-  LUX.Random.SFMT.M216091 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M216091.pas',
-  LUX.Random.SFMT.M2281 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M2281.pas',
   MethodsFrame in 'MethodsFrame.pas' {FrameM: TFrame},
   LUX.Random.PCG.B32 in '_LIBRARY\LUXOPHIA\LUX\Random\PCG\LUX.Random.PCG.B32.pas',
   LUX.Random.PCG.B64 in '_LIBRARY\LUXOPHIA\LUX\Random\PCG\LUX.Random.PCG.B64.pas',
@@ -52,7 +42,17 @@ uses
   LUX.Random.Xoshiro.B32.P128 in '_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B32\LUX.Random.Xoshiro.B32.P128.pas',
   LUX.Random.Xoshiro.B64.P128 in '_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B64\LUX.Random.Xoshiro.B64.P128.pas',
   LUX.Random.Xoshiro.B64.P256 in '_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B64\LUX.Random.Xoshiro.B64.P256.pas',
-  LUX.Random.Xoshiro.B64.P512 in '_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B64\LUX.Random.Xoshiro.B64.P512.pas';
+  LUX.Random.Xoshiro.B64.P512 in '_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B64\LUX.Random.Xoshiro.B64.P512.pas',
+  LUX.Random.SFMT.P4253 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P4253.pas',
+  LUX.Random.SFMT.P11213 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P11213.pas',
+  LUX.Random.SFMT.P19937 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P19937.pas',
+  LUX.Random.SFMT.P44497 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P44497.pas',
+  LUX.Random.SFMT.P86243 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P86243.pas',
+  LUX.Random.SFMT.P132049 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P132049.pas',
+  LUX.Random.SFMT.P216091 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P216091.pas',
+  LUX.Random.SFMT.P607 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P607.pas',
+  LUX.Random.SFMT.P1279 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P1279.pas',
+  LUX.Random.SFMT.P2281 in '_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P2281.pas';
 
 {$R *.res}
 

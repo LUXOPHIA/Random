@@ -55,16 +55,16 @@ uses LUX.Random.LCG,
      LUX.Random.PCG.B32,
      LUX.Random.PCG.B64,
      LUX.Random.SFMT,
-     LUX.Random.SFMT.M607,
-     LUX.Random.SFMT.M1279,
-     LUX.Random.SFMT.M2281,
-     LUX.Random.SFMT.M4253,
-     LUX.Random.SFMT.M11213,
-     LUX.Random.SFMT.M19937,
-     LUX.Random.SFMT.M44497,
-     LUX.Random.SFMT.M86243,
-     LUX.Random.SFMT.M132049,
-     LUX.Random.SFMT.M216091;
+     LUX.Random.SFMT.P607,
+     LUX.Random.SFMT.P1279,
+     LUX.Random.SFMT.P2281,
+     LUX.Random.SFMT.P4253,
+     LUX.Random.SFMT.P11213,
+     LUX.Random.SFMT.P19937,
+     LUX.Random.SFMT.P44497,
+     LUX.Random.SFMT.P86243,
+     LUX.Random.SFMT.P132049,
+     LUX.Random.SFMT.P216091;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -78,10 +78,10 @@ begin
 
      with StringGridM do
      begin
-          Cells[ 0, I ] :=       A_        ;
-          Cells[ 1, I ] := '2^'+ P_        ;
-          Cells[ 2, I ] :=       B_ + 'bit';
-          Cells[ 3, I ] := '2^'+ S_        ;
+          Cells[ 0, I ] := A_;
+          Cells[ 1, I ] := P_;
+          Cells[ 2, I ] := B_;
+          Cells[ 3, I ] := S_;
      end;
 
      _Methods := _Methods + [ M_ ];

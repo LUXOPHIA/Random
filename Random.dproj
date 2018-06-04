@@ -342,16 +342,6 @@
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.WELL.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.PCG.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\LUX.Random.SFMT.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M607.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M1279.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M4253.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M11213.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M19937.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M44497.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M86243.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M132049.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M216091.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.M2281.pas"/>
         <DCCReference Include="MethodsFrame.pas">
             <Form>FrameM</Form>
             <FormType>fmx</FormType>
@@ -372,6 +362,16 @@
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B64\LUX.Random.Xoshiro.B64.P128.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B64\LUX.Random.Xoshiro.B64.P256.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\Xoshiro\B64\LUX.Random.Xoshiro.B64.P512.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P4253.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P11213.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P19937.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P44497.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P86243.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P132049.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P216091.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P607.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P1279.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Random\SFMT\LUX.Random.SFMT.P2281.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
