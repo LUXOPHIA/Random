@@ -17,7 +17,15 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32ROS64
 
-     TRandom32ROS64 = class( TRandom32SHI<TInt32u2D> )
+     IRandom32ROS64 = interface( IRandom<TInt32u2D> )
+     ['{E6D4EE10-CCC9-4E35-AD85-D94987524CDF}']
+     {protected}
+     {public}
+     end;
+
+     //-------------------------------------------------------------------------
+
+     TRandom32ROS64 = class( TRandom32SHI<TInt32u2D>, IRandom32ROS64 )
      private
      protected
        ///// メソッド
@@ -28,7 +36,15 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32XOS128
 
-     TRandom32XOS128 = class( TRandom32SHI<TInt32u4D> )
+     IRandom32XOS128 = interface( IRandom<TInt32u4D> )
+     ['{3A1CEE71-C699-4F5F-BCF8-1ABEC365DC82}']
+     {protected}
+     {public}
+     end;
+
+     //-------------------------------------------------------------------------
+
+     TRandom32XOS128 = class( TRandom32SHI<TInt32u4D>, IRandom32XOS128 )
      private
      protected
        ///// メソッド

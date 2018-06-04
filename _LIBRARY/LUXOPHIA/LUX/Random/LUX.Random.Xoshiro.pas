@@ -20,7 +20,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomSHI<_TSeed_>
 
      IRandomSHI<_TSeed_:record> = interface( IRandom<_TSeed_> )
-     ['{FDD69CB5-D221-4FDD-89C9-BB3CF352BD74}']
+     ['{DCD720B8-D569-4949-8BD0-1BF7A436BB62}']
      {protected}
      {public}
      end;
