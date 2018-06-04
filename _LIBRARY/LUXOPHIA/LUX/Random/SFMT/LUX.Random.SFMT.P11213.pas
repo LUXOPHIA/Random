@@ -1,4 +1,4 @@
-﻿unit LUX.Random.SFMT.M607;
+﻿unit LUX.Random.SFMT.P11213;
 
 interface //#################################################################### ■
 
@@ -12,9 +12,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32SFMT607
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32SFMT11213
 
-     TRandom32SFMT607 = class( TRandom32SFMT )
+     TRandom32SFMT11213 = class( TRandom32SFMT )
+     private const
      private
      protected
        ///// アクセス
@@ -36,9 +37,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64SFMT607
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64SFMT11213
 
-     TRandom64SFMT607 = class( TRandom64SFMT )
+     TRandom64SFMT11213 = class( TRandom64SFMT )
+     private const
      private
      protected
        ///// アクセス
@@ -74,172 +76,168 @@ uses System.SysUtils;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32SFMT607
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32SFMT11213
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-/////////////////////////////////////////////////////////////////////// アクセス
-
-function TRandom32SFMT607.GetSFMT_MEXP :Int32s;
+function TRandom32SFMT11213.GetSFMT_MEXP :Int32s;
 begin
-     Result := 607;
+     Result := 11213;
 end;
 
-function TRandom32SFMT607.GetSFMT_POS1 :Int32s;
+function TRandom32SFMT11213.GetSFMT_POS1 :Int32s;
 begin
-     Result := 2;
+     Result := 68;
 end;
 
-function TRandom32SFMT607.GetSFMT_SL1 :Int32s;
+function TRandom32SFMT11213.GetSFMT_SL1 :Int32s;
 begin
-     Result := 15;
+     Result := 14;
 end;
 
-function TRandom32SFMT607.GetSFMT_SL2 :Int32s;
+function TRandom32SFMT11213.GetSFMT_SL2 :Int32s;
 begin
      Result := 3;
 end;
 
-function TRandom32SFMT607.GetSFMT_SR1 :Int32s;
+function TRandom32SFMT11213.GetSFMT_SR1 :Int32s;
 begin
-     Result := 13;
+     Result := 7;
 end;
 
-function TRandom32SFMT607.GetSFMT_SR2 :Int32s;
+function TRandom32SFMT11213.GetSFMT_SR2 :Int32s;
 begin
      Result := 3;
 end;
 
-function TRandom32SFMT607.GetSFMT_MSK1 :Int32u;
+function TRandom32SFMT11213.GetSFMT_MSK1 :Int32u;
 begin
-     Result := $fdff37ff;
+     Result := $effff7fb;
 end;
 
-function TRandom32SFMT607.GetSFMT_MSK2 :Int32u;
+function TRandom32SFMT11213.GetSFMT_MSK2 :Int32u;
 begin
-     Result := $ef7f3f7d;
+     Result := $ffffffef;
 end;
 
-function TRandom32SFMT607.GetSFMT_MSK3 :Int32u;
+function TRandom32SFMT11213.GetSFMT_MSK3 :Int32u;
 begin
-     Result := $ff777b7d;
+     Result := $dfdfbfff;
 end;
 
-function TRandom32SFMT607.GetSFMT_MSK4 :Int32u;
+function TRandom32SFMT11213.GetSFMT_MSK4 :Int32u;
 begin
-     Result := $7ff7fb2f;
+     Result := $7fffdbfd;
 end;
 
-function TRandom32SFMT607.GetSFMT_PARITY1 :Int32u;
+function TRandom32SFMT11213.GetSFMT_PARITY1 :Int32u;
 begin
      Result := $00000001;
 end;
 
-function TRandom32SFMT607.GetSFMT_PARITY2 :Int32u;
+function TRandom32SFMT11213.GetSFMT_PARITY2 :Int32u;
 begin
      Result := $00000000;
 end;
 
-function TRandom32SFMT607.GetSFMT_PARITY3 :Int32u;
+function TRandom32SFMT11213.GetSFMT_PARITY3 :Int32u;
 begin
-     Result := $00000000;
+     Result := $e8148000;
 end;
 
-function TRandom32SFMT607.GetSFMT_PARITY4 :Int32u;
+function TRandom32SFMT11213.GetSFMT_PARITY4 :Int32u;
 begin
-     Result := $5986f054;
+     Result := $d0c7afa3;
 end;
 
-function TRandom32SFMT607.GetSFMT_IDSTR :String;
+function TRandom32SFMT11213.GetSFMT_IDSTR :String;
 begin
-     Result := 'SFMT-607:2-15-3-13-3:fdff37ff-ef7f3f7d-ff777b7d-7ff7fb2f';
+     Result := 'SFMT-11213:68-14-3-7-3:effff7fb-ffffffef-dfdfbfff-7fffdbfd';
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64SFMT607
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64SFMT11213
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-/////////////////////////////////////////////////////////////////////// アクセス
-
-function TRandom64SFMT607.GetSFMT_MEXP :Int32s;
+function TRandom64SFMT11213.GetSFMT_MEXP :Int32s;
 begin
-     Result := 607;
+     Result := 11213;
 end;
 
-function TRandom64SFMT607.GetSFMT_POS1 :Int32s;
+function TRandom64SFMT11213.GetSFMT_POS1 :Int32s;
 begin
-     Result := 2;
+     Result := 68;
 end;
 
-function TRandom64SFMT607.GetSFMT_SL1 :Int32s;
+function TRandom64SFMT11213.GetSFMT_SL1 :Int32s;
 begin
-     Result := 15;
+     Result := 14;
 end;
 
-function TRandom64SFMT607.GetSFMT_SL2 :Int32s;
+function TRandom64SFMT11213.GetSFMT_SL2 :Int32s;
 begin
      Result := 3;
 end;
 
-function TRandom64SFMT607.GetSFMT_SR1 :Int32s;
+function TRandom64SFMT11213.GetSFMT_SR1 :Int32s;
 begin
-     Result := 13;
+     Result := 7;
 end;
 
-function TRandom64SFMT607.GetSFMT_SR2 :Int32s;
+function TRandom64SFMT11213.GetSFMT_SR2 :Int32s;
 begin
      Result := 3;
 end;
 
-function TRandom64SFMT607.GetSFMT_MSK1 :Int32u;
+function TRandom64SFMT11213.GetSFMT_MSK1 :Int32u;
 begin
-     Result := $fdff37ff;
+     Result := $effff7fb;
 end;
 
-function TRandom64SFMT607.GetSFMT_MSK2 :Int32u;
+function TRandom64SFMT11213.GetSFMT_MSK2 :Int32u;
 begin
-     Result := $ef7f3f7d;
+     Result := $ffffffef;
 end;
 
-function TRandom64SFMT607.GetSFMT_MSK3 :Int32u;
+function TRandom64SFMT11213.GetSFMT_MSK3 :Int32u;
 begin
-     Result := $ff777b7d;
+     Result := $dfdfbfff;
 end;
 
-function TRandom64SFMT607.GetSFMT_MSK4 :Int32u;
+function TRandom64SFMT11213.GetSFMT_MSK4 :Int32u;
 begin
-     Result := $7ff7fb2f;
+     Result := $7fffdbfd;
 end;
 
-function TRandom64SFMT607.GetSFMT_PARITY1 :Int32u;
+function TRandom64SFMT11213.GetSFMT_PARITY1 :Int32u;
 begin
      Result := $00000001;
 end;
 
-function TRandom64SFMT607.GetSFMT_PARITY2 :Int32u;
+function TRandom64SFMT11213.GetSFMT_PARITY2 :Int32u;
 begin
      Result := $00000000;
 end;
 
-function TRandom64SFMT607.GetSFMT_PARITY3 :Int32u;
+function TRandom64SFMT11213.GetSFMT_PARITY3 :Int32u;
 begin
-     Result := $00000000;
+     Result := $e8148000;
 end;
 
-function TRandom64SFMT607.GetSFMT_PARITY4 :Int32u;
+function TRandom64SFMT11213.GetSFMT_PARITY4 :Int32u;
 begin
-     Result := $5986f054;
+     Result := $d0c7afa3;
 end;
 
-function TRandom64SFMT607.GetSFMT_IDSTR :String;
+function TRandom64SFMT11213.GetSFMT_IDSTR :String;
 begin
-     Result := 'SFMT-607:2-15-3-13-3:fdff37ff-ef7f3f7d-ff777b7d-7ff7fb2f';
+     Result := 'SFMT-11213:68-14-3-7-3:effff7fb-ffffffef-dfdfbfff-7fffdbfd';
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
