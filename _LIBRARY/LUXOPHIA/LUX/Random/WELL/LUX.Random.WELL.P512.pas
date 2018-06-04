@@ -63,18 +63,17 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      TRandomWEL512a = class( TRandomWEL<TWELL512a> )
      private
-       ///// メソッド
-       function MAT0POS( const t:Int32u; const v:Int32u ) :Int32u; inline;
-       function MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u; inline;
-       function MAT3NEG( const t:Int32s; const v:Int32u ) :Int32u; inline;
-       function MAT4NEG( const t:Int32s; const b,v:Int32u ) :Int32u; inline;
      protected
        ///// メソッド
        procedure CalcNextSeed; override;
        function CalcRandInt32u :Int32u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
-       constructor Create( const Seed_:TWELL512a ); overload; override;
+       ///// メソッド
+       function MAT0POS( const t:Int32u; const v:Int32u ) :Int32u; inline;
+       function MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u; inline;
+       function MAT3NEG( const t:Int32s; const v:Int32u ) :Int32u; inline;
+       function MAT4NEG( const t:Int32s; const b,v:Int32u ) :Int32u; inline;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -195,28 +194,6 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
-/////////////////////////////////////////////////////////////////////// メソッド
-
-function TRandomWEL512a.MAT0POS( const t:Int32u; const v:Int32u ) :Int32u;
-begin
-     Result := v xor ( v shr +t );
-end;
-
-function TRandomWEL512a.MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u;
-begin
-     Result := v xor ( v shl -t );
-end;
-
-function TRandomWEL512a.MAT3NEG( const t:Int32s; const v:Int32u ) :Int32u;
-begin
-     Result := v shl -t;
-end;
-
-function TRandomWEL512a.MAT4NEG( const t:Int32s; const b,v:Int32u ) :Int32u;
-begin
-     Result := v xor ( ( v shl -t ) and b );
-end;
-
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 /////////////////////////////////////////////////////////////////////// メソッド
@@ -252,22 +229,39 @@ end;
 
 constructor TRandomWEL512a.CreateFromRand( const Random_:IRandom );
 var
-   W :TWELL512a;
+   S :TWELL512a;
    I :Integer;
 begin
-     with W do
+     with S do
      begin
           for I := 0 to R-1 do STATE[ I ] := Random_.DrawRandInt32u;
+
+          state_i := 0;
      end;
 
-     Create( W );
+     Create( S );
 end;
 
-constructor TRandomWEL512a.Create( const Seed_:TWELL512a );
-begin
-     inherited;
+/////////////////////////////////////////////////////////////////////// メソッド
 
-     _Seed.state_i := 0;
+function TRandomWEL512a.MAT0POS( const t:Int32u; const v:Int32u ) :Int32u;
+begin
+     Result := v xor ( v shr +t );
+end;
+
+function TRandomWEL512a.MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u;
+begin
+     Result := v xor ( v shl -t );
+end;
+
+function TRandomWEL512a.MAT3NEG( const t:Int32s; const v:Int32u ) :Int32u;
+begin
+     Result := v shl -t;
+end;
+
+function TRandomWEL512a.MAT4NEG( const t:Int32s; const b,v:Int32u ) :Int32u;
+begin
+     Result := v xor ( ( v shl -t ) and b );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】

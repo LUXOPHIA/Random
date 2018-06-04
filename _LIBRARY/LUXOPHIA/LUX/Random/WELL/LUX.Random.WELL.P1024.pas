@@ -57,17 +57,16 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      TRandomWEL1024a = class( TRandomWEL<TWELL1024a> )
      private
-       ///// メソッド
-       function MAT0POS( const t:Int32u; const v:Int32u ) :Int32u; inline;
-       function MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u; inline;
-       function Identity( const v:Int32u ) :Int32u; inline;
      protected
        ///// メソッド
        procedure CalcNextSeed; override;
        function CalcRandInt32u :Int32u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
-       constructor Create( const Seed_:TWELL1024a ); overload; override;
+       ///// メソッド
+       function MAT0POS( const t:Int32u; const v:Int32u ) :Int32u; inline;
+       function MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u; inline;
+       function Identity( const v:Int32u ) :Int32u; inline;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -168,23 +167,6 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
-/////////////////////////////////////////////////////////////////////// メソッド
-
-function TRandomWEL1024a.MAT0POS( const t:Int32u; const v:Int32u ) :Int32u;
-begin
-     Result := v xor ( v shr +t );
-end;
-
-function TRandomWEL1024a.MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u;
-begin
-     Result := v xor ( v shl -t );
-end;
-
-function TRandomWEL1024a.Identity( const v:Int32u ) :Int32u;
-begin
-     Result := v;
-end;
-
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 /////////////////////////////////////////////////////////////////////// メソッド
@@ -219,22 +201,34 @@ end;
 
 constructor TRandomWEL1024a.CreateFromRand( const Random_:IRandom );
 var
-   W :TWELL1024a;
+   S :TWELL1024a;
    I :Integer;
 begin
-     with W do
+     with S do
      begin
           for I := 0 to R-1 do STATE[ I ] := Random_.DrawRandInt32u;
+
+          state_i := 0;
      end;
 
-     Create( W );
+     Create( S );
 end;
 
-constructor TRandomWEL1024a.Create( const Seed_:TWELL1024a );
-begin
-     inherited;
+/////////////////////////////////////////////////////////////////////// メソッド
 
-     _Seed.state_i := 0;
+function TRandomWEL1024a.MAT0POS( const t:Int32u; const v:Int32u ) :Int32u;
+begin
+     Result := v xor ( v shr +t );
+end;
+
+function TRandomWEL1024a.MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u;
+begin
+     Result := v xor ( v shl -t );
+end;
+
+function TRandomWEL1024a.Identity( const v:Int32u ) :Int32u;
+begin
+     Result := v;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
