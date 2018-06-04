@@ -10,13 +10,13 @@ uses LUX,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
-     TRandomWEL1024a = class;
+     TRandom32WEL1024a = class;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TWELL1024a
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSeed32WEL1024a
 
-     TWELL1024a = record
+     TSeed32WEL1024a = record
      private const
        R  = 32;
        M1 =  3;
@@ -53,21 +53,20 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL1024a
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32WEL1024a
 
-     TRandomWEL1024a = class( TRandomWEL<TWELL1024a> )
+     TRandom32WEL1024a = class( TRandomWEL<TSeed32WEL1024a> )
      private
-       ///// メソッド
-       function MAT0POS( const t:Int32u; const v:Int32u ) :Int32u; inline;
-       function MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u; inline;
-       function Identity( const v:Int32u ) :Int32u; inline;
      protected
        ///// メソッド
        procedure CalcNextSeed; override;
        function CalcRandInt32u :Int32u; override;
      public
        constructor CreateFromRand( const Random_:IRandom ); overload; override;
-       constructor Create( const Seed_:TWELL1024a ); overload; override;
+       ///// メソッド
+       function MAT0POS( const t:Int32u; const v:Int32u ) :Int32u; inline;
+       function MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u; inline;
+       function Identity( const v:Int32u ) :Int32u; inline;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -82,78 +81,78 @@ uses System.SysUtils;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TWELL1024a
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSeed32WEL1024a
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TWELL1024a.GetV0 :Int32u;
+function TSeed32WEL1024a.GetV0 :Int32u;
 begin
      Result := STATE[ state_i ];
 end;
 
-procedure TWELL1024a.SetV0( const V0_:Int32u );
+procedure TSeed32WEL1024a.SetV0( const V0_:Int32u );
 begin
      STATE[ state_i ] := V0_;
 end;
 
-function TWELL1024a.GetVM1 :Int32u;
+function TSeed32WEL1024a.GetVM1 :Int32u;
 begin
      Result := STATE[ ( state_i + M1 ) and $0000001f ];
 end;
 
-procedure TWELL1024a.SetVM1( const VM1_:Int32u );
+procedure TSeed32WEL1024a.SetVM1( const VM1_:Int32u );
 begin
      STATE[ ( state_i + M1 ) and $0000001f ] := VM1_;
 end;
 
-function TWELL1024a.GetVM2 :Int32u;
+function TSeed32WEL1024a.GetVM2 :Int32u;
 begin
      Result := STATE[ ( state_i + M2 ) and $0000001f ];
 end;
 
-procedure TWELL1024a.SetVM2( const VM2_:Int32u );
+procedure TSeed32WEL1024a.SetVM2( const VM2_:Int32u );
 begin
      STATE[ ( state_i + M2 ) and $0000001f ] := VM2_;
 end;
 
-function TWELL1024a.GetVM3 :Int32u;
+function TSeed32WEL1024a.GetVM3 :Int32u;
 begin
      Result := STATE[ ( state_i + M3 ) and $0000001f ];
 end;
 
-procedure TWELL1024a.SetVM3( const VM3_:Int32u );
+procedure TSeed32WEL1024a.SetVM3( const VM3_:Int32u );
 begin
      STATE[ ( state_i + M3 ) and $0000001f ] := VM3_;
 end;
 
-function TWELL1024a.GetVRm1 :Int32u;
+function TSeed32WEL1024a.GetVRm1 :Int32u;
 begin
      Result := STATE[ ( state_i + 31 ) and $0000001f ];
 end;
 
-procedure TWELL1024a.SetVRm1( const VRm1_:Int32u );
+procedure TSeed32WEL1024a.SetVRm1( const VRm1_:Int32u );
 begin
      STATE[ ( state_i + 31 ) and $0000001f ] := VRm1_;
 end;
 
-function TWELL1024a.GetnewV0 :Int32u;
+function TSeed32WEL1024a.GetnewV0 :Int32u;
 begin
      Result := STATE[ ( state_i + 31 ) and $0000001f ];
 end;
 
-procedure TWELL1024a.SetnewV0( const newV0_:Int32u );
+procedure TSeed32WEL1024a.SetnewV0( const newV0_:Int32u );
 begin
      STATE[ ( state_i + 31 ) and $0000001f ] := newV0_;
 end;
 
-function TWELL1024a.GetnewV1 :Int32u;
+function TSeed32WEL1024a.GetnewV1 :Int32u;
 begin
      Result := STATE[ state_i ];
 end;
 
-procedure TWELL1024a.SetnewV1( const newV1_:Int32u );
+procedure TSeed32WEL1024a.SetnewV1( const newV1_:Int32u );
 begin
      STATE[ state_i ] := newV1_;
 end;
@@ -162,34 +161,17 @@ end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL1024a
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32WEL1024a
 
 { http://www.iro.umontreal.ca/~panneton/well/WELL1024a.c }
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
-/////////////////////////////////////////////////////////////////////// メソッド
-
-function TRandomWEL1024a.MAT0POS( const t:Int32u; const v:Int32u ) :Int32u;
-begin
-     Result := v xor ( v shr +t );
-end;
-
-function TRandomWEL1024a.MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u;
-begin
-     Result := v xor ( v shl -t );
-end;
-
-function TRandomWEL1024a.Identity( const v:Int32u ) :Int32u;
-begin
-     Result := v;
-end;
-
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandomWEL1024a.CalcNextSeed;
+procedure TRandom32WEL1024a.CalcNextSeed;
 var
    z0, z1, z2 :Int32u;
 begin
@@ -210,31 +192,43 @@ begin
      end;
 end;
 
-function TRandomWEL1024a.CalcRandInt32u :Int32u;
+function TRandom32WEL1024a.CalcRandInt32u :Int32u;
 begin
      Result := _Seed.V0;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TRandomWEL1024a.CreateFromRand( const Random_:IRandom );
+constructor TRandom32WEL1024a.CreateFromRand( const Random_:IRandom );
 var
-   W :TWELL1024a;
+   S :TSeed32WEL1024a;
    I :Integer;
 begin
-     with W do
+     with S do
      begin
           for I := 0 to R-1 do STATE[ I ] := Random_.DrawRandInt32u;
+
+          state_i := 0;
      end;
 
-     Create( W );
+     Create( S );
 end;
 
-constructor TRandomWEL1024a.Create( const Seed_:TWELL1024a );
-begin
-     inherited;
+/////////////////////////////////////////////////////////////////////// メソッド
 
-     _Seed.state_i := 0;
+function TRandom32WEL1024a.MAT0POS( const t:Int32u; const v:Int32u ) :Int32u;
+begin
+     Result := v xor ( v shr +t );
+end;
+
+function TRandom32WEL1024a.MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u;
+begin
+     Result := v xor ( v shl -t );
+end;
+
+function TRandom32WEL1024a.Identity( const v:Int32u ) :Int32u;
+begin
+     Result := v;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】

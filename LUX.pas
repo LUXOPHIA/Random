@@ -407,6 +407,9 @@ function BinPow( const N_:Cardinal ) :Cardinal; overload;
 function BinPow( const N_:Int64 ) :Int64; overload;
 function BinPow( const N_:UInt64 ) :UInt64; overload;
 
+function UIntToStr( const Value_:Uint32; const N_:Integer; const C_:Char = '0' ) :String; overload;
+function UIntToStr( const Value_:UInt64; const N_:Integer; const C_:Char = '0' ) :String; overload;
+
 function IntToStr( const Value_:Integer; const N_:Integer; const C_:Char = '0' ) :String; overload;
 function IntToStr( const Value_:Int64; const N_:Integer; const C_:Char = '0' ) :String; overload;
 function IntToStrP( const Value_:Integer; const N_:Integer; const C_:Char = '0' ) :String; overload;
@@ -1909,6 +1912,22 @@ end;
 function BinPow( const N_:UInt64 ) :UInt64;
 begin
      Result := 1 shl N_;
+end;
+
+//------------------------------------------------------------------------------
+
+function UIntToStr( const Value_:Uint32; const N_:Integer; const C_:Char = '0' ) :String;
+begin
+     Result := UIntToStr( Value_ );
+
+     Result := Result.Insert( 0, StringOfChar( C_, N_ - Length( Result ) ) );
+end;
+
+function UIntToStr( const Value_:UInt64; const N_:Integer; const C_:Char = '0' ) :String;
+begin
+     Result := UIntToStr( Value_ );
+
+     Result := Result.Insert( 0, StringOfChar( C_, N_ - Length( Result ) ) );
 end;
 
 //------------------------------------------------------------------------------
