@@ -11,15 +11,15 @@ uses System.SysUtils,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
-     TRandomWEL44497a      = class;
-       TRandomWEL44497b    = class;
-       TRandomWEL44497anew = class;
+     TRandom32WEL44497a      = class;
+       TRandom32WEL44497b    = class;
+       TRandom32WEL44497anew = class;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSeedWEL44497a
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSeed32WEL44497a
 
-     TSeedWEL44497a = record
+     TSeed32WEL44497a = record
      private const
        W     = 32;
        R     = 1391;
@@ -96,9 +96,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL44497a
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32WEL44497a
 
-     TRandomWEL44497a = class( TRandomWEL<TSeedWEL44497a> )
+     TRandom32WEL44497a = class( TRandomWEL<TSeed32WEL44497a> )
      protected
        ///// メソッド
        procedure case_1;
@@ -124,9 +124,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function MAT7( const v:Int32u ) :Int32u; inline;
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL44497b
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32WEL44497b
 
-     TRandomWEL44497b = class( TRandomWEL44497a )
+     TRandom32WEL44497b = class( TRandom32WEL44497a )
      private const
        TEMPERB = $93dd1400;
        TEMPERC = $fa118000;
@@ -137,9 +137,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL44497anew
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32WEL44497anew
 
-     TRandomWEL44497anew = class( TRandomWEL44497a )
+     TRandom32WEL44497anew = class( TRandom32WEL44497a )
      private const
        BITMASK = $48000000;
      private
@@ -159,190 +159,190 @@ implementation //###############################################################
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSeedWEL44497a
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSeed32WEL44497a
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TSeedWEL44497a.GetV0 :Int32u;
+function TSeed32WEL44497a.GetV0 :Int32u;
 begin
      Result := STATE[ state_i ];
 end;
 
-procedure TSeedWEL44497a.SetV0( const V0_:Int32u );
+procedure TSeed32WEL44497a.SetV0( const V0_:Int32u );
 begin
      STATE[ state_i ] := V0_;
 end;
 
-function TSeedWEL44497a.GetVM1Over :Int32u;
+function TSeed32WEL44497a.GetVM1Over :Int32u;
 begin
      Result := STATE[ state_i+M1-R ];
 end;
 
-procedure TSeedWEL44497a.SetVM1Over( const VM1Over_:Int32u );
+procedure TSeed32WEL44497a.SetVM1Over( const VM1Over_:Int32u );
 begin
      STATE[ state_i+M1-R ] := VM1Over_;
 end;
 
-function TSeedWEL44497a.GetVM1 :Int32u;
+function TSeed32WEL44497a.GetVM1 :Int32u;
 begin
      Result := STATE[ state_i+M1 ];
 end;
 
-procedure TSeedWEL44497a.SetVM1( const VM1_:Int32u );
+procedure TSeed32WEL44497a.SetVM1( const VM1_:Int32u );
 begin
      STATE[ state_i+M1 ] := VM1_;
 end;
 
-function TSeedWEL44497a.GetVM2Over :Int32u;
+function TSeed32WEL44497a.GetVM2Over :Int32u;
 begin
      Result := STATE[ state_i+M2-R ];
 end;
 
-procedure TSeedWEL44497a.SetVM2Over( const VM2Over_:Int32u );
+procedure TSeed32WEL44497a.SetVM2Over( const VM2Over_:Int32u );
 begin
      STATE[ state_i+M2-R ] := VM2Over_;
 end;
 
-function TSeedWEL44497a.GetVM2 :Int32u;
+function TSeed32WEL44497a.GetVM2 :Int32u;
 begin
      Result := STATE[ state_i+M2 ];
 end;
 
-procedure TSeedWEL44497a.SetVM2( const VM2_:Int32u );
+procedure TSeed32WEL44497a.SetVM2( const VM2_:Int32u );
 begin
      STATE[ state_i+M2 ] := VM2_;
 end;
 
-function TSeedWEL44497a.GetVM3Over :Int32u;
+function TSeed32WEL44497a.GetVM3Over :Int32u;
 begin
      Result := STATE[ state_i+M3-R ];
 end;
 
-procedure TSeedWEL44497a.SetVM3Over( const VM3Over_:Int32u );
+procedure TSeed32WEL44497a.SetVM3Over( const VM3Over_:Int32u );
 begin
      STATE[ state_i+M3-R ] := VM3Over_;
 end;
 
-function TSeedWEL44497a.GetVM3 :Int32u;
+function TSeed32WEL44497a.GetVM3 :Int32u;
 begin
      Result := STATE[ state_i+M3 ];
 end;
 
-procedure TSeedWEL44497a.SetVM3( const VM3_:Int32u );
+procedure TSeed32WEL44497a.SetVM3( const VM3_:Int32u );
 begin
      STATE[ state_i+M3 ] := VM3_;
 end;
 
-function TSeedWEL44497a.GetVRm1 :Int32u;
+function TSeed32WEL44497a.GetVRm1 :Int32u;
 begin
      Result := STATE[ state_i-1 ];
 end;
 
-procedure TSeedWEL44497a.SetVRm1( const VRm1_:Int32u );
+procedure TSeed32WEL44497a.SetVRm1( const VRm1_:Int32u );
 begin
      STATE[ state_i-1 ] := VRm1_;
 end;
 
-function TSeedWEL44497a.GetVRm1Under :Int32u;
+function TSeed32WEL44497a.GetVRm1Under :Int32u;
 begin
      Result := STATE[ state_i+R-1 ];
 end;
 
-procedure TSeedWEL44497a.SetVRm1Under( const VRm1Under_:Int32u );
+procedure TSeed32WEL44497a.SetVRm1Under( const VRm1Under_:Int32u );
 begin
      STATE[ state_i+R-1 ] := VRm1Under_;
 end;
 
-function TSeedWEL44497a.GetVRm2 :Int32u;
+function TSeed32WEL44497a.GetVRm2 :Int32u;
 begin
      Result := STATE[ state_i-2 ];
 end;
 
-procedure TSeedWEL44497a.SetVRm2( const VRm2_:Int32u );
+procedure TSeed32WEL44497a.SetVRm2( const VRm2_:Int32u );
 begin
      STATE[ state_i-2 ] := VRm2_;
 end;
 
-function TSeedWEL44497a.GetVRm2Under :Int32u;
+function TSeed32WEL44497a.GetVRm2Under :Int32u;
 begin
      Result := STATE[ state_i+R-2 ];
 end;
 
-procedure TSeedWEL44497a.SetVRm2Under( const VRm2Under_:Int32u );
+procedure TSeed32WEL44497a.SetVRm2Under( const VRm2Under_:Int32u );
 begin
      STATE[ state_i+R-2 ] := VRm2Under_;
 end;
 
-function TSeedWEL44497a.GetnewV0 :Int32u;
+function TSeed32WEL44497a.GetnewV0 :Int32u;
 begin
      Result := STATE[ state_i-1 ];
 end;
 
-procedure TSeedWEL44497a.SetnewV0( const newV0_:Int32u );
+procedure TSeed32WEL44497a.SetnewV0( const newV0_:Int32u );
 begin
      STATE[ state_i-1 ] := newV0_;
 end;
 
-function TSeedWEL44497a.GetnewV0Under :Int32u;
+function TSeed32WEL44497a.GetnewV0Under :Int32u;
 begin
      Result := STATE[ state_i-1+R ];
 end;
 
-procedure TSeedWEL44497a.SetnewV0Under( const newV0Under_:Int32u );
+procedure TSeed32WEL44497a.SetnewV0Under( const newV0Under_:Int32u );
 begin
      STATE[ state_i-1+R ] := newV0Under_;
 end;
 
-function TSeedWEL44497a.GetnewV1 :Int32u;
+function TSeed32WEL44497a.GetnewV1 :Int32u;
 begin
      Result := STATE[ state_i ];
 end;
 
-procedure TSeedWEL44497a.SetnewV1( const newV1_:Int32u );
+procedure TSeed32WEL44497a.SetnewV1( const newV1_:Int32u );
 begin
      STATE[ state_i ] := newV1_;
 end;
 
-function TSeedWEL44497a.GetnewVRm1 :Int32u;
+function TSeed32WEL44497a.GetnewVRm1 :Int32u;
 begin
      Result := STATE[ state_i-2 ];
 end;
 
-procedure TSeedWEL44497a.SetnewVRm1( const newVRm1_:Int32u );
+procedure TSeed32WEL44497a.SetnewVRm1( const newVRm1_:Int32u );
 begin
      STATE[ state_i-2 ] := newVRm1_;
 end;
 
-function TSeedWEL44497a.GetnewVRm1Under :Int32u;
+function TSeed32WEL44497a.GetnewVRm1Under :Int32u;
 begin
      Result := STATE[ state_i-2+R ];
 end;
 
-procedure TSeedWEL44497a.SetnewVRm1Under( const newVRm1Under_:Int32u );
+procedure TSeed32WEL44497a.SetnewVRm1Under( const newVRm1Under_:Int32u );
 begin
      STATE[ state_i-2+R ] := newVRm1Under_;
 end;
 
 { WELL44497a-new }
 
-function TSeedWEL44497a.GetnewVM2Over :Int32u;
+function TSeed32WEL44497a.GetnewVM2Over :Int32u;
 begin
      Result := STATE[ state_i+M2-R+1 ];
 end;
 
-procedure TSeedWEL44497a.SetnewVM2Over( const newVM2Over_:Int32u );
+procedure TSeed32WEL44497a.SetnewVM2Over( const newVM2Over_:Int32u );
 begin
      STATE[ state_i+M2-R+1 ] := newVM2Over_;
 end;
 
-function TSeedWEL44497a.GetnewVM2 :Int32u;
+function TSeed32WEL44497a.GetnewVM2 :Int32u;
 begin
      Result := STATE[ state_i+M2+1 ];
 end;
 
-procedure TSeedWEL44497a.SetnewVM2( const newVM2_:Int32u );
+procedure TSeed32WEL44497a.SetnewVM2( const newVM2_:Int32u );
 begin
      STATE[ state_i+M2+1 ] := newVM2_;
 end;
@@ -351,7 +351,7 @@ end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL44497a
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32WEL44497a
 
 { http://www.iro.umontreal.ca/~panneton/well/WELL44497a.c }
 
@@ -361,7 +361,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandomWEL44497a.case_1;
+procedure TRandom32WEL44497a.case_1;
 var
    z0, z1, z2 :Int32u;
 begin
@@ -384,7 +384,7 @@ begin
      end;
 end;
 
-procedure TRandomWEL44497a.case_2;
+procedure TRandom32WEL44497a.case_2;
 var
    z0, z1, z2 :Int32u;
 begin
@@ -407,7 +407,7 @@ begin
      end;
 end;
 
-procedure TRandomWEL44497a.case_3;
+procedure TRandom32WEL44497a.case_3;
 var
    z0, z1, z2 :Int32u;
 begin
@@ -430,7 +430,7 @@ begin
      end;
 end;
 
-procedure TRandomWEL44497a.case_4;
+procedure TRandom32WEL44497a.case_4;
 var
    z0, z1, z2 :Int32u;
 begin
@@ -453,7 +453,7 @@ begin
      end;
 end;
 
-procedure TRandomWEL44497a.case_5;
+procedure TRandom32WEL44497a.case_5;
 var
    z0, z1, z2 :Int32u;
 begin
@@ -476,7 +476,7 @@ begin
      end;
 end;
 
-procedure TRandomWEL44497a.case_6;
+procedure TRandom32WEL44497a.case_6;
 var
    z0, z1, z2 :Int32u;
 begin
@@ -501,7 +501,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TRandomWEL44497a.CalcNextSeed;
+procedure TRandom32WEL44497a.CalcNextSeed;
 begin
      with _Seed do
      begin
@@ -525,16 +525,16 @@ begin
      end;
 end;
 
-function TRandomWEL44497a.CalcRandInt32u :Int32u;
+function TRandom32WEL44497a.CalcRandInt32u :Int32u;
 begin
      Result := _Seed.V0;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TRandomWEL44497a.CreateFromRand( const Random_:IRandom );
+constructor TRandom32WEL44497a.CreateFromRand( const Random_:IRandom );
 var
-   S :TSeedWEL44497a;
+   S :TSeed32WEL44497a;
    I :Integer;
 begin
      with S do
@@ -550,59 +550,59 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomWEL44497a.MAT0POS( const t:Int32u; const v:Int32u ) :Int32u;
+function TRandom32WEL44497a.MAT0POS( const t:Int32u; const v:Int32u ) :Int32u;
 begin
      Result := v xor ( v shr +t );
 end;
 
-function TRandomWEL44497a.MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u;
+function TRandom32WEL44497a.MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u;
 begin
      Result := v xor ( v shl -t );
 end;
 
-function TRandomWEL44497a.MAT1( const v:Int32u ) :Int32u;
+function TRandom32WEL44497a.MAT1( const v:Int32u ) :Int32u;
 begin
      Result := v;
 end;
 
-function TRandomWEL44497a.MAT2( const a:Int32u; const v:Int32u ) :Int32u;
+function TRandom32WEL44497a.MAT2( const a:Int32u; const v:Int32u ) :Int32u;
 begin
      if v and 1 <> 0 then Result := ( v shr 1 ) xor a
                      else Result :=   v shr 1;
 end;
 
-function TRandomWEL44497a.MAT3POS( const t:Int32u; const v:Int32u ) :Int32u;
+function TRandom32WEL44497a.MAT3POS( const t:Int32u; const v:Int32u ) :Int32u;
 begin
      Result := v shr +t;
 end;
 
-function TRandomWEL44497a.MAT3NEG( const t:Int32s; const v:Int32u ) :Int32u;
+function TRandom32WEL44497a.MAT3NEG( const t:Int32s; const v:Int32u ) :Int32u;
 begin
      Result := v shl -t;
 end;
 
-function TRandomWEL44497a.MAT4POS( const t:Int32u; const b,v:Int32u ) :Int32u;
+function TRandom32WEL44497a.MAT4POS( const t:Int32u; const b,v:Int32u ) :Int32u;
 begin
      Result := v xor ( ( v shr +t ) and b );
 end;
 
-function TRandomWEL44497a.MAT4NEG( const t:Int32s; const b,v:Int32u ) :Int32u;
+function TRandom32WEL44497a.MAT4NEG( const t:Int32s; const b,v:Int32u ) :Int32u;
 begin
      Result := v xor ( ( v shl -t ) and b );
 end;
 
-function TRandomWEL44497a.MAT5( const r:Int32s; const a,ds,dt,v:Int32u ) :Int32u;
+function TRandom32WEL44497a.MAT5( const r:Int32s; const a,ds,dt,v:Int32u ) :Int32u;
 begin
      if v and dt <> 0 then Result := ( ( ( v shl r ) xor ( v shr ( _Seed.W - r ) ) ) and ds ) xor a
                       else Result :=   ( ( v shl r ) xor ( v shr ( _Seed.W - r ) ) ) and ds;
 end;
 
-function TRandomWEL44497a.MAT7( const v:Int32u ) :Int32u;
+function TRandom32WEL44497a.MAT7( const v:Int32u ) :Int32u;
 begin
      Result := 0;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL44497b
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32WEL44497b
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -610,7 +610,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomWEL44497b.CalcRandInt32u :Int32u;
+function TRandom32WEL44497b.CalcRandInt32u :Int32u;
 begin
      with _Seed do
      begin
@@ -621,7 +621,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL44497anew
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32WEL44497anew
 
 { http://www.ritsumei.ac.jp/~harase/WELL44497a_new.c }
 
@@ -631,7 +631,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-function TRandomWEL44497anew.CalcRandInt32u :Int32u;
+function TRandom32WEL44497anew.CalcRandInt32u :Int32u;
 begin
      with _Seed do
      begin
