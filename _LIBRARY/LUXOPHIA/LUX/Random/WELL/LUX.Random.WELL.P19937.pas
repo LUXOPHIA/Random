@@ -71,6 +71,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
        state_i :Int32u;
        STATE   :array [ 0..R-1 ] of Int32u;
+       case_i  :Byte;
        ///// プロパティ
        property V0           :Int32u read GetV0           write SetV0          ;
        property VM1Over      :Int32u read GetVM1Over      write SetVM1Over     ;
@@ -98,26 +99,23 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL19937a
 
      TRandomWEL19937a = class( TRandomWEL<TWELL19937a> )
-     private
-       WELLRNG19937a :TProc;
+     protected
+       ///// メソッド
+       procedure case_1;
+       procedure case_2;
+       procedure case_3;
+       procedure case_4;
+       procedure case_5;
+       procedure case_6;
+       procedure CalcNextSeed; override;
+       function CalcRandInt32u :Int32u; override;
+     public
+       constructor CreateFromRand( const Random_:IRandom ); overload; override;
        ///// メソッド
        function MAT0POS( const t:Int32u; const v:Int32u ) :Int32u; inline;
        function MAT0NEG( const t:Int32s; const v:Int32u ) :Int32u; inline;
        function MAT1( const v:Int32u ) :Int32u; inline;
        function MAT3POS( const t:Int32u; const v:Int32u ) :Int32u; inline;
-     protected
-       ///// メソッド
-       procedure case_1; virtual;
-       procedure case_2; virtual;
-       procedure case_3; virtual;
-       procedure case_4; virtual;
-       procedure case_5; virtual;
-       procedure case_6; virtual;
-       procedure CalcNextSeed; override;
-       function CalcRandInt32u :Int32u; override;
-     public
-       constructor CreateFromRand( const Random_:IRandom ); overload; override;
-       constructor Create( const Seed_:TWELL19937a ); overload; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL19937c
@@ -128,14 +126,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        TEMPERC = $9b868000;
      private
      protected
-       y :Int32u;
        ///// メソッド
-       procedure case_1; override;
-       procedure case_2; override;
-       procedure case_3; override;
-       procedure case_4; override;
-       procedure case_5; override;
-       procedure case_6; override;
        function CalcRandInt32u :Int32u; override;
      public
      end;
@@ -147,14 +138,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        BITMASK = $41180000;
      private
      protected
-       y :Int32u;
        ///// メソッド
-       procedure case_1; override;
-       procedure case_2; override;
-       procedure case_3; override;
-       procedure case_4; override;
-       procedure case_5; override;
-       procedure case_6; override;
        function CalcRandInt32u :Int32u; override;
      public
      end;
@@ -367,6 +351,205 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+/////////////////////////////////////////////////////////////////////// メソッド
+
+procedure TRandomWEL19937a.case_1;
+var
+   z0, z1, z2 :Int32u;
+begin
+     with _Seed do
+     begin
+          z0 := ( VRm1Under and MASKL )
+             or ( VRm2Under and MASKU );
+          z1 := MAT0NEG( -25, V0  )
+            xor MAT0POS( +27, VM1 );
+          z2 := MAT3POS( +09, VM2 )
+            xor MAT0POS( +01, VM3 );
+
+          newV1      := z1 xor z2;
+          newV0Under := MAT1( z0 )
+                    xor MAT0NEG( -09, z1    )
+                    xor MAT0NEG( -21, z2    )
+                    xor MAT0POS( +21, newV1 );
+
+          state_i := R - 1;
+
+
+     end;
+end;
+
+procedure TRandomWEL19937a.case_2;
+var
+   z0, z1, z2 :Int32u;
+begin
+     with _Seed do
+     begin
+          z0 := ( VRm1      and MASKL )
+             or ( VRm2Under and MASKU );
+          z1 := MAT0NEG( -25, V0  )
+            xor MAT0POS( +27, VM1 );
+          z2 := MAT3POS( +09, VM2 )
+            xor MAT0POS( +01, VM3 );
+
+          newV1 := z1 xor z2;
+          newV0 := MAT1( z0 )
+               xor MAT0NEG( -09, z1    )
+               xor MAT0NEG( -21, z2    )
+               xor MAT0POS( +21, newV1 );
+
+          state_i := 0;
+
+
+     end;
+end;
+
+procedure TRandomWEL19937a.case_3;
+var
+   z0, z1, z2 :Int32u;
+begin
+     with _Seed do
+     begin
+          z0 := ( VRm1 and MASKL )
+             or ( VRm2 and MASKU );
+          z1 := MAT0NEG( -25, V0      )
+            xor MAT0POS( +27, VM1Over );
+          z2 := MAT3POS( +09, VM2Over )
+            xor MAT0POS( +01, VM3Over );
+
+          newV1 := z1 xor z2;
+          newV0 := MAT1( z0 )
+               xor MAT0NEG( -09, z1    )
+               xor MAT0NEG( -21, z2    )
+               xor MAT0POS( +21, newV1 );
+
+          Dec( state_i );
+
+
+     end;
+end;
+
+procedure TRandomWEL19937a.case_4;
+var
+   z0, z1, z2 :Int32u;
+begin
+     with _Seed do
+     begin
+          z0 := ( VRm1 and MASKL )
+             or ( VRm2 and MASKU );
+          z1 := MAT0NEG( -25, V0      )
+            xor MAT0POS( +27, VM1     );
+          z2 := MAT3POS( +09, VM2     )
+            xor MAT0POS( +01, VM3Over );
+
+          newV1 := z1 xor z2;
+          newV0 := MAT1( z0 )
+               xor MAT0NEG( -09, z1    )
+               xor MAT0NEG( -21, z2    )
+               xor MAT0POS( +21, newV1 );
+
+          Dec( state_i );
+
+
+     end;
+end;
+
+procedure TRandomWEL19937a.case_5;
+var
+   z0, z1, z2 :Int32u;
+begin
+     with _Seed do
+     begin
+          z0 := ( VRm1 and MASKL )
+             or ( VRm2 and MASKU );
+          z1 := MAT0NEG( -25, V0      )
+            xor MAT0POS( +27, VM1     );
+          z2 := MAT3POS( +09, VM2Over )
+            xor MAT0POS( +01, VM3Over );
+
+          newV1 := z1 xor z2;
+          newV0 := MAT1( z0 )
+               xor MAT0NEG( -09, z1    )
+               xor MAT0NEG( -21, z2    )
+               xor MAT0POS( +21, newV1 );
+
+          Dec( state_i );
+     end;
+end;
+
+procedure TRandomWEL19937a.case_6;
+var
+   z0, z1, z2 :Int32u;
+begin
+     with _Seed do
+     begin
+          z0 := ( VRm1 and MASKL )
+             or ( VRm2 and MASKU );
+          z1 := MAT0NEG( -25, V0  )
+            xor MAT0POS( +27, VM1 );
+          z2 := MAT3POS( +09, VM2 )
+            xor MAT0POS( +01, VM3 );
+
+          newV1 := z1 xor z2;
+          newV0 := MAT1( z0 )
+               xor MAT0NEG( -09, z1    )
+               xor MAT0NEG( -21, z2    )
+               xor MAT0POS( +21, newV1 );
+
+          Dec( state_i );
+     end;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TRandomWEL19937a.CalcNextSeed;
+begin
+     with _Seed do
+     begin
+          case case_i of
+            1:                          case_i := 3;
+            2:                          case_i := 1;
+            3: if state_i + M1 < R then case_i := 5;
+            4: if state_i + M3 < R then case_i := 6;
+            5: if state_i + M2 < R then case_i := 4;
+            6: if state_i      = 1 then case_i := 2;
+          end;
+
+          case case_i of
+            1: case_1;  // 0     = state_i
+            2: case_2;  // 1     = state_i
+            3: case_3;  // R-M1 <= state_i
+            4: case_4;  // R-M3 <= state_i
+            5: case_5;  // R-M2 <= state_i
+            6: case_6;  // 2    <= state_i <= R-M3-1
+          end;
+     end;
+end;
+
+function TRandomWEL19937a.CalcRandInt32u :Int32u;
+begin
+     Result := _Seed.V0;
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TRandomWEL19937a.CreateFromRand( const Random_:IRandom );
+var
+   S :TWELL19937a;
+   I :Integer;
+begin
+     with S do
+     begin
+          for I := 0 to R-1 do STATE[ I ] := Random_.DrawRandInt32u;
+
+          state_i := 0;
+          case_i  := 2;
+     end;
+
+     Create( S );
+end;
+
 /////////////////////////////////////////////////////////////////////// メソッド
 
 function TRandomWEL19937a.MAT0POS( const t:Int32u; const v:Int32u ) :Int32u;
@@ -389,196 +572,6 @@ begin
      Result := v shr t;
 end;
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
-/////////////////////////////////////////////////////////////////////// メソッド
-
-procedure TRandomWEL19937a.case_1;  // state_i = 0
-var
-   z0, z1, z2 :Int32u;
-begin
-     with _Seed do
-     begin
-          z0 := ( VRm1Under and MASKL )
-             or ( VRm2Under and MASKU );
-          z1 := MAT0NEG( -25, V0  )
-            xor MAT0POS( +27, VM1 );
-          z2 := MAT3POS( +09, VM2 )
-            xor MAT0POS( +01, VM3 );
-
-          newV1      := z1 xor z2;
-          newV0Under := MAT1( z0 )
-                    xor MAT0NEG( -09, z1    )
-                    xor MAT0NEG( -21, z2    )
-                    xor MAT0POS( +21, newV1 );
-
-          state_i := R - 1;
-
-          WELLRNG19937a := case_3;
-     end;
-end;
-
-procedure TRandomWEL19937a.case_2;  // state_i = 1
-var
-   z0, z1, z2 :Int32u;
-begin
-     with _Seed do
-     begin
-          z0 := ( VRm1      and MASKL )
-             or ( VRm2Under and MASKU );
-          z1 := MAT0NEG( -25, V0  )
-            xor MAT0POS( +27, VM1 );
-          z2 := MAT3POS( +09, VM2 )
-            xor MAT0POS( +01, VM3 );
-
-          newV1 := z1 xor z2;
-          newV0 := MAT1( z0 )
-               xor MAT0NEG( -09, z1    )
-               xor MAT0NEG( -21, z2    )
-               xor MAT0POS( +21, newV1 );
-
-          state_i := 0;
-
-          WELLRNG19937a := case_1;
-     end;
-end;
-
-procedure TRandomWEL19937a.case_3;  // state_i + M1 >= R
-var
-   z0, z1, z2 :Int32u;
-begin
-     with _Seed do
-     begin
-          z0 := ( VRm1 and MASKL )
-             or ( VRm2 and MASKU );
-          z1 := MAT0NEG( -25, V0      )
-            xor MAT0POS( +27, VM1Over );
-          z2 := MAT3POS( +09, VM2Over )
-            xor MAT0POS( +01, VM3Over );
-
-          newV1 := z1 xor z2;
-          newV0 := MAT1( z0 )
-               xor MAT0NEG( -09, z1    )
-               xor MAT0NEG( -21, z2    )
-               xor MAT0POS( +21, newV1 );
-
-          Dec( state_i );
-
-          if state_i + M1 < R then WELLRNG19937a := case_5;
-     end;
-end;
-
-procedure TRandomWEL19937a.case_4;  // state_i + M3 >= R
-var
-   z0, z1, z2 :Int32u;
-begin
-     with _Seed do
-     begin
-          z0 := ( VRm1 and MASKL )
-             or ( VRm2 and MASKU );
-          z1 := MAT0NEG( -25, V0      )
-            xor MAT0POS( +27, VM1     );
-          z2 := MAT3POS( +09, VM2     )
-            xor MAT0POS( +01, VM3Over );
-
-          newV1 := z1 xor z2;
-          newV0 := MAT1( z0 )
-               xor MAT0NEG( -09, z1    )
-               xor MAT0NEG( -21, z2    )
-               xor MAT0POS( +21, newV1 );
-
-          Dec( state_i );
-
-          if state_i + M3 < R then WELLRNG19937a := case_6;
-     end;
-end;
-
-procedure TRandomWEL19937a.case_5;  // state_i + M2 >= R
-var
-   z0, z1, z2 :Int32u;
-begin
-     with _Seed do
-     begin
-          z0 := ( VRm1 and MASKL )
-             or ( VRm2 and MASKU );
-          z1 := MAT0NEG( -25, V0      )
-            xor MAT0POS( +27, VM1     );
-          z2 := MAT3POS( +09, VM2Over )
-            xor MAT0POS( +01, VM3Over );
-
-          newV1 := z1 xor z2;
-          newV0 := MAT1( z0 )
-               xor MAT0NEG( -09, z1    )
-               xor MAT0NEG( -21, z2    )
-               xor MAT0POS( +21, newV1 );
-
-          Dec( state_i );
-
-          if state_i + M2 < R then WELLRNG19937a := case_4;
-     end;
-end;
-
-procedure TRandomWEL19937a.case_6;  // 2 <= state_i <= ( R - M3 - 1 )
-var
-   z0, z1, z2 :Int32u;
-begin
-     with _Seed do
-     begin
-          z0 := ( VRm1 and MASKL )
-             or ( VRm2 and MASKU );
-          z1 := MAT0NEG( -25, V0  )
-            xor MAT0POS( +27, VM1 );
-          z2 := MAT3POS( +09, VM2 )
-            xor MAT0POS( +01, VM3 );
-
-          newV1 := z1 xor z2;
-          newV0 := MAT1( z0 )
-               xor MAT0NEG( -09, z1    )
-               xor MAT0NEG( -21, z2    )
-               xor MAT0POS( +21, newV1 );
-
-          Dec( state_i );
-
-          if state_i = 1 then WELLRNG19937a := case_2;
-     end;
-end;
-
-//------------------------------------------------------------------------------
-
-procedure TRandomWEL19937a.CalcNextSeed;
-begin
-     WELLRNG19937a;
-end;
-
-function TRandomWEL19937a.CalcRandInt32u :Int32u;
-begin
-     Result := _Seed.V0;
-end;
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-constructor TRandomWEL19937a.CreateFromRand( const Random_:IRandom );
-var
-   W :TWELL19937a;
-   I :Integer;
-begin
-     with W do
-     begin
-          for I := 0 to R-1 do STATE[ I ] := Random_.DrawRandInt32u;
-     end;
-
-     Create( W );
-end;
-
-constructor TRandomWEL19937a.Create( const Seed_:TWELL19937a );
-begin
-     inherited;
-
-     _Seed.state_i := 0;
-
-     WELLRNG19937a := case_1;
-end;
-
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomWEL19937c
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
@@ -587,77 +580,13 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandomWEL19937c.case_1;
-begin
-     inherited;
-
-     with _Seed do
-     begin
-          y := STATE[ state_i ] xor ( ( STATE[ state_i ] shl 07 ) and TEMPERB );
-          y :=                y xor ( (                y shl 15 ) and TEMPERC );
-     end;
-end;
-
-procedure TRandomWEL19937c.case_2;
-begin
-     inherited;
-
-     with _Seed do
-     begin
-          y := STATE[ state_i ] xor ( ( STATE[ state_i ] shl 07 ) and TEMPERB );
-          y :=                y xor ( (                y shl 15 ) and TEMPERC );
-     end;
-end;
-
-procedure TRandomWEL19937c.case_3;
-begin
-     inherited;
-
-     with _Seed do
-     begin
-          y := STATE[ state_i ] xor ( ( STATE[ state_i ] shl 07 ) and TEMPERB );
-          y :=                y xor ( (                y shl 15 ) and TEMPERC );
-     end;
-end;
-
-procedure TRandomWEL19937c.case_4;
-begin
-     inherited;
-
-     with _Seed do
-     begin
-          y := STATE[ state_i ] xor ( ( STATE[ state_i ] shl 07 ) and TEMPERB );
-          y :=                y xor ( (                y shl 15 ) and TEMPERC );
-     end;
-end;
-
-procedure TRandomWEL19937c.case_5;
-begin
-     inherited;
-
-     with _Seed do
-     begin
-          y := STATE[ state_i ] xor ( ( STATE[ state_i ] shl 07 ) and TEMPERB );
-          y :=                y xor ( (                y shl 15 ) and TEMPERC );
-     end;
-end;
-
-procedure TRandomWEL19937c.case_6;
-begin
-     inherited;
-
-     with _Seed do
-     begin
-          y := STATE[ state_i ] xor ( ( STATE[ state_i ] shl 07 ) and TEMPERB );
-          y :=                y xor ( (                y shl 15 ) and TEMPERC );
-     end;
-end;
-
-//------------------------------------------------------------------------------
-
 function TRandomWEL19937c.CalcRandInt32u :Int32u;
 begin
-     Result := y;
+     with _Seed do
+     begin
+          Result := STATE[ state_i ] xor ( ( STATE[ state_i ] shl 07 ) and TEMPERB );
+          Result := Result           xor ( ( Result           shl 15 ) and TEMPERC );
+     end;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -672,71 +601,20 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandomWEL19937anew.case_1;
-begin
-     inherited;
-
-     with _Seed do
-     begin
-          y := STATE[ state_i ] xor ( newVM2Over and BITMASK );
-     end;
-end;
-
-procedure TRandomWEL19937anew.case_2;
-begin
-     inherited;
-
-     with _Seed do
-     begin
-          y := STATE[ state_i ] xor ( newVM2 and BITMASK );
-     end;
-end;
-
-procedure TRandomWEL19937anew.case_3;
-begin
-     inherited;
-
-     with _Seed do
-     begin
-          y := STATE[ state_i ] xor ( newVM2Over and BITMASK );
-     end;
-end;
-
-procedure TRandomWEL19937anew.case_4;
-begin
-     inherited;
-
-     with _Seed do
-     begin
-          y := STATE[ state_i ] xor ( newVM2 and BITMASK );
-     end;
-end;
-
-procedure TRandomWEL19937anew.case_5;
-begin
-     inherited;
-
-     with _Seed do
-     begin
-          y := STATE[ state_i ] xor ( newVM2Over and BITMASK );
-     end;
-end;
-
-procedure TRandomWEL19937anew.case_6;
-begin
-     inherited;
-
-     with _Seed do
-     begin
-          y := STATE[ state_i ] xor ( newVM2 and BITMASK );
-     end;
-end;
-
-//------------------------------------------------------------------------------
-
 function TRandomWEL19937anew.CalcRandInt32u :Int32u;
 begin
-     Result := y;
+     with _Seed do
+     begin
+          case case_i of
+            1: Result := STATE[ state_i ] xor ( newVM2Over and BITMASK );
+            2: Result := STATE[ state_i ] xor ( newVM2     and BITMASK );
+            3: Result := STATE[ state_i ] xor ( newVM2Over and BITMASK );
+            4: Result := STATE[ state_i ] xor ( newVM2     and BITMASK );
+            5: Result := STATE[ state_i ] xor ( newVM2Over and BITMASK );
+            6: Result := STATE[ state_i ] xor ( newVM2     and BITMASK );
+          else Result := 0;
+          end;
+     end;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
