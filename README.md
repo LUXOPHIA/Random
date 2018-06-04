@@ -58,23 +58,23 @@ In all algorithms, the seed value (state vector) is initialized by consecutive n
     * [Xorshift 096p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/Xorshift/Xorshift%20096p%2032b.txt).txt
     * [Xorshift 128p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/Xorshift/Xorshift%20128p%2032b.txt).txt
 * [**xoshiro**](https://github.com/LUXOPHIA/Random/tree/master/--------/_OUTPUT/xoshiro)
-    * [xoshiro-p 128p 32b s64s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20128p%2032b%20s64s.txt).txt
+    * [xoshiro-p 128p 32b 64s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20128p%2032b%2064s.txt).txt
     * [xoshiro-p 128p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20128p%2032b.txt).txt
-    * [xoshiro-p 256p 64b s128s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20256p%2064b%20s128s.txt).txt
+    * [xoshiro-p 256p 64b 128s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20256p%2064b%20128s.txt).txt
     * [xoshiro-p 256p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20256p%2064b.txt).txt
     * [xoshiro-p 512p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-p%20512p%2064b.txt).txt
-    * [xoshiro-ss 128p 32b s64s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20128p%2032b%20s64s.txt).txt
+    * [xoshiro-ss 128p 32b 64](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20128p%2032b%2064s.txt).txt
     * [xoshiro-ss 128p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20128p%2032b.txt).txt
-    * [xoshiro-ss 256p 64b s128s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20256p%2064b%20s128s.txt).txt
+    * [xoshiro-ss 256p 64b 128s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20256p%2064b%20128s.txt).txt
     * [xoshiro-ss 256p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20256p%2064b.txt).txt
     * [xoshiro-ss 512p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoshiro-ss%20512p%2064b.txt).txt
     * [**xoroshiro**](https://github.com/LUXOPHIA/Random/tree/master/--------/_OUTPUT/xoshiro/xoroshiro)
-        * [xoroshiro-p 128p 64b s64s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-p%20128p%2064b%20s64s.txt).txt
+        * [xoroshiro-p 128p 64b 64s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-p%20128p%2064b%2064s.txt).txt
         * [xoroshiro-p 128p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-p%20128p%2064b.txt).txt
         * [xoroshiro-s 064p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-s%20064p%2032b.txt).txt
         * [xoroshiro-s 128p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-s%20128p%2064b.txt).txt
         * [xoroshiro-ss 064p 32b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-ss%20064p%2032b.txt).txt
-        * [xoroshiro-ss 128p 64b s64s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-ss%20128p%2064b%20s64s.txt).txt
+        * [xoroshiro-ss 128p 64b 64s](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-ss%20128p%2064b%2064s.txt).txt
         * [xoroshiro-ss 128p 64b](https://github.com/LUXOPHIA/Random/blob/master/--------/_OUTPUT/xoshiro/xoroshiro/xoroshiro-ss%20128p%2064b.txt).txt
 
 ----
