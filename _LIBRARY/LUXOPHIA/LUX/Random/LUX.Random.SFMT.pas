@@ -47,9 +47,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomSFMT
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomSMT
 
-     IRandomSFMT = interface( IRandom<T_sfmt_t> )
+     IRandomSMT = interface( IRandom<T_sfmt_t> )
      ['{3780F689-4D47-4EA8-ABE8-6D5051C0CBEC}']
      {protected}
      {public}
@@ -57,7 +57,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TRandomSFMT = class( TRandom<T_sfmt_t>, IRandomSFMT )
+     TRandomSMT = class( TRandom<T_sfmt_t>, IRandomSMT )
      private
      protected
        ///// アクセス
@@ -138,9 +138,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure sfmt_init_by_array( var sfmt:T_sfmt_t; init_key:TArray<Int32u>; key_length:Int32s );
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32SFMT
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32SMT
 
-     TRandom32SFMT = class( TRandomSFMT )
+     TRandom32SMT = class( TRandomSMT )
      private
      protected
        ///// メソッド
@@ -149,9 +149,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64SFMT
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64SMT
 
-     TRandom64SFMT = class( TRandomSFMT )
+     TRandom64SMT = class( TRandomSMT )
      private
      protected
        ///// メソッド
@@ -222,7 +222,7 @@ end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomSFMT
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandomSMT
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -230,24 +230,24 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TRandomSFMT.GetSFMT_N :Int32s;
+function TRandomSMT.GetSFMT_N :Int32s;
 begin
      Result := SFMT_MEXP div 128 + 1;
 end;
 
-function TRandomSFMT.GetSFMT_N32 :Int32s;
+function TRandomSMT.GetSFMT_N32 :Int32s;
 begin
      Result := SFMT_N * 4;
 end;
 
-function TRandomSFMT.GetSFMT_N64 :Int32s;
+function TRandomSMT.GetSFMT_N64 :Int32s;
 begin
      Result := SFMT_N * 2;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TRandomSFMT.CreateFromRand( const Random_:IRandom );
+constructor TRandomSMT.CreateFromRand( const Random_:IRandom );
 var
    S :T_sfmt_t;
 begin
@@ -258,12 +258,12 @@ begin
      Create( S );
 end;
 
-constructor TRandomSFMT.Create( const Seed_:T_sfmt_t );
+constructor TRandomSMT.Create( const Seed_:T_sfmt_t );
 begin
      inherited Create( T_sfmt_t.Create( Seed_ ) );
 end;
 
-constructor TRandomSFMT.Create( const Key_:Int32u );
+constructor TRandomSMT.Create( const Key_:Int32u );
 var
    S :T_sfmt_t;
 begin
@@ -274,7 +274,7 @@ begin
      inherited Create( S );
 end;
 
-constructor TRandomSFMT.Create( const Keys_:TArray<Int32u> );
+constructor TRandomSMT.Create( const Keys_:TArray<Int32u> );
 var
    S :T_sfmt_t;
 begin
@@ -287,7 +287,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-class procedure TRandomSFMT.rshift128( out out_:T_w128_t; const in_:T_w128_t; shift:Int32s );
+class procedure TRandomSMT.rshift128( out out_:T_w128_t; const in_:T_w128_t; shift:Int32s );
 var
    th, tl, oh, ol :Int64u;
 begin
@@ -304,7 +304,7 @@ begin
      out_.u[ 2 ] := Int32u( oh        );
 end;
 
-class procedure TRandomSFMT.lshift128( out out_:T_w128_t; const in_:T_w128_t; shift:Int32s );
+class procedure TRandomSMT.lshift128( out out_:T_w128_t; const in_:T_w128_t; shift:Int32s );
 var
    th, tl, oh, ol :Int64u;
 begin
@@ -321,7 +321,7 @@ begin
      out_.u[ 2 ] := Int32u( oh        );
 end;
 
-procedure TRandomSFMT.do_recursion( out r:T_w128_t; const a,b,c,d:T_w128_t );
+procedure TRandomSMT.do_recursion( out r:T_w128_t; const a,b,c,d:T_w128_t );
 var
    x, y :T_w128_t;
 begin
@@ -342,7 +342,7 @@ end;
  * @param sfmt SFMT internal state
  * @return 32-bit pseudorandom number
  *)
-function TRandomSFMT.sfmt_genrand_uint32( var sfmt:T_sfmt_t ) :Int32u;
+function TRandomSMT.sfmt_genrand_uint32( var sfmt:T_sfmt_t ) :Int32u;
 begin
      if sfmt.idx >= SFMT_N32 then
      begin
@@ -364,7 +364,7 @@ end;
  * @param sfmt SFMT internal state
  * @return 64-bit pseudorandom number
  *)
-function TRandomSFMT.sfmt_genrand_uint64( var sfmt:T_sfmt_t ) :Int64u;
+function TRandomSMT.sfmt_genrand_uint64( var sfmt:T_sfmt_t ) :Int64u;
 begin
      Assert( sfmt.idx mod 2 = 0 );
 
@@ -385,7 +385,7 @@ end;
  * @param v 32-bit unsigned integer
  * @return double on [0,1]-real-interval
  *)
-class function TRandomSFMT.sfmt_to_real1( v:Int32u ) :Flo64s;
+class function TRandomSMT.sfmt_to_real1( v:Int32u ) :Flo64s;
 begin
      Result := v * ( 1.0 / 4294967295.0 ); // divided by 2^32-1
 end;
@@ -395,7 +395,7 @@ end;
  * @param sfmt SFMT internal state
  * @return double on [0,1]-real-interval
  *)
-function TRandomSFMT.sfmt_genrand_real1( var sfmt:T_sfmt_t ) :Flo64s;
+function TRandomSMT.sfmt_genrand_real1( var sfmt:T_sfmt_t ) :Flo64s;
 begin
      Result := sfmt_to_real1( sfmt_genrand_uint32( sfmt ) );
 end;
@@ -405,7 +405,7 @@ end;
  * @param v 32-bit unsigned integer
  * @return double on [0,1)-real-interval
  *)
-class function TRandomSFMT.sfmt_to_real2( v:Int32u ) :Flo64s;
+class function TRandomSMT.sfmt_to_real2( v:Int32u ) :Flo64s;
 begin
      Result := v * ( 1.0 / 4294967296.0 );  // divided by 2^32
 end;
@@ -415,7 +415,7 @@ end;
  * @param sfmt SFMT internal state
  * @return double on [0,1)-real-interval
  *)
-function TRandomSFMT.sfmt_genrand_real2( var sfmt:T_sfmt_t ) :Flo64s;
+function TRandomSMT.sfmt_genrand_real2( var sfmt:T_sfmt_t ) :Flo64s;
 begin
      Result := sfmt_to_real2( sfmt_genrand_uint32( sfmt ) );
 end;
@@ -425,7 +425,7 @@ end;
  * @param v 32-bit unsigned integer
  * @return double on (0,1)-real-interval
  *)
-class function TRandomSFMT.sfmt_to_real3( v:Int32u ) :Flo64s;
+class function TRandomSMT.sfmt_to_real3( v:Int32u ) :Flo64s;
 begin
      Result := ( Flo64s( v ) + 0.5 ) * ( 1.0 / 4294967296.0 );  // divided by 2^32
 end;
@@ -435,7 +435,7 @@ end;
  * @param sfmt SFMT internal state
  * @return double on (0,1)-real-interval
  *)
-function TRandomSFMT.sfmt_genrand_real3( var sfmt:T_sfmt_t ) :Flo64s;
+function TRandomSMT.sfmt_genrand_real3( var sfmt:T_sfmt_t ) :Flo64s;
 begin
      Result := sfmt_to_real3( sfmt_genrand_uint32( sfmt ) );
 end;
@@ -446,7 +446,7 @@ end;
  * @param v 32-bit unsigned integer
  * @return double on [0,1)-real-interval with 53-bit resolution.
  *)
-class function TRandomSFMT.sfmt_to_res53( v:Int64u ) :Flo64s;
+class function TRandomSMT.sfmt_to_res53( v:Int64u ) :Flo64s;
 begin
      Result := ( v shr 11 ) * ( 1.0 / 9007199254740992.0 );
 end;
@@ -456,7 +456,7 @@ end;
  * @param sfmt SFMT internal state
  * @return double on [0,1) with 53-bit resolution
  *)
-function TRandomSFMT.sfmt_genrand_res53( var sfmt:T_sfmt_t ) :Flo64s;
+function TRandomSMT.sfmt_genrand_res53( var sfmt:T_sfmt_t ) :Flo64s;
 begin
      Result := sfmt_to_res53( sfmt_genrand_uint64( sfmt ) );
 end;
@@ -465,7 +465,7 @@ end;
  * generates a random number on [0,1) with 53-bit resolution from two
  * 32 bit integers
  *)
-class function TRandomSFMT.sfmt_to_res53_mix( x,y:Int32u ) :Flo64s;
+class function TRandomSMT.sfmt_to_res53_mix( x,y:Int32u ) :Flo64s;
 begin
      Result := sfmt_to_res53( x or ( Int64u( y ) shl 32 ) );
 end;
@@ -476,7 +476,7 @@ end;
  * @param sfmt SFMT internal state
  * @return double on [0,1) with 53-bit resolution
  *)
-function TRandomSFMT.sfmt_genrand_res53_mix( var sfmt:T_sfmt_t ) :Flo64s;
+function TRandomSMT.sfmt_genrand_res53_mix( var sfmt:T_sfmt_t ) :Flo64s;
 var
    x, y :Int32u;
 begin
@@ -492,7 +492,7 @@ end;
  * This function simulate a 64-bit index of LITTLE ENDIAN
  * in BIG ENDIAN machine.
  *)
-class function TRandomSFMT.idxof( i:Int32s ) :Int32s;
+class function TRandomSMT.idxof( i:Int32s ) :Int32s;
 begin
      Result := i;
 end;
@@ -505,7 +505,7 @@ end;
  * @param array an 128-bit array to be filled by pseudorandom numbers.
  * @param size number of 128-bit pseudorandom numbers to be generated.
  *)
-procedure TRandomSFMT.gen_rand_array( var sfmt:T_sfmt_t; array_:TArray<T_w128_t>; size:Int32s );
+procedure TRandomSMT.gen_rand_array( var sfmt:T_sfmt_t; array_:TArray<T_w128_t>; size:Int32s );
 var
    i, j :Int32s;
    r1, r2 :P_w128_t;
@@ -558,7 +558,7 @@ end;
  * @param x 32-bit integer
  * @return 32-bit integer
  *)
-class function TRandomSFMT.func1( x:Int32u ) :Int32u;
+class function TRandomSMT.func1( x:Int32u ) :Int32u;
 begin
      Result := ( x xor ( x shr 27 ) ) * Int32u( 1664525 );
 end;
@@ -569,7 +569,7 @@ end;
  * @param x 32-bit integer
  * @return 32-bit integer
  *)
-class function TRandomSFMT.func2( x:Int32u ) :Int32u;
+class function TRandomSMT.func2( x:Int32u ) :Int32u;
 begin
      Result := ( x xor ( x shr 27 ) ) * Int32u( 1566083941 );
 end;
@@ -578,7 +578,7 @@ end;
  * This function certificate the period of 2^{MEXP}
  * @param sfmt SFMT internal state
  *)
-procedure TRandomSFMT.period_certification( var sfmt:T_sfmt_t );
+procedure TRandomSMT.period_certification( var sfmt:T_sfmt_t );
 var
    inner, work :Int32u;
    i, j :Int32s;
@@ -635,7 +635,7 @@ end;
  * and all parameters of this generator.
  * @param sfmt SFMT internal state
  *)
-function TRandomSFMT.sfmt_get_idstring( var sfmt:T_sfmt_t ) :String;
+function TRandomSMT.sfmt_get_idstring( var sfmt:T_sfmt_t ) :String;
 begin
      Result := SFMT_IDSTR;
 end;
@@ -646,7 +646,7 @@ end;
  * @param sfmt SFMT internal state
  * @return minimum size of array used for fill_array32() function.
  *)
-function TRandomSFMT.sfmt_get_min_array_size32( var sfmt:T_sfmt_t ) :Int32s;
+function TRandomSMT.sfmt_get_min_array_size32( var sfmt:T_sfmt_t ) :Int32s;
 begin
      Result := SFMT_N32;
 end;
@@ -657,7 +657,7 @@ end;
  * @param sfmt SFMT internal state
  * @return minimum size of array used for fill_array64() function.
  *)
-function TRandomSFMT.sfmt_get_min_array_size64( var sfmt:T_sfmt_t ) :Int32s;
+function TRandomSMT.sfmt_get_min_array_size64( var sfmt:T_sfmt_t ) :Int32s;
 begin
      Result := SFMT_N64;
 end;
@@ -667,7 +667,7 @@ end;
  * integers.
  * @param sfmt SFMT internal state
  *)
-procedure TRandomSFMT.sfmt_gen_rand_all( var sfmt:T_sfmt_t );
+procedure TRandomSMT.sfmt_gen_rand_all( var sfmt:T_sfmt_t );
 var
    i :Int32s;
    r1, r2 :P_w128_t;
@@ -716,7 +716,7 @@ end;
  * memory. Mac OSX doesn't have these functions, but \b malloc of OSX
  * returns the pointer to the aligned memory block.
  *)
-procedure TRandomSFMT.sfmt_fill_array32( var sfmt:T_sfmt_t; array_:TArray<T_w128_t>; size:Int32s );
+procedure TRandomSMT.sfmt_fill_array32( var sfmt:T_sfmt_t; array_:TArray<T_w128_t>; size:Int32s );
 begin
      Assert( sfmt.idx = SFMT_N32 );
      Assert( size mod 4 = 0 );
@@ -753,7 +753,7 @@ end;
  * memory. Mac OSX doesn't have these functions, but \b malloc of OSX
  * returns the pointer to the aligned memory block.
  *)
-procedure TRandomSFMT.sfmt_fill_array64( var sfmt:T_sfmt_t; array_:TArray<T_w128_t>; size:Int32s );
+procedure TRandomSMT.sfmt_fill_array64( var sfmt:T_sfmt_t; array_:TArray<T_w128_t>; size:Int32s );
 begin
      Assert( sfmt.idx = SFMT_N32 );
      Assert( size mod 2 = 0 );
@@ -771,7 +771,7 @@ end;
  * @param sfmt SFMT internal state
  * @param seed a 32-bit integer used as the seed.
  *)
-procedure TRandomSFMT.sfmt_init_gen_rand( var sfmt:T_sfmt_t; seed:Int32u );
+procedure TRandomSMT.sfmt_init_gen_rand( var sfmt:T_sfmt_t; seed:Int32u );
 var
    i :Int32s;
 begin
@@ -793,7 +793,7 @@ end;
  * @param init_key the array of 32-bit integers, used as a seed.
  * @param key_length the length of init_key.
  *)
-procedure TRandomSFMT.sfmt_init_by_array( var sfmt:T_sfmt_t; init_key:TArray<Int32u>; key_length:Int32s );
+procedure TRandomSMT.sfmt_init_by_array( var sfmt:T_sfmt_t; init_key:TArray<Int32u>; key_length:Int32s );
 var
    i, j, count, lag, mid, size :Int32s;
    r :Int32u;
@@ -889,13 +889,13 @@ begin
      period_certification( sfmt );
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32SFMT
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom32SMT
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandom32SFMT.CalcNextSeed;
+procedure TRandom32SMT.CalcNextSeed;
 begin
      Inc( _Seed.idx );
 
@@ -907,20 +907,20 @@ begin
      end;
 end;
 
-function TRandom32SFMT.CalcRandInt32u :Int32u;
+function TRandom32SMT.CalcRandInt32u :Int32u;
 begin
      Result := _Seed.psfmt32[ _Seed.idx ];
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64SFMT
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRandom64SMT
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TRandom64SFMT.CalcNextSeed;
+procedure TRandom64SMT.CalcNextSeed;
 begin
      Inc( _Seed.idx, 2 );
 
@@ -932,7 +932,7 @@ begin
      end;
 end;
 
-function TRandom64SFMT.CalcRandInt64u :Int64u;
+function TRandom64SMT.CalcRandInt64u :Int64u;
 begin
      Result := _Seed.psfmt64[ _Seed.idx div 2 ];
 end;
