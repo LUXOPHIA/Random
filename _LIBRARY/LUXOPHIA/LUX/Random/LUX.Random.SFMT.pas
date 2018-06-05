@@ -248,14 +248,8 @@ end;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 constructor TRandomSMT.CreateFromRand( const Random_:IRandom );
-var
-   S :T_sfmt_t;
 begin
-     S := T_sfmt_t.Create( SFMT_N );
-
-     sfmt_init_gen_rand( S, Random_.DrawRandInt32u );
-
-     Create( S );
+     Create( Random_.DrawRandInt32u );
 end;
 
 constructor TRandomSMT.Create( const Seed_:T_sfmt_t );
@@ -269,7 +263,13 @@ var
 begin
      S := T_sfmt_t.Create( SFMT_N );
 
-     sfmt_init_gen_rand( S, Key_ );
+     sfmt_init_gen_rand( S, Key_ );  // S.idx = SFMT_N32
+
+     // from: sfmt_genrand_uint32( sfmt )
+
+     sfmt_gen_rand_all( S );
+
+     S.idx := 0;
 
      inherited Create( S );
 end;
@@ -280,7 +280,13 @@ var
 begin
      S := T_sfmt_t.Create( SFMT_N );
 
-     sfmt_init_by_array( S, Keys_, Length( Keys_ ) );
+     sfmt_init_by_array( S, Keys_, Length( Keys_ ) );  // S.idx = SFMT_N32
+
+     // from: sfmt_genrand_uint32( sfmt )
+
+     sfmt_gen_rand_all( S );
+
+     S.idx := 0;
 
      inherited Create( S );
 end;
@@ -897,6 +903,8 @@ end;
 
 procedure TRandom32SMT.CalcNextSeed;
 begin
+     // from: sfmt_genrand_uint32( sfmt )
+
      Inc( _Seed.idx );
 
      if _Seed.idx >= SFMT_N32 then
@@ -909,6 +917,8 @@ end;
 
 function TRandom32SMT.CalcRandInt32u :Int32u;
 begin
+     // from: sfmt_genrand_uint32( sfmt )
+
      Result := _Seed.psfmt32[ _Seed.idx ];
 end;
 
@@ -922,6 +932,8 @@ end;
 
 procedure TRandom64SMT.CalcNextSeed;
 begin
+     // from: sfmt_genrand_uint64( sfmt )
+
      Inc( _Seed.idx, 2 );
 
      if _Seed.idx >= SFMT_N32 then
@@ -934,6 +946,8 @@ end;
 
 function TRandom64SMT.CalcRandInt64u :Int64u;
 begin
+     // from: sfmt_genrand_uint64( sfmt )
+
      Result := _Seed.psfmt64[ _Seed.idx div 2 ];
 end;
 
