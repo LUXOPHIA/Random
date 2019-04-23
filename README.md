@@ -138,4 +138,4 @@ In all algorithms, the seed value (state vector) is initialized by consecutive n
             * [Sebastiano Vigna/Papers](http://vigna.di.unimi.it/papers.php)
                 * [Scrambled Linear Pseudorandom Number Generators](http://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf).pdf
 
-[![Delphi Starter](http://img.en25.com/EloquaImages/clients/Embarcadero/%7B063f1eec-64a6-4c19-840f-9b59d407c914%7D_dx-starter-bn159.png)](https://www.embarcadero.com/jp/products/delphi/starter)
+[![Delphi Starter](https://github.com/delphiusers/FreeDelphi/raw/master/Banner/FreeDelphi-Banner_350x126.png)](https://www.embarcadero.com/jp/products/delphi/starter)
