@@ -13,6 +13,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TSingleC = record
      private
        ///// アクセサ
+       class function GetImaginary :TSingleC; static;
+       //--------
        function GetSiz2 :Single;
        function GetSize :Single;
        procedure SetSize( const Size_:Single );
@@ -27,6 +29,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        /////
        constructor Create( const R_,I_:Single );
        ///// プロパティ
+       class property Imaginary :TSingleC read GetImaginary;
+       //--------
        property Siz2   :Single   read GetSiz2                  ;
        property Size   :Single   read GetSize   write SetSize  ;
        property Unitor :TSingleC read GetUnitor write SetUnitor;
@@ -57,6 +61,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TDoubleC = record
      private
        ///// アクセサ
+       class function GetImaginary :TDoubleC; static;
+       //--------
        function GetSiz2 :Double;
        function GetSize :Double;
        procedure SetSize( const Size_:Double );
@@ -71,6 +77,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        /////
        constructor Create( const R_,I_:Double );
        ///// プロパティ
+       class property Imaginary :TDoubleC read GetImaginary;
+       //--------
        property Siz2   :Double   read GetSiz2                  ;
        property Size   :Double   read GetSize   write SetSize  ;
        property Unitor :TDoubleC read GetUnitor write SetUnitor;
@@ -176,9 +184,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
-
-Imaginary :TDoubleC = ( R:0; I:1 );
+//const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
 
 //var //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【変数】
 
@@ -205,8 +211,10 @@ function Exp( const A_:TDoubleC ) :TDoubleC; overload;
 function Ln( const A_:TSingleC ) :TSingleC; overload;
 function Ln( const A_:TDoubleC ) :TDoubleC; overload;
 
+function ArcCos( const X_:TSingleC ) :TSingleC; overload;
 function ArcCos( const X_:TDoubleC ) :TDoubleC; overload;
 
+function ArcSin( const X_:TSingleC ) :TSingleC; overload;
 function ArcSin( const X_:TDoubleC ) :TDoubleC; overload;
 
 implementation //############################################################### ■
@@ -218,6 +226,14 @@ uses System.Math;
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleC
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+class function TSingleC.GetImaginary :TSingleC;
+begin
+     Result.R := 0;
+     Result.I := 1;
+end;
+
+//------------------------------------------------------------------------------
 
 function TSingleC.GetSiz2 :Single;
 begin
@@ -419,6 +435,14 @@ end;
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleC
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+class function TDoubleC.GetImaginary :TDoubleC;
+begin
+     Result.R := 0;
+     Result.I := 1;
+end;
+
+//------------------------------------------------------------------------------
 
 function TDoubleC.GetSiz2 :Double;
 begin
@@ -1121,14 +1145,24 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+function ArcCos( const X_:TSingleC ) :TSingleC;
+begin
+     Result := +TSingleC.Imaginary * Ln( X_ + TSingleC.Imaginary * Roo2( 1 - X_ * X_ ) );
+end;
+
 function ArcCos( const X_:TDoubleC ) :TDoubleC;
 begin
-     Result := +Imaginary * Ln( X_ + Imaginary * Roo2( 1 - X_ * X_ ) );
+     Result := +TDoubleC.Imaginary * Ln( X_ + TDoubleC.Imaginary * Roo2( 1 - X_ * X_ ) );
+end;
+
+function ArcSin( const X_:TSingleC ) :TSingleC;
+begin
+     Result := -TSingleC.Imaginary * Ln( TSingleC.Imaginary * X_ + Roo2( 1 - X_ * X_ ) );
 end;
 
 function ArcSin( const X_:TDoubleC ) :TDoubleC;
 begin
-     Result := -Imaginary * Ln( Imaginary * X_ + Roo2( 1 - X_ * X_ ) );
+     Result := -TDoubleC.Imaginary * Ln( TDoubleC.Imaginary * X_ + Roo2( 1 - X_ * X_ ) );
 end;
 
 //############################################################################## □
