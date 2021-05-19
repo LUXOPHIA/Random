@@ -3,7 +3,7 @@
 interface //#################################################################### ■
 
 uses System.UITypes,
-     LUX;
+     LUX, LUX.D4;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
@@ -110,6 +110,39 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        ///// メソッド
        function Gamma( const C_:Single = 2.2 ) :TSingleRGB;
        function ToneMap( const W_:Single = 1 ) :TSingleRGB;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TUInt32xRGB
+
+     TUInt32xRGB = record
+     private
+     public
+       R :UInt32;
+       G :UInt32;
+       B :UInt32;
+       /////
+       constructor Create( const R_,G_,B_:UInt32 ); overload;
+       ///// 型変換
+       class operator Implicit( const L_:UInt32 ) :TUInt32xRGB;
+       class operator Implicit( const C_:TByteRGB ) :TUInt32xRGB;
+       class operator Explicit( const C_:TUInt32xRGB ) :TByteRGB;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TUInt32xRGBA
+
+     TUInt32xRGBA = record
+     private
+     public
+       C :TUInt32xRGB;
+       A :UInt32;
+       /////
+       constructor Create( const R_,G_,B_:UInt32; const A_:UInt32 = 1 ); overload;
+       ///// 型変換
+       class operator Implicit( const L_:UInt32 ) :TUInt32xRGBA;
+       class operator Implicit( const C_:TByteRGBA ) :TUInt32xRGBA;
+       class operator Explicit( const C_:TUInt32xRGBA ) :TByteRGBA;
+       class operator Implicit( const C_:TInt32u4D ) :TUInt32xRGBA;
+       class operator Implicit( const C_:TUInt32xRGBA ) :TInt32u4D;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleRGBA
@@ -595,6 +628,98 @@ begin
      Result.R := Clamp( R * ( 1 + R / W2 ) / ( 1 + R ), 0, 1 );
      Result.G := Clamp( G * ( 1 + G / W2 ) / ( 1 + G ), 0, 1 );
      Result.B := Clamp( B * ( 1 + B / W2 ) / ( 1 + B ), 0, 1 );
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TUInt32xRGB
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TUInt32xRGB.Create( const R_,G_,B_:UInt32 );
+begin
+     R := R_;
+     G := G_;
+     B := B_;
+end;
+
+///////////////////////////////////////////////////////////////////////// 型変換
+
+class operator TUInt32xRGB.Implicit( const L_:UInt32 ) :TUInt32xRGB;
+begin
+     Result.R := L_;
+     Result.G := L_;
+     Result.B := L_;
+end;
+
+//------------------------------------------------------------------------------
+
+class operator TUInt32xRGB.Implicit( const C_:TByteRGB ) :TUInt32xRGB;
+begin
+     Result.R := C_.R;
+     Result.G := C_.G;
+     Result.B := C_.B;
+end;
+
+class operator TUInt32xRGB.Explicit( const C_:TUInt32xRGB ) :TByteRGB;
+begin
+     Result.R := C_.R;
+     Result.G := C_.G;
+     Result.B := C_.B;
+end;
+
+//------------------------------------------------------------------------------
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TUInt32xRGBA
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TUInt32xRGBA.Create( const R_,G_,B_:UInt32; const A_:UInt32 = 1 );
+begin
+     C := TUInt32xRGB.Create( R_, G_, B_ );
+     A := A_;
+end;
+
+///////////////////////////////////////////////////////////////////////// 型変換
+
+class operator TUInt32xRGBA.Implicit( const L_:UInt32 ) :TUInt32xRGBA;
+begin
+     Result.C := L_;
+     Result.A := 1;
+end;
+
+//------------------------------------------------------------------------------
+
+class operator TUInt32xRGBA.Implicit( const C_:TByteRGBA ) :TUInt32xRGBA;
+begin
+     Result.C := C_.C;
+     Result.A := C_.A;
+end;
+
+class operator TUInt32xRGBA.Explicit( const C_:TUInt32xRGBA ) :TByteRGBA;
+begin
+     Result.C := TByteRGB( C_.C );
+     Result.A :=           C_.A  ;
+end;
+
+//------------------------------------------------------------------------------
+
+class operator TUInt32xRGBA.Implicit( const C_:TInt32u4D ) :TUInt32xRGBA;
+begin
+     Result.C.R := C_.X;
+     Result.C.G := C_.Y;
+     Result.C.B := C_.Z;
+     Result.A   := C_.W;
+end;
+
+class operator TUInt32xRGBA.Implicit( const C_:TUInt32xRGBA ) :TInt32u4D;
+begin
+     Result.X := C_.C.R;
+     Result.Y := C_.C.G;
+     Result.Z := C_.C.B;
+     Result.W := C_  .A;
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleRGBA

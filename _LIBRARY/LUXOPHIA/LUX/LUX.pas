@@ -378,8 +378,8 @@ function MaxI( const Vs_:array of Integer ) :Integer; overload;
 function MaxI( const Vs_:array of Single ) :Integer; overload;
 function MaxI( const Vs_:array of Double ) :Integer; overload;
 
-function RealMod( const X_,Range_:Integer ) :Integer; overload;
-function RealMod( const X_,Range_:Int64 ) :Int64; overload;
+function PoMod( const X_,Range_:Integer ) :Integer; overload;
+function PoMod( const X_,Range_:Int64 ) :Int64; overload;
 
 {$IF Defined( MACOS ) or Defined( MSWINDOWS ) }
 function RevBytes( const Value_:Word ) :Word; overload;
@@ -428,6 +428,21 @@ function FloatToStr( const Value_:Single; const N_:Integer ) :String; overload;
 function FloatToStr( const Value_:Double; const N_:Integer ) :String; overload;
 function FloatToStrP( const Value_:Single; const N_:Integer ) :String; overload;
 function FloatToStrP( const Value_:Double; const N_:Integer ) :String; overload;
+
+function Floor( const X_,D_:UInt32 ) :UInt32; overload;
+function Floor( const X_,D_:UInt64 ) :UInt64; overload;
+
+function Ceil( const X_,D_:UInt32 ) :UInt32; overload;
+function Ceil( const X_,D_:UInt64 ) :UInt64; overload;
+
+function Floor2N( const X_,D_:UInt32 ) :UInt32; overload;
+function Floor2N( const X_,D_:UInt64 ) :UInt64; overload;
+
+function Ceil2N( const X_,D_:UInt32 ) :UInt32; overload;
+function Ceil2N( const X_,D_:UInt64 ) :UInt64; overload;
+
+procedure GetMemAligned( out P_:Pointer; const Size_,Align2N_:UInt32 );
+procedure FreeMemAligned( const P_:Pointer );
 
 implementation //############################################################### ■
 
@@ -614,8 +629,8 @@ end;
 constructor TMarginArray<_TValue_>.Create( const LowerN_,Count_,UpperN_:Integer );
 begin
      _LowerN := LowerN_;
-     _Count  :=Count_ ;
-     _UpperN :=UpperN_;
+     _Count  := Count_ ;
+     _UpperN := UpperN_;
 
      InitArray;
 end;
@@ -1736,14 +1751,18 @@ end;
 
 //------------------------------------------------------------------------------
 
-function RealMod( const X_,Range_:Integer ) :Integer;
+function PoMod( const X_,Range_:Integer ) :Integer;
 begin
-     Result := X_ mod Range_;  if Result < 0 then Inc( Result, Range_ );
+     Result := X_ - ( X_ div Range_ ) * Range_;
+
+     if Result < 0 then Inc( Result, Range_ );
 end;
 
-function RealMod( const X_,Range_:Int64 ) :Int64;
+function PoMod( const X_,Range_:Int64 ) :Int64;
 begin
-     Result := X_ mod Range_;  if Result < 0 then Inc( Result, Range_ );
+     Result := X_ - ( X_ div Range_ ) * Range_;
+
+     if Result < 0 then Inc( Result, Range_ );
 end;
 
 //------------------------------------------------------------------------------
@@ -2112,6 +2131,92 @@ begin
      Result := FloatToStr( Value_, N_ );
 
      if Value_ > 0 then Result := '+' + Result;
+end;
+
+//------------------------------------------------------------------------------
+
+function Floor( const X_,D_:UInt32 ) :UInt32;
+begin
+     Result := X_ div D_ * D_;
+end;
+
+function Floor( const X_,D_:UInt64 ) :UInt64;
+begin
+     Result := X_ div D_ * D_;
+end;
+
+//------------------------------------------------------------------------------
+
+function Ceil( const X_,D_:UInt32 ) :UInt32;
+begin
+     Result := Floor( X_ + D_ - 1, D_ );
+end;
+
+function Ceil( const X_,D_:UInt64 ) :UInt64;
+begin
+     Result := Floor( X_ + D_ - 1, D_ );
+end;
+
+//------------------------------------------------------------------------------
+
+function Floor2N( const X_,D_:UInt32 ) :UInt32;
+begin
+     Result := X_ and not ( D_ - 1 );
+end;
+
+function Floor2N( const X_,D_:UInt64 ) :UInt64;
+begin
+     Result := X_ and not ( D_ - 1 );
+end;
+
+//------------------------------------------------------------------------------
+
+function Ceil2N( const X_,D_:UInt32 ) :UInt32;
+begin
+     Result := Floor( X_ + D_ - 1, D_ );
+end;
+
+function Ceil2N( const X_,D_:UInt64 ) :UInt64;
+begin
+     Result := Floor( X_ + D_ - 1, D_ );
+end;
+
+//------------------------------------------------------------------------------
+
+procedure GetMemAligned( out P_:Pointer; const Size_,Align2N_:UInt32 );
+const
+     H :UInt32 = SizeOf( Pointer );
+var
+   P0 :Pointer;
+   PP :PPointer;
+   I0, I1 :NativeUInt;
+begin
+     //  ┠───Ａ───╂────────Ｓ────────┤
+     //  ┃              ┃                                  │
+     //  ┃  │I0        ┃              ┃              ┃  │      │  ┃
+     //  ╂─├─┬─┬─┣━┯━┯━┯━╋━┯━┯━┯━╋━┥─┬─┤─╂
+     //  ┃  │×│×│I0┃◯│◯│◯│◯┃◯│◯│◯│◯┃◯│×│×│  ┃
+     //  ╂─├─┴─┴─┣━┷━┷━┷━╋━┷━┷━┷━╋━┥─┴─┤─╂
+     //  ┃  │  │      ┃I1    │      ┃              ┃          │  ┃
+     //      │  │              │                                  │
+     //      ├Ｈ┼───Ａ───┼────────Ｓ────────┤
+
+     GetMem( P0, H + Align2N_ + Size_ );
+
+     I0 := NativeUInt( P0 );
+
+     I1 := Ceil2N( H + I0, Align2N_ );
+
+     P_ := Pointer( I1 );
+
+     PP := P_;  Dec( PP );  PP^ := P0;
+end;
+
+procedure FreeMemAligned( const P_:Pointer );
+var
+   PP :PPointer;
+begin
+     PP := P_;  Dec( PP );  FreeMem( PP^ );
 end;
 
 //############################################################################## □
